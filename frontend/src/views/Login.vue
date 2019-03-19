@@ -1,5 +1,5 @@
 <template>
-  <section>Home</section>
+  <section>login page</section>
 </template>
 <script>
 export default {};

@@ -1,5 +1,5 @@
 <template>
-  <section>Home</section>
+  <section>member preview</section>
 </template>
 <script>
 export default {};
