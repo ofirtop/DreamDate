@@ -1,0 +1,28 @@
+[
+    {
+        "firstName": "",
+        "lastName": "",
+        "gender": "",
+        "DOB": "",
+        "password":"",
+        "eMail":"",
+        "city":"",
+        "street":"",
+        "status":"",
+        "height":"",
+        "interestedIn":{
+            "ageMin":0,
+            "ageMax":0,
+            "gender":""
+        },
+        "proffession":"",
+        "mainImage":"",
+        "images":["",""],
+        "liked":[],
+        "likedMe":[],
+        "watched":[],
+        "watchedMe":[]
+
+
+    }
+]
