@@ -1,28 +1,28 @@
 [
     {
-        "firstName": "",
-        "lastName": "",
+        "_id": "",
+        "name": "",
+        "pass": "",
+        "email": "",
         "gender": "",
-        "DOB": "",
-        "password":"",
-        "eMail":"",
-        "city":"",
-        "street":"",
-        "status":"",
-        "height":"",
-        "interestedIn":{
-            "ageMin":0,
-            "ageMax":0,
-            "gender":""
+        "dateOfBirth": "",
+        "city": "",
+        "maritalStatus": "",
+        "numOfChildren": 0,
+        "height": "",
+        "interestedIn": {
+            "minAge": 0,
+            "maxAge": 0,
+            "gender": ""
         },
-        "proffession":"",
-        "mainImage":"",
-        "images":["",""],
-        "liked":[],
-        "likedMe":[],
-        "watched":[],
-        "watchedMe":[]
-
-
+        "mainImage": "",
+        "images": [
+            "",
+            ""
+        ],
+        "membersILike": [],
+        "membersWhoLikeMe": [],
+        "membersIWatched": [],
+        "membersWhoWatchedMe": []
     }
 ]
