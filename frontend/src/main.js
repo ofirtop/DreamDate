@@ -12,6 +12,8 @@ library.add(faHeart)
 library.add(faTimes)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+import '@/sass/style.scss';
+
 Vue.config.productionTip = false
 
 new Vue({

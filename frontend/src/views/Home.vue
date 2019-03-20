@@ -1,8 +1,10 @@
 <template>
-  <section>Home
-    <member-list></member-list>
+  <section class="home-page">
+    <section class="mid-screen"></section>
+     <member-list></member-list>
   </section>
 </template>
+
 <script>
 import MemberList from '../components/MemberList.vue'
 
@@ -12,3 +14,7 @@ export default {
   }
 };
 </script>
+
+<style>
+</style>
+
