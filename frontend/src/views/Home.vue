@@ -1,10 +1,18 @@
 <template>
   <section class="home-page">
     <section class="mid-screen"></section>
+     <member-list></member-list>
   </section>
 </template>
+
 <script>
-export default {};
+import MemberList from '../components/MemberList.vue'
+
+export default {
+  components: {
+    MemberList
+  }
+};
 </script>
 
 <style>
