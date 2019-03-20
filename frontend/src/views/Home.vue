@@ -3,7 +3,7 @@
     <section class="mid-screen flex items-center content-center">
       <login-demo-user v-if="!loggedInUser"></login-demo-user>
     </section>
-    <!-- <member-list></member-list> -->
+    <member-list></member-list>
   </section>
 </template>
 
