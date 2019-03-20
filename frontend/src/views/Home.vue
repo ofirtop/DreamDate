@@ -1,6 +1,14 @@
 <template>
-  <section>Home</section>
+  <section>Home
+    <member-list></member-list>
+  </section>
 </template>
 <script>
-export default {};
+import MemberList from '../components/MemberList.vue'
+
+export default {
+  components: {
+    MemberList
+  }
+};
 </script>
