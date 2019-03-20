@@ -16,6 +16,7 @@ export default {
   methods: {
     like() {
       console.log('I like', this.member.name)
+      this.$emit('like', this.member);
     },
     notLike() {
       console.log("I don't like", this.member.name)

@@ -3,7 +3,7 @@
     <!-- <h1>Members list</h1> -->
       <ul>
        <li class="member" v-for="member in members" :member="member" :key="member._id">
-            <member-preview :member="member"></member-preview>
+            <member-preview :member="member" @like="$emit('like', $event)"></member-preview>
         </li>
       </ul>
   </section>
