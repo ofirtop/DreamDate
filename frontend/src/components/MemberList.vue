@@ -14,14 +14,16 @@ import memberPreview from './MemberPreview'
 export default {
     data() {
         return {
-            members: [],
+
         }
     },
-    computed() {
-      return this.$store.getters.members;
+    computed: {
+      members() {
+        return this.$store.getters.members;
+      }
     },
     created() {
-      this.$store.dispatch({ type: 'loadMembers'});
+      this.$store.dispatch({ type: 'loadMembers'})
     },
     components: {
       memberPreview
