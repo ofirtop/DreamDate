@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import memberService from './services/member.service.js'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadToys(context) {   
+    loadMembers(context) {   
       return memberService.query()
         .then(members => {
           context.commit({ type: 'setMembers', members });

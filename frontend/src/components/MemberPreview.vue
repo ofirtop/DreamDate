@@ -37,14 +37,18 @@ export default {
 .likes-panel {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 10px;
   align-items: center;
   height: 50px;
 }
+
 img {
   width: 200px;
   height: 200px;
   object-fit: contain;
+}
+.font-awesome-icon {
+  height: 10px;
 }
 </style>
