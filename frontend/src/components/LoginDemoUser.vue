@@ -32,7 +32,7 @@ export default {
   position: fixed;
   width: 100vw;
   height: 90vh;
-  background: url('../assets/img/home-bg9.jpg') no-repeat ;
+  background: url('../assets/img/home-bg.jpg') no-repeat ;
   
   background-size: cover;
   background-position: center;
