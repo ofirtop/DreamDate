@@ -39,10 +39,10 @@ a {
   color: black
 }
 .member-preview {
-  width: 200px;
+  width: 250px;
   height: 300px;
   border: 1px solid grey;
-  background-color: bisque;
+  background-color: rgb(196, 236, 255);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,7 +60,7 @@ a {
 img {
   width: 200px;
   height: 200px;
-  object-fit: contain;
+  object-fit: cover;
 }
 .font-awesome-icon {
   font-size: 2em;

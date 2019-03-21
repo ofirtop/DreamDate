@@ -34,6 +34,7 @@ export default {
   .member-list ul{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   li {
     list-style: none;
