@@ -34,8 +34,8 @@ export default {
   font-size: 2em;
 }
 a {
-  font-style: none;
-  color: inherit
+  text-decoration: none;
+  color: black
 }
 .member-preview {
   width: 200px;
