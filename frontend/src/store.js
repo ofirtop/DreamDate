@@ -35,6 +35,7 @@ export default new Vuex.Store({
     setDemoUser({ commit, state }, { gender }) {
       let demoUser = state.members.find(member => member.gender === gender);
       commit({type: 'setLoggedInUser', user: demoUser });
+      //TODO load members by gender
       return Promise.resolve();
     }
   }

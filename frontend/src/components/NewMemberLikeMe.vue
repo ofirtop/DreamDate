@@ -1,5 +1,5 @@
 <template>
-  <section v-if="member">
+  <section v-if="memberCopy">
     member {{member.from}} likes you!
     <button @click="startChat">Start Chat</button>
   </section>
@@ -10,10 +10,15 @@ import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
+  data(){
+    return {
+      memberCopy:this.member
+    };
+  },
   methods: {
     startChat() {
       EVENT_BUS.$emit(EV_START_CHAT, this.member);
-      this.member = null;//hides this notification
+      this.memberCopy = null;//hides this notification
     }
   }
 };
