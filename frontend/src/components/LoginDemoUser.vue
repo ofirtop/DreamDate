@@ -32,8 +32,9 @@ export default {
   position: fixed;
   width: 100vw;
   height: 90vh;
-  background: url(/img/home-bg.afc254dd.jpg) no-repeat;
+  background: url('../assets/img/home-bg9.jpg') no-repeat ;
+  
   background-size: cover;
-  background-position: top right;
+  background-position: center;
 }
 </style>
