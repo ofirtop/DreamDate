@@ -5,7 +5,6 @@
         <router-link to="/">
           <img src="@/assets/img/logo.png" alt="logo" class="logo">
         </router-link>
-        <router-link to="/login">Login</router-link>
       </nav>
       <div v-if="loggedInUser">
         Hello

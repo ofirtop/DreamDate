@@ -9,8 +9,10 @@ export default {
 //     return members;
 // }
 function query() {
-    console.log('AXIOS!');
-    
     return axios.get(`${BASE_URL}/user`)
-        .then(res => res.data);
+        .then(res => {
+            let members = res.data;
+            console.log('members', members);
+            return members;
+        });
 }

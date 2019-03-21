@@ -32,8 +32,9 @@ export default new Vuex.Store({
           context.commit({ type: 'setMembers', members });
         })
     },
-    setDemoUser({ commit }, { user }) {
-      commit({type: 'setLoggedInUser', user });
+    setDemoUser({ commit, state }, { gender }) {
+      let demoUser = state.members.find(member => member.gender === gender);
+      commit({type: 'setLoggedInUser', user: demoUser });
       return Promise.resolve();
     }
   }
