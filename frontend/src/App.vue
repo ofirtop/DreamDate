@@ -1,14 +1,30 @@
 <template>
   <div id="app">
-    <nav id="nav" class="flex items-center">
-      <router-link to="/">
-        <img src="@/assets/img/logo.png" alt="logo" class="logo">
-      </router-link>
-      <router-link to="/about">About</router-link>
-    </nav>
+    <div class="flex items-center">
+      <nav id="nav" class="flex items-center">
+        <router-link to="/">
+          <img src="@/assets/img/logo.png" alt="logo" class="logo">
+        </router-link>
+        <router-link to="/login">Login</router-link>
+      </nav>
+      <div v-if="loggedInUser">
+        Hello
+        {{loggedInUser.name}}
+      </div>
+    </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    loggedInUser: function() {
+      return this.$store.getters.loggedInUser;
+    }
+  }
+};
+</script>
 
 <style lang="scss">
 @import "@/sass/_variables.scss";
