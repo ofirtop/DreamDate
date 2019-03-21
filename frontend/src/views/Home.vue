@@ -4,8 +4,15 @@
       <login-demo-user v-if="!loggedInUser"></login-demo-user>
     </section>
     <new-member-like-me :member="newMemberWhoLikeMe" v-if="newMemberWhoLikeMe"/>
-    <member-match v-if="memberForMatch" :member="memberForMatch" @chat="startChat" @close="memberForMatch = null" />
-    <member-list @like="likeMember"></member-list>
+    <member-match
+      v-if="memberForMatch"
+      :member="memberForMatch"
+      @chat="startChat"
+      @close="memberForMatch = null"
+    />
+    <main>
+      <member-list @like="likeMember"></member-list>
+    </main>
   </section>
 </template>
 
@@ -66,5 +73,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+main{
+  max-width:900px;
+  margin:auto;
+}
 </style>
