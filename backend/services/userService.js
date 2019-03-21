@@ -1,5 +1,6 @@
 const mongoService = require('./mongo-service')
 const ObjectId = require('mongodb').ObjectId;
+const imgService = require('./imgService')
 
 module.exports = {
     query,
@@ -20,8 +21,12 @@ function query(/*query*/) {
             // if (query.sort === 'price' || query.sort !== 'name'){
             // console.log('userService: query() - sort by PRICE')
             // return db.collection('user').find(queryToMongo).sort({ 'price': 1 }).toArray();
+
             return db.collection('user').find({}).toArray()
-                .then(users => users)
+                .then(users => {
+                    // imgService.query({term:'woman', usersCount:users.length})
+                    return users
+                })
             // }
             // else {
             //     // console.log('NAME')
