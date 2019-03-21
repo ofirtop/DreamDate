@@ -2,8 +2,7 @@
   <section>
     <h1>Match with {{member.name}}</h1>
     <button @click="$emit('chat', member)">Start Chat</button>
-    <br>
-    <button @click="$emit('close')">&times;</button>
+    <button @click="$emit('close')">Later...</button>
   </section>
 </template>
 
@@ -24,5 +23,10 @@ section {
   left: 50%;
   height: 300px;
   box-shadow: 2px 2px 20px 14px black;
+}
+
+button{
+  display:inline-block;
+  margin-right: 10px;
 }
 </style>
