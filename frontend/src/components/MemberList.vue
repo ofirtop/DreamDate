@@ -1,7 +1,7 @@
 <template>
   <section class="member-list">
     <!-- <h1>Members list</h1> -->
-      <ul>
+      <ul class="flex content-center">
        <li class="member" v-for="member in members" :member="member" :key="member._id">
             <member-preview :member="member" @like="$emit('like', $event)"></member-preview>
         </li>
@@ -36,14 +36,4 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
   }
-  li {
-    list-style: none;
-  }
-  a {
-    text-decoration: none;
-    color: inherit
-  }
 </style>
-
-
-

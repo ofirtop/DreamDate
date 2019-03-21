@@ -26,6 +26,7 @@ section {
     height: 50vh;
     background: yellow;
     width: 40vw;
+    max-width:300px;
     border: 2px solid lightgoldenrodyellow;
     box-shadow: inset 0 0 9px 1px black;
     border-radius: 5px;

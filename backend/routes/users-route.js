@@ -10,7 +10,6 @@ function addUserRoutes(app) {
         // let query = req.query; //contains the filter
         userService.query(/*query*/)
         .then(users => {
-            console.log('user-route: GET list - users: ',users)
             return res.json(users)
         });
     })

@@ -5,31 +5,54 @@
         <router-link to="/">
           <img src="@/assets/img/logo.png" alt="logo" class="logo">
         </router-link>
-        <router-link to="/login">Login</router-link>
       </nav>
       <div v-if="loggedInUser">
         Hello
         {{loggedInUser.name}}
       </div>
     </div>
+    <login-demo-user v-if="!loggedInUser"></login-demo-user>
+    <new-member-like-me :member="newMemberWhoLikeMe" v-if="newMemberWhoLikeMe"/>
     <router-view/>
     <chat v-if="memberToChat" :member="memberToChat"/>
   </div>
 </template>
 
 <script>
-import { EVENT_BUS, EV_START_CHAT, EV_END_CHAT } from "@/event-bus.js";
 import chat from "@/components/Chat.vue";
+import loginDemoUser from "@/components/LoginDemoUser.vue";
+import newMemberLikeMe from "@/components/NewMemberLikeMe.vue";
+import { EVENT_BUS, EV_START_CHAT, EV_END_CHAT } from "@/event-bus.js";
+import likeService from "@/services/like.service.js";
 
 export default {
   data() {
     return {
-      memberToChat: null
+      memberToChat: null,
+      newMemberWhoLikeMe: null,
+      membersWhoLikeMe: [],
     };
   },
   computed: {
-    loggedInUser: function() {
+    loggedInUser() {
       return this.$store.getters.loggedInUser;
+    }
+  },
+  watch: {
+    async loggedInUser() {
+      if (this.loggedInUser) {
+        this.membersWhoLikeMe = likeService.queryMembersWhoLikeMe(
+          this.loggedInUser._id
+        );
+      }
+    },
+    membersWhoLikeMe() {
+      this.newMemberWhoLikeMe = this.membersWhoLikeMe[
+        this.membersWhoLikeMe.length - 1
+      ];
+      setTimeout(() => {
+        this.newMemberWhoLikeMe = null;
+      }, 5000);
     }
   },
   created() {
@@ -41,7 +64,9 @@ export default {
     });
   },
   components: {
-    chat
+    chat,
+    loginDemoUser,
+    newMemberLikeMe
   }
 };
 </script>

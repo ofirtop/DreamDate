@@ -11,10 +11,15 @@ export default {
 // }
 function query() {
     return axios.get(`${BASE_URL}/user`)
-        .then(res => res.data);
+        .then(res => {
+            let members = res.data;
+            console.log('members', members);
+            return members;
+        });
 }
+
 function getMemberById(userId) {
-    return axios.get (`${BASE_URL}/user/${userId}`)
+    return axios.get(`${BASE_URL}/user/${userId}`)
         .then(res => res.data)
-        .catch(err => console.log('Error:', err))
+        .catch(err => console.log('Error:', err));
 }
