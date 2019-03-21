@@ -13,15 +13,35 @@
       </div>
     </div>
     <router-view/>
+    <chat v-if="memberToChat" :member="memberToChat"/>
   </div>
 </template>
 
 <script>
+import { EVENT_BUS, EV_START_CHAT, EV_END_CHAT } from "@/event-bus.js";
+import chat from "@/components/Chat.vue";
+
 export default {
+  data() {
+    return {
+      memberToChat: null
+    };
+  },
   computed: {
     loggedInUser: function() {
       return this.$store.getters.loggedInUser;
     }
+  },
+  created() {
+    EVENT_BUS.$on(EV_START_CHAT, member => {
+      this.memberToChat = member;
+    });
+    EVENT_BUS.$on(EV_END_CHAT, () => {
+      this.memberToChat = null;
+    });
+  },
+  components: {
+    chat
   }
 };
 </script>
