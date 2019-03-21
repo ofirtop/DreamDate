@@ -29,7 +29,7 @@ function _createLikes() {
         //     memberWhoLikeMe = membersWhoLikeMe.find(like => like.from === ++i);
         //  }
         membersWhoLikeMe.push(_createLike(i++, loggedInUserId))
-    }, 30 * 1000);
+    }, 6 * 1000);
 }
 function _createLike(from, to) {
     return { from, to };
@@ -39,8 +39,17 @@ function queryMembersILike(userId) {
     return Promise.resolve(membersILike);
 }
 
-function queryMembersWhoLikeMe(userId) {
-    //return Promise.resolve(membersWhoLikeMe);
+function queryMembersWhoLikeMe(userId, members) {
+    membersWhoLikeMe = members.filter((member, idx) => { return idx % 3 === 0 });
+
+    //set demo data
+    let membersCopy = members.slice();
+    setInterval(() => {
+        membersWhoLikeMe.push(membersCopy.splice(0, 1));
+        console.log('service membersWhoLikeMe', membersWhoLikeMe);
+
+    }, 10*1000);
+
     return membersWhoLikeMe;
 }
 

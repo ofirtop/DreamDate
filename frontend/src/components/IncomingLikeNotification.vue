@@ -26,10 +26,12 @@ export default {
 
 <style scoped>
 section {
-  background-color: lightgreen;
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  padding: 25px;
+    border-radius: 5px;
+    background-color: yellowgreen;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 25px;
+    opacity: 0.9;
 }
 </style>

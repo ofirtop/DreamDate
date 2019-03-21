@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     likeMember(member) {
-      console.log("like member", member);
       this.memberForMatch = member;
     },
     startChat(member) {

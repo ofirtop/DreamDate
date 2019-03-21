@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import memberService from './services/member.service.js'
+import likeService from './services/like.service.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     members: [],
-    loggedInUser: null
+    membersWhoLikeMe: [],
+    loggedInUser: null,
   },
   mutations: {
     setMembers(state, { members }) {
@@ -16,22 +18,23 @@ export default new Vuex.Store({
     setLoggedInUser(state, { user }) {
       state.loggedInUser = user;
     },
-    loadMemberById(state, { member}) {
-      let idx = state.members.findIndex(item => item._id === member._id);
-      state.members.splice(idx, 1, member);
-      
-    }
+    setMembersWhoLikeMe(state, { members }) {
+      state.membersWhoLikeMe = members;
+    },
   },
   getters: {
     members(state) {
       return state.members
     },
-    loggedInUser(state){
+    loggedInUser(state) {
       return state.loggedInUser;
+    },
+    membersWhoLikeMe(state){
+      return state.membersWhoLikeMe;
     }
   },
   actions: {
-    loadMembers(context) {   
+    loadMembers(context) {
       return memberService.query()
         .then(members => {
           context.commit({ type: 'setMembers', members });
@@ -39,16 +42,11 @@ export default new Vuex.Store({
     },
     setDemoUser({ commit, state }, { gender }) {
       let demoUser = state.members.find(member => member.gender === gender);
-      commit({type: 'setLoggedInUser', user: demoUser });
+      commit({ type: 'setLoggedInUser', user: demoUser });
       //TODO load members by gender
+      let membersWhoLikeMe = likeService.queryMembersWhoLikeMe(state.loggedInUser._id, state.members);
+      commit({type:'setMembersWhoLikeMe', members: membersWhoLikeMe});
       return Promise.resolve();
-    },
-    loadMemberById({ commit }, {memberId}) {
-      return memberService.getMemberById(memberId)
-        .then(member => {
-          commit({type: 'loadMemberById', member});
-          return member;
-          })
-        }
+    }
   }
 })

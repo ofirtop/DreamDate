@@ -1,7 +1,7 @@
 <template>
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
-      <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
+    <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
       <img :src= member.mainImage>
     </router-link>
     <div class="likes-panel">
@@ -13,15 +13,14 @@
 <script>
 export default {
   props: ['member'],
-  methods: {
+ methods: {
     like() {
-      console.log('I like', this.member.name)
       this.$emit('like', this.member);
     },
     notLike() {
       console.log("I don't like", this.member.name)
     }
-  },
+  },  
   computed: {
     memberAge() {
       let year = +(this.member.dateOfBirth.substring(6,10));
