@@ -1,7 +1,7 @@
 <template>
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
-      <h1>{{member.name}}, {{member.age}}</h1>
+      <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
       <img :src= member.mainImage>
     </router-link>
     <div class="likes-panel">
@@ -21,15 +21,28 @@ export default {
     notLike() {
       console.log("I don't like", this.member.name)
     }
+  },
+  computed: {
+    memberAge() {
+      let year = +(this.member.dateOfBirth.substring(6,10));
+      return new Date().getFullYear() - year;
+    }
   }
 };
 </script>
 <style scoped>
+.member-name {
+  font-size: 2em;
+}
+a {
+  text-decoration: none;
+  color: black
+}
 .member-preview {
-  width: 200px;
+  width: 250px;
   height: 300px;
   border: 1px solid grey;
-  background-color: bisque;
+  background-color: rgb(196, 236, 255);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,9 +60,9 @@ export default {
 img {
   width: 200px;
   height: 200px;
-  object-fit: contain;
+  object-fit: cover;
 }
 .font-awesome-icon {
-  height: 10px;
+  font-size: 2em;
 }
 </style>

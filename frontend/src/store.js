@@ -15,6 +15,11 @@ export default new Vuex.Store({
     },
     setLoggedInUser(state, { user }) {
       state.loggedInUser = user;
+    },
+    loadMemberById(state, { member}) {
+      let idx = state.members.findIndex(item => item._id === member._id);
+      state.members.splice(idx, 1, member);
+      
     }
   },
   getters: {
@@ -37,6 +42,13 @@ export default new Vuex.Store({
       commit({type: 'setLoggedInUser', user: demoUser });
       //TODO load members by gender
       return Promise.resolve();
-    }
+    },
+    loadMemberById({ commit }, {memberId}) {
+      return memberService.getMemberById(memberId)
+        .then(member => {
+          commit({type: 'loadMemberById', member});
+          return member;
+          })
+        }
   }
 })
