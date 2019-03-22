@@ -6,6 +6,7 @@
     </router-link>
     <div class="likes-panel">
       <font-awesome-icon icon="heart" @click.stop="like" />
+      {{likeStatus}}
       <font-awesome-icon icon="times" @click.stop="notLike"/>
     </div>
   </section>
@@ -25,16 +26,18 @@ export default {
     memberAge() {
       let year = +(this.member.dateOfBirth.substring(6,10));
       return new Date().getFullYear() - year;
+    },
+    likeStatus(){
+      return this.$store.getters.likeStatus(this.member._id);
     }
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .member-name {
   font-size: 2em;
 }
 a {
-  text-decoration: none;
   color: black
 }
 .member-preview {

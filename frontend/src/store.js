@@ -9,8 +9,7 @@ export default new Vuex.Store({
   state: {
     members: [],
     loggedInUser: null,
-    membersILike: new Map(),
-    membersWhoLikeMe: new Map()
+    likes: new Map(),
   },
   mutations: {
     setMembers(state, { members }) {
@@ -25,23 +24,32 @@ export default new Vuex.Store({
     },
     setLikes(state, { likes }) {
 
-      state.membersILike = likes
-        .filter(like => like.from === state.loggedInUser._id)
-        .reduce((acc, like) => {
-          return acc.set(like.to, like);
-        }, new Map());
+      state.likes = likes.reduce((acc, like) => {
+        let memberId = '';
+        if (like.from === state.loggedInUser._id) {//member i like
+          memberId = like.to;
+          if (!acc.get(memberId)) acc.set(memberId, { iLikeMember: true, memberLikeMe: false });
+          else acc.get(memberId).iLikeMember = true;
+        }
+        else {//member who likes me
+          memberId = like.from;
+          if (!acc.get(memberId)) acc.set(memberId, { iLikeMember: false, memberLikeMe: true });
+          else acc.get(memberId).memberLikeMe = true;
+        }
+        return acc;
+      }, new Map());
+      console.log('store likes', state.likes);
 
-      state.membersWhoLikeMe = likes
-        .filter(like => like.to === state.loggedInUser._id)
-        .reduce((acc, like) => {
-          return acc.set(like.from, like)
-        }, new Map());
     },
     addMemberILike(state, { memberId }) {
-      state.membersILike.set(memberId);
+      let like = state.likes.get(memberId);
+      if (!like) state.likes.set(memberId, { iLikeMember: true, memberLikeMe: false })
+      else like.iLikeMember = true;
     },
     addMemberWhoLikesMe(state, { memberId }) {
-      state.membersWhoLikeMe.set(memberId);
+      let like = state.likes.get(memberId);
+      if (!like) state.likes.set(memberId, { iLikeMember: false, memberLikeMe: true })
+      else like.memberLikeMe = true;
     }
   },
   getters: {
@@ -51,10 +59,22 @@ export default new Vuex.Store({
     loggedInUser(state) {
       return state.loggedInUser;
     },
-    isMatch: (state) => {//returns a function. hack for getter with params
+    isMatch(state) {//returns a function. hack for getter with params
       return (memberId) => {
-        return !!state.membersWhoLikeMe.get(memberId);
+        let like = state.likes.get(memberId);
+        if (!like) return false;
+        return like.iLikeMember && like.memberLikeMe;
       }
+    },
+    likeStatus(state){
+      return (memberId)=>{
+        if(!state.likes) return '';
+        let like = state.likes.get(memberId);
+        if (!like) return '';
+        if (like.iLikeMember && like.memberLikeMe) return 'match';
+        if (like.iLikeMember) return 'i like';
+        else if (like.memberLikeMe) return 'likes me';
+      };
     }
   },
   actions: {
@@ -81,8 +101,6 @@ export default new Vuex.Store({
     async loadLikes({ commit, state }) {
       let likes = await likeService.query(state.loggedInUser._id);
       commit({ type: 'setLikes', likes });
-      console.log('likes loaded. membersILike:', state.membersILike);
-      console.log('likes loaded. membersWhoLikeMe:', state.membersWhoLikeMe);
     },
     async addLike({ commit, state }, { memberId }) {
       await likeService.add(state.loggedInUser._id, memberId);
