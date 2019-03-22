@@ -7,7 +7,7 @@
       @close="memberForMatch = null"
     />
     <main>
-      <member-list @like="likeMember"></member-list>
+      <member-list @notLike="notLikeMember" @like="likeMember"></member-list>
     </main>
   </section>
 </template>
@@ -27,6 +27,9 @@ export default {
     likeMember(member) {
       console.log("like member", member);
       this.memberForMatch = member;
+    },
+    notLikeMember(memberId) {
+      this.$store.dispatch({ type: 'notLikeMember', memberId})
     },
     startChat(member) {
       this.memberForMatch = null;

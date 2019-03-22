@@ -19,7 +19,10 @@ export default new Vuex.Store({
     loadMemberById(state, { member}) {
       let idx = state.members.findIndex(item => item._id === member._id);
       state.members.splice(idx, 1, member);
-      
+    },
+    removeMemberIDontLike(state, { updatedMemberId }){
+      let idx = state.members.findIndex(member => member._id === updatedMemberId);
+      state.members.splice(idx, 1);
     }
   },
   getters: {
@@ -49,6 +52,10 @@ export default new Vuex.Store({
           commit({type: 'loadMemberById', member});
           return member;
           })
-        }
+    },
+    notLikeMember({ commit, state }, {memberId}) {
+      memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
+        .then(updatedMemberId => commit({type: 'removeMemberIDontLike', updatedMemberId }))
+    }
   }
 })

@@ -20,6 +20,7 @@ export default {
     },
     notLike() {
       console.log("I don't like", this.member.name)
+      this.$emit('notLike', this.member._id);
     }
   },
   computed: {
