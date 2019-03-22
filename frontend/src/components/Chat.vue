@@ -1,20 +1,14 @@
 <template>
   <section>
     <h1>Chat with {{member.name}}</h1>
-    <button @click="closeChat">&times;</button>
+    <button @click="$emit('close')">&times;</button>
   </section>
 </template>
 
 <script>
-import { EVENT_BUS, EV_END_CHAT } from "@/event-bus.js";
 
 export default {
-  props: ["member"],
-  methods: {
-    closeChat() {
-      EVENT_BUS.$emit(EV_END_CHAT);
-    }
-  }
+  props: ["member"]
 };
 </script>
 

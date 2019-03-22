@@ -15,7 +15,6 @@ export default {
   props: ['member'],
   methods: {
     like() {
-      console.log('I like', this.member.name)
       this.$emit('like', this.member);
     },
     notLike() {

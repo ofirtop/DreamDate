@@ -1,47 +1,29 @@
-import userService from './user.service.js';
-
 export default {
-    queryMembersILike,
-    queryMembersWhoLikeMe,
+    query,
     add
 };
 
-let membersILikes = [];
-let membersWhoLikeMe = [];
+let likes = [];
 
-let loggedInUserId = 1;
+function _createLikes(userId = '5c921ba999879a164c7df9ed') {
+    likes.push(_createLike(userId, '5c921ba999879a164c7df9f4'));
+    likes.push(_createLike(userId, '5c921ba999879a164c7df9ef'));
+    likes.push(_createLike('5c921ba999879a164c7df9ef', userId));
+    likes.push(_createLike('5c921ba999879a164c7df9fe', userId));
 
-_createLikes();
+console.log('likeService. _createLikes. likes:', likes);
 
-function _createLikes() {
-    for (let i = 0; i < 3; i++) {
-        membersILikes.push(_createLike(loggedInUserId, i * 3));
-    }
-
-    for (let i = 0; i < 3; i++) {
-        membersWhoLikeMe.push(_createLike(i * 2, loggedInUserId));
-    }
-
-    let i = 2;
-    setInterval(() => {
-        //  let memberWhoLikeMe = membersWhoLikeMe.find(like => like.from === i);
-        //  while(memberWhoLikeMe){
-        //     memberWhoLikeMe = membersWhoLikeMe.find(like => like.from === ++i);
-        //  }
-        membersWhoLikeMe.push(_createLike(i++, loggedInUserId))
-    }, 30 * 1000);
+    // setTimeout(() => {
+    //     likes.push(_createLike('5c921ba999879a164c7df9fd', userId));
+    // }, 60 * 1000);
 }
 function _createLike(from, to) {
     return { from, to };
 }
 
-function queryMembersILike(userId) {
-    return Promise.resolve(membersILike);
-}
-
-function queryMembersWhoLikeMe(userId) {
-    //return Promise.resolve(membersWhoLikeMe);
-    return membersWhoLikeMe;
+function query(userId) {
+    _createLikes(userId);
+    return Promise.resolve(likes);
 }
 
 function add(userId, memberId) {
