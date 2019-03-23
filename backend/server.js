@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 
 const addUserRoutes = require('./routes/users-route')
+const addLikesRoutes = require('./routes/likes-route')
 
 const app = express()
 app.use(cors({
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 })
 
 addUserRoutes(app)
+addLikesRoutes(app)
 
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`))
