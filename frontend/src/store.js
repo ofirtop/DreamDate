@@ -53,6 +53,16 @@ export default new Vuex.Store({
       if (!like) state.likesMap[memberId] = { iLikeMember: false, memberLikeMe: true };
       else like.memberLikeMe = true;
       console.log('added like from member', memberId, state.likesMap[memberId]);
+    },
+    loginMember(state, {memberId}){
+      let member = state.members.find(currMember => currMember._id === memberId);
+      member.online = true;
+      console.log('loginMember', member);
+    },
+    logoutMember(state, {memberId}){
+      let member = state.members.find(currMember => currMember._id === memberId);
+      member.online = false;
+      console.log('logoutMember', member);
     }
   },
   getters: {
@@ -114,6 +124,12 @@ export default new Vuex.Store({
     },
     receiveLikeFromMember({ commit }, { memberId }) {
       commit({ type: 'addMemberWhoLikesMe', memberId });
+    },
+    loginMember({commit}, {memberId}){
+      commit({type: 'loginMember', memberId});
+    },
+    logoutMember({commit}, {memberId}){
+      commit({type: 'logoutMember', memberId});
     }
   }
 })

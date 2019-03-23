@@ -10,9 +10,11 @@ export default {
 
 socket.on('member login', memberId=>{
     console.log('member login',memberId );
+    store.dispatch({type: 'loginMember', memberId});
 });
 socket.on('member logout', memberId=>{
     console.log('member logout',memberId );
+    store.dispatch({type: 'logoutMember', memberId});
 });
 
 // var members = [{_id: '111', name: 'Puki', age: 23}, {_id: '222', name: 'Muki', age: 33}, {_id: '333',name: 'Kuki', age: 43}]
