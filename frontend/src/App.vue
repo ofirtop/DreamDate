@@ -30,7 +30,6 @@ import chat from "@/components/Chat.vue";
 import loginDemoUser from "@/components/LoginDemoUser.vue";
 import incomingLikeIndicator from "@/components/IncomingLikeIndicator.vue";
 import match from "@/components/Match.vue";
-
 import {EVENT_BUS, EV_START_CHAT, EV_NEW_MATCH} from "@/event-bus.js";
 
 export default {

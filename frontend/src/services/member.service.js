@@ -1,9 +1,19 @@
-import axios from 'axios'
+import axios from 'axios';
+import {socket} from './socket.js';
+import store from '@/store.js';
+
 const BASE_URL = 'http://localhost:3003'
 export default {
     query,
     getMemberById
 }
+
+socket.on('member login', memberId=>{
+    console.log('member login',memberId );
+});
+socket.on('member logout', memberId=>{
+    console.log('member logout',memberId );
+});
 
 // var members = [{_id: '111', name: 'Puki', age: 23}, {_id: '222', name: 'Muki', age: 33}, {_id: '333',name: 'Kuki', age: 43}]
 // function query() {

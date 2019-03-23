@@ -1,7 +1,15 @@
+import { socket } from './socket.js';
+import store from '@/store.js';
+
 export default {
     query,
     add
 };
+
+socket.on('like', memberId => {
+    console.log('received like', memberId);
+    store.dispatch({ type: 'receiveLikeFromMember', memberId });
+});
 
 let likes = [];
 

@@ -2,13 +2,13 @@
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
       <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
-      <img :src= member.mainImage>
+      <img :src="member.mainImage">
     </router-link>
     <div class="likes-panel">
       <font-awesome-icon icon="heart" @click.stop="like" />
       {{likeStatus}}
       <font-awesome-icon icon="times" @click.stop="notLike"/>
-    </div>
+  </div>
   </section>
 </template>
 <script>
@@ -19,15 +19,15 @@ export default {
       this.$emit('like', this.member);
     },
     notLike() {
-      console.log("I don't like", this.member.name)
+      console.log("I don't like", this.member.name);
     }
   },
   computed: {
     memberAge() {
-      let year = +(this.member.dateOfBirth.substring(6,10));
+      let year = +(this.member.dateOfBirth.substring(6, 10));
       return new Date().getFullYear() - year;
     },
-    likeStatus(){
+    likeStatus() {
       return this.$store.getters.likeStatus(this.member._id);
     }
   }
@@ -38,7 +38,7 @@ export default {
   font-size: 2em;
 }
 a {
-  color: black
+  color: black;
 }
 .member-preview {
   width: 250px;
