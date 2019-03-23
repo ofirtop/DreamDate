@@ -2,10 +2,23 @@
   <section class="user-filter">
     <form >
       <div class="gender-filter">
-        <el-radio-group size="medium" @change="setFilter" v-model="filterBy.gender">
+        <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
           <el-radio-button label="female"></el-radio-button>
           <el-radio-button label="male"></el-radio-button>
         </el-radio-group>
+      </div>
+      <div class="city-filter">
+        <el-select size="small" @change="setFilter" v-model="filterBy.city" placeholder="Select location">
+          <el-option
+            v-for="city in cities"
+            :key="city.value"
+            :label="city.label"
+            :value="city.value">
+          </el-option>
+      </el-select>
+      </div>
+      <div class="height-filter">
+        <el-input size="small" @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
       </div>
       <div class="age-filter">
          <label>Age</label>
@@ -17,19 +30,7 @@
             :max="100">
           </el-slider>
       </div>
-      <div class="city-filter">
-        <el-select @change="setFilter" v-model="filterBy.city" multiple placeholder="Select location">
-          <el-option
-            v-for="city in cities"
-            :key="city.value"
-            :label="city.label"
-            :value="city.value">
-          </el-option>
-      </el-select>
-      </div>
-      <div class="height-filter">
-        <el-input @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
-      </div>
+    <el-button @click="clearFilter" type="info">Clear Filter</el-button>
     </form>
   </section>
 </template>
@@ -64,6 +65,15 @@ export default {
           city: this.filterBy.city}
         this.$emit('setFilter', filter);
       },
+      clearFilter() {
+        this.filterBy = {
+           gender: '',
+           age: [18, 100],
+           minHeight: null,
+           city: ''
+          };
+        this.setFilter();
+      }
     },
     watch: {
       loggedInUser() {
@@ -78,7 +88,8 @@ export default {
     },
     created() {
       let namesCities = memberService.getCities();
-      this.cities = namesCities.map(city => {return {value: city, label: city}})
+      this.cities = namesCities.map(city => {return {value: city, label: city}});
+      this.cities.unshift({value: '', label: 'All cities'})
       this.setFilter();
     }
 }
@@ -101,9 +112,6 @@ form {
   align-items: center
 }
 .age-filter {
-  width: 250px;
-}
-.el-radio-group {
-  width: 180px;
+  width: 200px;
 }
 </style>

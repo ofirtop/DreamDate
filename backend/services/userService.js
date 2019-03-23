@@ -13,6 +13,8 @@ module.exports = {
 function query(query) {
     console.log('User SERVICE: about to connect to DreamDateDB')
     var queryToMongo = createQueryToMongo(query);
+    console.log('queryToMongo',queryToMongo);
+    
     // var sorter = query.sort === 'price' ? 'price' : 'name';
     // console.log('sorter:', sorter)
     return mongoService.connect()

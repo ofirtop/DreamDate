@@ -14,7 +14,13 @@ function getCities() {
 }
 
 function query(filter) {
-    return axios.get(`${BASE_URL}/user/?gender=${filter.gender}&&minAge=${filter.minAge}&&maxAge=${filter.maxAge}&&minHeight=${filter.minHeight}&&City=${filter.city}`)
+    let strUrl = `${BASE_URL}/user/?`
+    if(filter.gender) strUrl += `gender=${filter.gender}`
+    if(filter.minAge) strUrl += `&&minAge=${filter.minAge}`
+    if(filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
+    if(filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
+    if(filter.city) strUrl += `&&city=${filter.city}`
+    return axios.get(strUrl)
         .then(res => {
             let members = res.data;
             console.log('members', members);
