@@ -19,7 +19,8 @@ export default {
       this.$emit('like', this.member);
     },
     notLike() {
-      console.log("I don't like", this.member.name);
+      console.log("I don't like", this.member.name)
+      this.$emit('notLike', this.member._id);
     }
   },
   computed: {

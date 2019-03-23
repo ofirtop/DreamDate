@@ -54,15 +54,19 @@ export default new Vuex.Store({
       else like.memberLikeMe = true;
       console.log('added like from member', memberId, state.likesMap[memberId]);
     },
-    loginMember(state, {memberId}){
+    loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       member.online = true;
       console.log('loginMember', member);
     },
-    logoutMember(state, {memberId}){
+    logoutMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       member.online = false;
       console.log('logoutMember', member);
+    },
+    removeMemberIDontLike(state, { updatedMemberId }) {
+      let idx = state.members.findIndex(member => member._id === updatedMemberId);
+      state.members.splice(idx, 1);
     }
   },
   getters: {
@@ -125,11 +129,15 @@ export default new Vuex.Store({
     receiveLikeFromMember({ commit }, { memberId }) {
       commit({ type: 'addMemberWhoLikesMe', memberId });
     },
-    loginMember({commit}, {memberId}){
-      commit({type: 'loginMember', memberId});
+    loginMember({ commit }, { memberId }) {
+      commit({ type: 'loginMember', memberId });
     },
-    logoutMember({commit}, {memberId}){
-      commit({type: 'logoutMember', memberId});
+    logoutMember({ commit }, { memberId }) {
+      commit({ type: 'logoutMember', memberId });
+    },
+    notLikeMember({ commit, state }, { memberId }) {
+      memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
+        .then(updatedMemberId => commit({ type: 'removeMemberIDontLike', updatedMemberId }))
     }
   }
-})
+});

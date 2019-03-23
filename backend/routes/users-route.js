@@ -7,8 +7,8 @@ function addUserRoutes(app) {
     //GET list
     app.get('/user', (req, res) => {
         console.log('Entering user-route: GET list');
-        // let query = req.query; //contains the filter
-        userService.query(/*query*/)
+         let query = req.query; //contains the filter
+        userService.query(query)
         .then(users => {
             return res.json(users)
         });

@@ -5,7 +5,8 @@ import store from '@/store.js';
 const BASE_URL = 'http://localhost:3003'
 export default {
     query,
-    getMemberById
+    getMemberById,
+    updateNotLikeMember
 }
 
 socket.on('member login', memberId=>{
@@ -34,4 +35,13 @@ function getMemberById(userId) {
     return axios.get(`${BASE_URL}/user/${userId}`)
         .then(res => res.data)
         .catch(err => console.log('Error:', err));
+}
+
+function updateNotLikeMember(memberIdToUpdate, loggedInUserId){
+    return getMemberById(memberIdToUpdate)
+        .then(memberToUpdate => {
+            memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
+            return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
+                .then(res => res.data._id)
+    });
 }
