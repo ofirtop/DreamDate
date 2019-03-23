@@ -3,15 +3,18 @@ const BASE_URL = 'http://localhost:3003'
 export default {
     query,
     getMemberById,
-    updateNotLikeMember
+    updateNotLikeMember,
+    getCities
+}
+//temporary - until we have collection cities in DB 
+var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];
+
+function getCities() {
+    return cities
 }
 
-// var members = [{_id: '111', name: 'Puki', age: 23}, {_id: '222', name: 'Muki', age: 33}, {_id: '333',name: 'Kuki', age: 43}]
-// function query() {
-//     return members;
-// }
-function query() {
-    return axios.get(`${BASE_URL}/user`)
+function query(filter) {
+    return axios.get(`${BASE_URL}/user/?gender=${filter.gender}&&minAge=${filter.minAge}&&maxAge=${filter.maxAge}&&minHeight=${filter.minHeight}&&City=${filter.city}`)
         .then(res => {
             let members = res.data;
             console.log('members', members);

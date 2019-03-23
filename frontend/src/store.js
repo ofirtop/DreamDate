@@ -34,8 +34,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadMembers(context) {   
-      return memberService.query()
+    loadMembers(context, { filterBy }) {   
+      return memberService.query(filterBy)
         .then(members => {
           context.commit({ type: 'setMembers', members });
         })
