@@ -49,7 +49,7 @@ function initSocket(io) {
         });
 
         socket.on('chat finish typing', msg => {
-            console.log('chat finish typing', msg);
+            console.log('ws in','chat finish typing', msg);
 
             let targetSocket = sockets.find(currSocket => currSocket.userId === msg.to);
             console.log('found target socket: ', !!targetSocket);
@@ -58,12 +58,22 @@ function initSocket(io) {
         });
 
         socket.on('add like', payload => {
-            console.log('add like', payload);
+            console.log('ws in','add like', payload);
 
             let targetSocket = sockets.find(currSocket => currSocket.userId === payload.to);
             console.log('found target socket: ', !!targetSocket);
 
             if (targetSocket) targetSocket.emit('add like', payload);
         });
+
+        socket.on('watch member', payload => {
+            console.log('ws in','watch member', payload);
+
+            let targetSocket = sockets.find(currSocket => currSocket.userId === payload.to);
+            console.log('found target socket: ', !!targetSocket);
+
+            if (targetSocket) targetSocket.emit('member is watching', payload);
+        });
+        
     });
 }

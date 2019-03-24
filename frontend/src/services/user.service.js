@@ -15,6 +15,8 @@ async function login(userCredentials) {
         let res = await axios.post(`${BASE_URL}/user/login`, userCredentials)
         let loggedInUser = res.data;
         SOCKET.emit('login', loggedInUser._id);
+        //TODO add to db
+        loggedInUser.membersWhoWatchedMe = [];
         return Promise.resolve(loggedInUser);
     } catch{
         console.log('login failed');

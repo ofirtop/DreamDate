@@ -43,9 +43,16 @@ export default new Vuex.Store({
         memberFromStore.likes.isRead = false;
       }
     },
+    addWatchFromMember(state, { memberId }) {
+      let member = state.loggedInUser.membersWhoWatchedMe.find(currMember => currMember.id === memberId)
+      if (member) member.date = new Date();
+      else {
+        state.loggedInUser.membersWhoWatchedMe.push({ id: memberId, isRead: false, date: new Date() });
+      }
+    },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
-      if(member) member.online = true;
+      if (member) member.online = true;
     },
     logoutMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
@@ -87,6 +94,11 @@ export default new Vuex.Store({
     },
     isMemberTyping(state) {
       return state.chat.isMemberTyping;
+    },
+    newMembersWhoWatchedCount(state) {
+      if (state.loggedInUser) {
+        return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
+      }
     }
   },
   actions: {
@@ -139,6 +151,9 @@ export default new Vuex.Store({
     receiveChatMsgFromMember({ commit }, { msg }) {
       commit({ type: 'addChatMsg', msg });
       EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
+    },
+    watchMember({ state }, { memberId }) {
+      memberService.watchMember(state.loggedInUser._id, memberId);
     }
   }
 });

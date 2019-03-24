@@ -11,6 +11,10 @@
         {{loggedInUser.name}}
         <button @click="logout">Logout</button>
       </div>
+      <div>
+        Watched me:
+        <span>{{newMembersWhoWatchedMeCount}}</span>
+      </div>
     </div>
 
     <login v-if="!loggedInUser"/>
@@ -49,6 +53,7 @@ import {
 } from "@/event-bus.js";
 
 export default {
+  name: 'App',
   data() {
     return {
       memberToChat: null,
@@ -60,6 +65,9 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    newMembersWhoWatchedMeCount(){
+      return this.$store.getters.newMembersWhoWatchedCount;
     }
   },
   methods: {
@@ -104,7 +112,7 @@ export default {
       this.memberWhoLikeMe = member;
       setTimeout(() => {
         this.memberWhoLikeMe = null;
-      },5000);
+      }, 5000);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;

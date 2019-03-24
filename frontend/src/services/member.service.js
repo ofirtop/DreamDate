@@ -9,7 +9,8 @@ export default {
   getMemberById,
   updateNotLikeMember,
   getCities,
-  addLike
+  addLike,
+  watchMember
 }
 //temporary - until we have collection cities in DB 
 var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];
@@ -32,6 +33,13 @@ function _init() {
     console.log('members logged in', memberIds);
     memberIds.forEach(memberId => store.commit({ type: 'loginMember', memberId }));
   });
+
+  SOCKET.on('member is watching', ({ from }) => {
+    console.log('ws in', 'member is watching', from);
+    store.commit({ type: 'addWatchFromMember', memberId: from });
+  });
+
+
 
   SOCKET.on('add like', async ({ from }) => {
     console.log('ws in', 'add like', from);
@@ -67,7 +75,7 @@ function query(filter) {
       let members = res.data;
 
       members.forEach((member, idx) => {
-        //temp - add likes
+        //TODO add these props to db
         member.likes =
           {
             iLike: idx % 3 === 0,
@@ -156,4 +164,23 @@ async function addLike(from, to) {
   let obj = { from, to };
   SOCKET.emit('add like', obj);
   return Promise.resolve();
+}
+
+async function watchMember(from, to) {
+  try {
+    /*
+    TODO ask ofir how to update watch
+    on server - add isRead: false, date: new Date()
+    if exists - only update the date to now
+
+    { id: memberId, isRead: false, date: new Date() }
+    */
+    
+    let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
+  } catch{
+    //TODO
+  }
+  SOCKET.emit('watch member', { from, to });
+
+
 }

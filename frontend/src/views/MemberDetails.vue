@@ -64,6 +64,7 @@ export default {
     this.$store
       .dispatch({ type: "loadMemberById", memberId })
       .then(res => (this.member = res));
+      this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
 </script>
