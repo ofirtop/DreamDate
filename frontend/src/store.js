@@ -30,7 +30,8 @@ export default new Vuex.Store({
       if (idx > -1) state.members.splice(idx, 1, member);
     },
     addLikeToMember(state, { member }) {
-      member.likes.iLike = true;
+      let memberFromStore = state.members.find(currMember => currMember._id === member._id);
+      if(memberFromStore) memberFromStore.likes = member.likes;
     },
     addLikeFromMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);

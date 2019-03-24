@@ -1,7 +1,10 @@
 <template>
   <section v-if="memberCopy">
-    member {{member.from}} likes you!
+    {{member.name}} likes you!
+    
     <button @click="startChat">Start Chat</button>
+    <br>
+    {{member.likes}}
   </section>
 </template>
 

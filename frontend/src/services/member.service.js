@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
-import {EVENT_BUS, EV_RECEIVED_LIKE} from '@/event-bus.js';
+import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 const BASE_URL = 'http://localhost:3003'
 export default {
@@ -28,10 +28,21 @@ function _init() {
     store.dispatch({ type: 'logoutMember', memberId });
   });
 
-  SOCKET.on('add like', payload => {
-    console.log('ws in', 'add like', payload);
-    store.commit({ type: 'addLikeFromMember', memberId: payload.fromId });
-    EVENT_BUS.$emit(EV_RECEIVED_LIKE, payload);
+  SOCKET.on('add like', async ({from}) => {
+    console.log('ws in', 'add like', from);
+    let member = await getMemberById(from);
+    
+    //TODO remove
+    member.likes = {
+      iLike: !!((Math.floor(Math.random() * 10)) % 2),
+      likeMe: true,
+      isRead: false
+    };
+
+    //console.log('member ', member);
+    
+    store.commit({ type: 'addLikeFromMember', member });
+    EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
   });
 }
 
@@ -136,6 +147,7 @@ async function addLike(from, to) {
   catch{
     //TODO
   }
-  SOCKET.emit('add like', { from, to });
+  let obj = {from, to};
+  SOCKET.emit('add like', obj);
   return Promise.resolve();
 }

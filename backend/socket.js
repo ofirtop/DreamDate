@@ -54,18 +54,13 @@ function initSocket(io) {
             if (targetSocket) targetSocket.emit('chat finish typing', msg);
         });
 
-        socket.on('add like', msg => {
-            console.log('add like', msg);
+        socket.on('add like', payload => {
+            console.log('add like', payload);
 
-            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.to);
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === payload.to);
             console.log('found target socket: ', !!targetSocket);
 
-            if (targetSocket) {
-                userService.getById(msg.to)
-                    .then(user => {
-                        targetSocket.emit('add like', { fromId: msg.from, fromName: user.name });
-                    });
-            }
+            if (targetSocket) targetSocket.emit('add like', payload); 
         });
     });
 }
