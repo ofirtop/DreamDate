@@ -1,35 +1,45 @@
 import axios from 'axios';
-import {SOCKET} from '@/socket.js';
+import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
 
 const BASE_URL = 'http://localhost:3003'
 export default {
     query,
     getMemberById,
-    updateNotLikeMember
+    updateNotLikeMember,
+    getCities
 }
+//temporary - until we have collection cities in DB 
+var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];
 
 _init();
 
-function _init(){
+function _init() {
 
-    SOCKET.on('member login', memberId=>{
-        console.log('member login',memberId );
-        store.dispatch({type: 'loginMember', memberId});
+    SOCKET.on('member login', memberId => {
+        console.log('member login', memberId);
+        store.dispatch({ type: 'loginMember', memberId });
     });
-    
-    SOCKET.on('member logout', memberId=>{
-        console.log('member logout',memberId );
-        store.dispatch({type: 'logoutMember', memberId});
+
+    SOCKET.on('member logout', memberId => {
+        console.log('member logout', memberId);
+        store.dispatch({ type: 'logoutMember', memberId });
     });
-    
+
 }
-// var members = [{_id: '111', name: 'Puki', age: 23}, {_id: '222', name: 'Muki', age: 33}, {_id: '333',name: 'Kuki', age: 43}]
-// function query() {
-//     return members;
-// }
-function query() {
-    return axios.get(`${BASE_URL}/user`)
+
+function getCities() {
+    return cities
+}
+
+function query(filter) {
+    let strUrl = `${BASE_URL}/user/?`
+    if (filter.gender) strUrl += `gender=${filter.gender}`
+    if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
+    if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
+    if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
+    if (filter.city) strUrl += `&&city=${filter.city}`
+    return axios.get(strUrl)
         .then(res => {
             let members = res.data;
             console.log('members', members);
@@ -43,11 +53,11 @@ function getMemberById(userId) {
         .catch(err => console.log('Error:', err));
 }
 
-function updateNotLikeMember(memberIdToUpdate, loggedInUserId){
+function updateNotLikeMember(memberIdToUpdate, loggedInUserId) {
     return getMemberById(memberIdToUpdate)
         .then(memberToUpdate => {
             memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
             return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
                 .then(res => res.data._id)
-    });
+        });
 }
