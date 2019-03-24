@@ -28,7 +28,7 @@ function initSocket(io) {
         socket.on('chat msg', msg => {
             console.log('ws in', 'chat msg', msg);
 
-            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId);
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.to);
             console.log('found target socket: ', !!targetSocket);
 
             if (targetSocket) targetSocket.emit('chat msg', msg);
@@ -37,7 +37,7 @@ function initSocket(io) {
         socket.on('chat start typing', msg => {
             console.log('chat start typing', msg);
 
-            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId);
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.to);
             console.log('found target socket: ', !!targetSocket);
 
             if (targetSocket) targetSocket.emit('chat start typing', msg);
@@ -46,7 +46,7 @@ function initSocket(io) {
         socket.on('chat finish typing', msg => {
             console.log('chat finish typing', msg);
 
-            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId);
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.to);
             console.log('found target socket: ', !!targetSocket);
 
             if (targetSocket) targetSocket.emit('chat finish typing', msg);

@@ -59,7 +59,7 @@ export default {
       this.iAmTyping = false;
     },
     getClass(msg) {
-      let isOut = msg.fromId === this.$store.state.loggedInUser._id;
+      let isOut = msg.from === this.$store.state.loggedInUser._id;
       return {
         in: !isOut,
         out: isOut

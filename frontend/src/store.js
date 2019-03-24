@@ -4,6 +4,7 @@ import memberService from '@/services/member.service.js'
 import likeService from '@/services/like.service.js';
 import userService from '@/services/user.service.js';
 import chatService from '@/services/chat.service.js';
+import { EVENT_BUS, EV_CHAT_RECEIVED_MSG } from '@/event-bus.js';
 
 Vue.use(Vuex)
 
@@ -14,8 +15,7 @@ export default new Vuex.Store({
     chat: {
       msgs: [],
       member: null,
-      isMemberTyping: false,
-      isWindowOpen:false
+      isMemberTyping: false
     }
   },
   mutations: {
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     },
     loadMemberById(state, { member }) {
       let idx = state.members.findIndex(item => item._id === member._id);
-      state.members.splice(idx, 1, member);
+      if (idx > -1) state.members.splice(idx, 1, member);
     },
     addLikeToMember(state, { member }) {
       member.likes.iLike = true;
@@ -57,17 +57,26 @@ export default new Vuex.Store({
     },
     addChatMsg(state, { msg }) {
       state.chat.msgs.push(msg);
+      state.chat.isMemberTyping = false;
     },
     startChat(state, { member }) {
       state.chat.member = member;
     },
     setIsMemberTyping(state, { isTyping }) {
       state.chat.isMemberTyping = isTyping;
+    },
+    endChat(state){
+      state.chat.member = null;
     }
   },
   getters: {
     members(state) {
       return state.members
+    },
+    memberById(state) {
+      return (memberId) => {
+        return state.members.find(member => member._id === memberId);
+      }
     },
     loggedInUser(state) {
       return state.loggedInUser;
@@ -130,6 +139,10 @@ export default new Vuex.Store({
     },
     finishTyping({ }, { msg }) {
       chatService.finishTyping(msg);
+    },
+    receiveChatMsgFromMember({ commit }, { msg }) {
+      commit({ type: 'addChatMsg', msg });
+      EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
     }
   }
 });
