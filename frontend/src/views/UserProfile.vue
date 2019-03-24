@@ -90,6 +90,9 @@ export default {
           this.age = [this.user.interestedIn.minAge, this.user.interestedIn.maxAge]
         })
     }
+    console.log('LoggedInUser', this.loggedInUser);
+    
+
   },
   methods: {
     changeMainImg(imgSrc, idx) {
@@ -130,7 +133,13 @@ export default {
           this.user.interestedIn.maxAge
         } years old`;
     }
-  }
+  },
+  watch: {
+    loggedInUser() {
+      let userId = this.$route.params.userId;
+      if (!this.loggedInUser || this.loggedInUser._id !== userId) this.$router.push("/");
+    }
+  },
 };
 </script>
 <style scoped>

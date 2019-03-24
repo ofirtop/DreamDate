@@ -8,38 +8,16 @@
         </el-radio-group>
       </div>
       <div class="city-filter">
-        <el-select
-          size="small"
-          @change="setFilter"
-          v-model="filterBy.city"
-          placeholder="Select location">
-          <el-option
-            v-for="city in cities"
-            :key="city.value"
-            :label="city.label"
-            :value="city.value">
-            </el-option>
+        <el-select size="small" @change="setFilter" v-model="filterBy.city" placeholder="Select location">
+          <el-option v-for="city in cities" :key="city.value" :label="city.label" :value="city.value"></el-option>
         </el-select>
       </div>
       <div class="height-filter">
-        <el-input
-          size="small"
-          @input="setFilter"
-          type="number"
-          placeholder="Enter min-height"
-          v-model="filterBy.minHeight">
-          </el-input>
+        <el-input size="small" @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
       </div>
       <div class="age-filter">
         <label>Age</label>
-        <el-slider
-          @change="setFilter"
-          :key="rangeKey"
-          v-model="filterBy.age"
-          range
-          :min="18"
-          :max="100">
-          </el-slider>
+        <el-slider @change="setFilter" :key="rangeKey" v-model="filterBy.age" range :min="18" :max="100"></el-slider>
       </div>
       <el-button @click="clearFilter" type="info">Clear Filter</el-button>
     </form>
@@ -92,11 +70,11 @@ export default {
       this.filterBy.age[1] = this.loggedInUser.interestedIn.maxAge;
     }
   },
-  watched: {
+  watch: {
     loggedInUser() {
       if (this.loggedInUser) this.loggedInUserSet();
       this.setFilter();
-      this.rangeKey += 1;
+      // this.rangeKey += 1;
     }
   },
   created() {
