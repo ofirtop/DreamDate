@@ -36,5 +36,6 @@ export default {
   
   background-size: cover;
   background-position: center;
+  z-index: 4000;
 }
 </style>

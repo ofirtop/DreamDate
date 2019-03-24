@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     memberAge() {
-      let year = +(this.member.dateOfBirth.substring(6,10));
+      let year = +(this.member.dateOfBirth.substring(0,4));
       return new Date().getFullYear() - year;
     }
   }

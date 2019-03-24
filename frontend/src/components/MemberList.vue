@@ -22,9 +22,6 @@ export default {
         return this.$store.getters.members;
       }
     },
-    created() {
-      this.$store.dispatch({ type: 'loadMembers'})
-    },
     components: {
       memberPreview
     }

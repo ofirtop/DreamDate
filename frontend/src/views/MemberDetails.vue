@@ -35,8 +35,8 @@ export default {
   },
   computed: {
     memberAge() {
-      let year = +(this.member.dateOfBirth.substring(6,10));
-      return new Date().getFullYear() - year;
+      let year = +(this.member.dateOfBirth.substring(0,4));
+      return new Date().getFullYear()-year;
     },
     childrenInfo() {
       if(!this.member.numOfChildren) return `No`;
@@ -52,7 +52,6 @@ export default {
   },
   created() {
     let memberId = this.$route.params.userId;
-    console.log('ID', memberId);
     this.$store.dispatch({ type: 'loadMemberById', memberId})
       .then(res => this.member = res)
   }
