@@ -51,6 +51,9 @@ export default {
   methods:{
     logout(){
       this.$store.dispatch({type: 'logoutUser'});
+    },
+    toProfile() {
+      this.$router.push('/')
     }
   },
   created() {

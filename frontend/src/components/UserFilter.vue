@@ -92,7 +92,7 @@ export default {
       this.filterBy.age[1] = this.loggedInUser.interestedIn.maxAge;
     }
   },
-  watch: {
+  watched: {
     loggedInUser() {
       if (this.loggedInUser) this.loggedInUserSet();
       this.setFilter();
