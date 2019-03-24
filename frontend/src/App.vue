@@ -90,7 +90,6 @@ export default {
     },
     closeChat() {
       this.memberToChat = null;
-      this.$store.commit({ type: "endChat" });
     }
   },
   created() {

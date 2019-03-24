@@ -69,6 +69,7 @@ export default new Vuex.Store({
     },
     endChat(state) {
       state.chat.member = null;
+      state.chat.msgs = [];
     }
   },
   getters: {
