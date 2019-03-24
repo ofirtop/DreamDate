@@ -31,13 +31,13 @@ export default new Vuex.Store({
     },
     addLikeToMember(state, { member }) {
       let memberFromStore = state.members.find(currMember => currMember._id === member._id);
-      if(memberFromStore) memberFromStore.likes.iLike = true;
+      if (memberFromStore) memberFromStore.likes.iLike = true;
     },
     addLikeFromMember(state, { member }) {
       console.log('addLikeFromMember', member.memberId);
       let memberFromStore = state.members.find(currMember => currMember._id === member._id);
       console.log('addLikeFromMember', memberFromStore);
-      
+
       if (memberFromStore) {
         memberFromStore.likes.likeMe = true;
         memberFromStore.likes.isRead = false;
@@ -67,7 +67,7 @@ export default new Vuex.Store({
     setIsMemberTyping(state, { isTyping }) {
       state.chat.isMemberTyping = isTyping;
     },
-    endChat(state){
+    endChat(state) {
       state.chat.member = null;
     }
   },
@@ -109,10 +109,14 @@ export default new Vuex.Store({
       commit({ type: 'addLikeToMember', member });
     },
     async loginUser({ commit }, { userCredentials }) {
-      let loggedInUser = await userService.login(userCredentials);
-      commit({ type: 'setLoggedInUser', user: loggedInUser });
-      console.log('logged in:', loggedInUser._id);
-      return Promise.resolve();
+      try {
+        let loggedInUser = await userService.login(userCredentials);
+        commit({ type: 'setLoggedInUser', user: loggedInUser });
+        console.log('logged in:', loggedInUser._id);
+        return Promise.resolve();
+      } catch{
+        return Promise.reject();
+      }
     },
     async logoutUser({ commit }) {
       await userService.logout();
