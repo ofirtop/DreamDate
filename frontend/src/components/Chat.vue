@@ -106,7 +106,7 @@ ul {
     align-self: flex-start;
   }
   &.out {
-    background-color: blueviolet;
+    background-color: bisque;
     align-self: flex-end;
   }
 }
