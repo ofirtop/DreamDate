@@ -10,6 +10,7 @@
       <div v-if="loggedInUser">
         Hello
         {{loggedInUser.name}}
+        <button @click="logout">Logout</button>
       </div>
     </div>
 
@@ -41,6 +42,11 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    }
+  },
+  methods:{
+    logout(){
+      this.$store.dispatch({type: 'logoutUser'});
     }
   },
   created() {

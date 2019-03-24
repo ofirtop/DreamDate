@@ -8,7 +8,7 @@
       <button @click="setDemoUser('random')">Random</button>
       
       <div class="flex space-between mt-1">
-        <input v-model="userCredentials.username" placeholder="Username" class="mr-1">
+        <input v-model="userCredentials.name" placeholder="Username" class="mr-1">
         <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
         <button @click="doLogin">Login</button>
       </div>
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       userCredentials: {
-        username: "",
+        name: "",
         pass: ""
       }
     };

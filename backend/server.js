@@ -6,12 +6,14 @@ const session = require('express-session');
 const http = require('http');
 const socketIo = require('socket.io');
 
-const addUserRoutes = require('./routes/users-route');
+const addUserRoutes = require('./routes/users-route')
+const addLikesRoutes = require('./routes/likes-route')
 
 
 const app = express();
 const httpServer = http.Server(app);
 const io = socketIo(httpServer);
+
 
 
 app.use(cors({
@@ -33,8 +35,11 @@ app.get('/', (req, res) => {
   res.send('Hello Charlies Angels...')
 })
 
-addUserRoutes(app);
+addUserRoutes(app)
+addLikesRoutes(app)
 
+
+/*SOCKET START */
 const connectedSockets = [];
 
 io.on('connection', socket => {
@@ -77,6 +82,7 @@ io.on('connection', socket => {
     if (targetSocket) targetSocket.emit('chat start typing', msg);
   });
 });
+/*SOCKET END */
 
 const PORT = process.env.PORT || 3003;
 httpServer.listen(PORT, () => console.log(`Example app listening on port ${PORT}`))

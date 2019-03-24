@@ -17,7 +17,7 @@ function loginDemo(user){
 
 async function login(userCredentials){
     console.log('logging in',userCredentials );
-    let  res =  await axios.get(`${BASE_URL}/user/login`, userCredentials)
+    let  res =  await axios.post(`${BASE_URL}/user/login`, userCredentials)
     return res.data;
 }
 

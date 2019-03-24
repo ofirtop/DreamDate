@@ -4,6 +4,31 @@ module.exports = addUserRoutes;
 function addUserRoutes(app) {
     //User REST API
 
+    //LOGIN
+    app.post('/user/login', (req, res) => {
+
+        const userCredentials = req.body;
+        console.log('userCredentials', userCredentials); 
+    return userService.checkLogin(userCredentials)
+            .then(user => {
+                req.session.loggedInUser = user;
+                console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser);
+                return res.json(user)
+            })
+            .catch(err => {
+                console.log('user-route: LOGIN catch:', err);
+                res.status(500).send('Wrong Credentials')
+            })      
+    })
+
+    //LOGOUT
+    app.get('/user/logout', (req, res) => {
+        console.log('user-route:LOGOUT - req.session.loggedInUser: ',req.session.loggedInUser)
+        req.session.destroy();
+        console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
+        res.json({})
+    });
+
     //GET list
     app.get('/user', (req, res) => {
         console.log('Entering user-route: GET list');
