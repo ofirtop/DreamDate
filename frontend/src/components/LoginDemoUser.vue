@@ -6,15 +6,32 @@
       <button @click="setDemoUser('male')" class="mr-1">Man</button>
       <button @click="setDemoUser('female')" class="mr-1">Woman</button>
       <button @click="setDemoUser('random')">Random</button>
+      
+      <div class="flex space-between mt-1">
+        <input v-model="userCredentials.username" placeholder="Username" class="mr-1">
+        <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
+        <button @click="doLogin">Login</button>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      userCredentials: {
+        username: "",
+        pass: ""
+      }
+    };
+  },
   methods: {
-    async setDemoUser(gender) {
-      await this.$store.dispatch({ type: "setDemoUser", gender });
+    setDemoUser(gender) {
+      this.$store.dispatch({ type: "setDemoUser", gender });
+    },
+    doLogin() {
+      this.$store.dispatch({ type: "loginUser", userCredentials: this.userCredentials });
     }
   }
 };
@@ -24,7 +41,6 @@ export default {
 .login-demo {
   background-color: white;
   opacity: 0.8;
-  width: 300px;
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 0 7px 4px #00000052;
@@ -33,8 +49,8 @@ export default {
   position: fixed;
   width: 100vw;
   height: 90vh;
-  background: url('../assets/img/home-bg.jpg') no-repeat ;
-  
+  background: url("../assets/img/home-bg.jpg") no-repeat;
+
   background-size: cover;
   background-position: center;
   z-index: 99;

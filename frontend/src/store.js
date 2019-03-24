@@ -14,7 +14,7 @@ export default new Vuex.Store({
     chat: {
       msgs: [],
       member: null,
-      isTyping: false
+      isMemberTyping: false
     }
   },
   mutations: {
@@ -27,52 +27,6 @@ export default new Vuex.Store({
     loadMemberById(state, { member }) {
       let idx = state.members.findIndex(item => item._id === member._id);
       state.members.splice(idx, 1, member);
-    },
-    loadLikes(state, { likes }) {
-
-      let likesMap = {};
-
-      likes.reduce((acc, like) => {
-        let memberId = '';
-        if (like.from === state.loggedInUser._id) {//member i like
-          memberId = like.to;
-          if (!acc[memberId]) acc[memberId] =
-            {
-              iLike: true,
-              likeMe: false,
-              isRead: false
-            };
-          else acc[memberId].iLike = true;
-        }
-        else {//member who likes me
-          memberId = like.from;
-          if (!acc[memberId]) acc[memberId] =
-            {
-              iLike: false,
-              likeMe: true,
-              isRead: like.isRead
-            };
-          else {
-            acc[memberId].likeMe = true;
-            acc[memberId].isRead = like.isRead;
-          }
-        }
-        return acc;
-      }, likesMap);
-
-      console.log('likesMap', likesMap);
-
-      state.members.forEach(member => {
-
-        let likesObj = likesMap[member._id];
-        if (likesObj) member.likes = likesObj;
-        else member.likes = {
-          iLike: false,
-          likeMe: false,
-          isRead: false
-        };
-      });
-
     },
     addLikeToMember(state, { member }) {
       member.likes.iLike = true;
@@ -106,8 +60,9 @@ export default new Vuex.Store({
     startChat(state, { member }) {
       state.chat.member = member;
     },
-    setIsTypingChatMsg(state, isTyping) {
-      state.chat.isTyping = isTyping;
+    setIsMemberTyping(state, {isTyping}) {
+      state.chat.isMemberTyping = isTyping;
+      console.log('state member typing:', state.chat.isMemberTyping );
     }
   },
   getters: {
@@ -119,6 +74,9 @@ export default new Vuex.Store({
     },
     chatMsgs(state) {
       return state.chat.msgs;
+    },
+    isMemberTyping(state){
+      return state.chat.isMemberTyping;
     }
   },
   actions: {
@@ -133,10 +91,7 @@ export default new Vuex.Store({
       if (gender === 'random') demoUser = state.members[1];
       else demoUser = state.members.find(member => member.gender === gender);
       commit({ type: 'setLoggedInUser', user: demoUser });
-      console.log('user login (demo)', demoUser._id);
-
-      //TODO load members by gender
-      dispatch({ type: 'loadLikes' });//load in background. do not wait for proimse to resolve
+      console.log('logged in (demo):', demoUser._id);
       userService.loginDemo(demoUser);
 
       return Promise.resolve();
@@ -148,16 +103,23 @@ export default new Vuex.Store({
           return member;
         })
     },
-    async loadLikes({ commit, state }) {
-      let likes = await likeService.query(state.loggedInUser._id);
-      commit({ type: 'loadLikes', likes });
-    },
     async addLikeToMember({ commit, state }, { member }) {
       await likeService.add(state.loggedInUser._id, member._id);
       commit({ type: 'addLikeToMember', member });
     },
     receiveLikeFromMember({ commit }, { memberId }) {
       commit({ type: 'addMemberWhoLikesMe', memberId });
+    },
+    async loginUser({commit}, {userCredentials}){
+      let loggedInUser = await userService.login(userCredentials);
+      commit({ type: 'setLoggedInUser', user: loggedInUser });
+      console.log('logged in:', loggedInUser._id);
+      return Promise.resolve();
+    },
+    async logoutUser({commit}){
+      await userService.logout();
+      commit({ type: 'setLoggedInUser', user: null });
+      console.log('logged out');
     },
     loginMember({ commit }, { memberId }) {
       commit({ type: 'loginMember', memberId });
@@ -172,12 +134,12 @@ export default new Vuex.Store({
     sendChatMsg({ commit }, { msg }) {
       chatService.sendMsg(msg);
       commit({ type: 'addChatMsg', msg });
-      commit({ type: 'setIsTypingChatMsg', isTyping: false });
-
     },
-    startTypingChatMsg({ commit }, { msg }) {
+    startTyping({ commit }, { msg }) {
       chatService.startTyping(msg);
-      commit({ type: 'setIsTypingChatMsg', isTyping: true });
+    },
+    startMemberTypingChat({commit}, {msg}){
+      commit({type:'setIsMemberTyping', isTyping:true});
     }
   }
 });

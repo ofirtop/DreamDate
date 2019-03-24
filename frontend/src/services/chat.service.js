@@ -15,9 +15,9 @@ function _init() {
         store.commit({ type: 'addChatMsg', msg });
     });
 
-    SOCKET.on('chat msg start typing', msg => {
-        console.log('received chat msg start typint...', msg.txt);
-        // store.commit({type: 'addChatMsg', msg});
+    SOCKET.on('chat start typing', msg => {
+        console.log('chat member started typing...', msg.txt);
+         store.commit({type: 'setIsMemberTyping', isTyping:true});
     });
 }
 
@@ -27,8 +27,8 @@ function sendMsg(msg) {
 }
 
 function startTyping(msg) {
-    console.log('start typing chat msg...');
-    SOCKET.emit('chat msg start typing', msg);
+    console.log('send start typing');
+    SOCKET.emit('chat start typing', msg);
 }
 
 function getEmptyMsg(fromId, toId) {

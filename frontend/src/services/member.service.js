@@ -42,10 +42,70 @@ function query(filter) {
     return axios.get(strUrl)
         .then(res => {
             let members = res.data;
+
+            members.forEach((member, idx) =>{
+            //temp - add likes
+            member.likes =
+            {
+                iLike: idx % 3 === 0,
+                likeMe: idx % 2 === 0,
+                isRead: false
+              };
+            });
+
             console.log('members', members);
             return members;
         });
 }
+
+function _loadLikes( likes ) {
+
+    let likesMap = {};
+
+    likes.reduce((acc, like) => {
+      let memberId = '';
+      if (like.from === state.loggedInUser._id) {//member i like
+        memberId = like.to;
+        if (!acc[memberId]) acc[memberId] =
+          {
+            iLike: true,
+            likeMe: false,
+            isRead: false
+          };
+        else acc[memberId].iLike = true;
+      }
+      else {//member who likes me
+        memberId = like.from;
+        if (!acc[memberId]) acc[memberId] =
+          {
+            iLike: false,
+            likeMe: true,
+            isRead: like.isRead
+          };
+        else {
+          acc[memberId].likeMe = true;
+          acc[memberId].isRead = like.isRead;
+        }
+      }
+      return acc;
+    }, likesMap);
+
+    console.log('likesMap', likesMap);
+
+    state.members.forEach(member => {
+
+      let likesObj = likesMap[member._id];
+      if (likesObj) member.likes = likesObj;
+      else member.likes = {
+        iLike: false,
+        likeMe: false,
+        isRead: false
+      };
+    });
+
+  }
+
+
 
 function getMemberById(userId) {
     return axios.get(`${BASE_URL}/user/${userId}`)

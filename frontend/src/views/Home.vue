@@ -1,6 +1,7 @@
 <template>
   <section class="home-page">
     <main>
+      <user-filter @setFilter="setFilter"></user-filter>
       <member-list @notLike="notLikeMember" @like="addLike"></member-list>
     </main>
   </section>

@@ -3,10 +3,12 @@
     <h1>
       Chat with {{member.name}}
       <button @click="$emit('close')">&times;</button>
+      {{isMemberTyping}}
     </h1>
     <ul class="flex flex-column">
       <li v-for="(msg, idx) in msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
     </ul>
+
     <div class="flex">
       <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="startTyping">
       <button @click="sendMsg">Send</button>
@@ -15,19 +17,25 @@
 </template>
 
 <script>
-import chatService from '@/services/chat.service.js';
+import chatService from "@/services/chat.service.js";
 
 export default {
   props: ["member"],
   data() {
     return {
-      currMsg: chatService.getEmptyMsg(this.$store.state.loggedInUser._id, this.member._id),
-      isTyping: false,
+      currMsg: chatService.getEmptyMsg(
+        this.$store.state.loggedInUser._id,
+        this.member._id
+      ),
+      isStartTyping: false
     };
   },
   computed: {
     msgs() {
       return this.$store.getters.chatMsgs;
+    },
+    isMemberTyping() {
+      return this.$store.isMemberTyping;
     }
   },
   methods: {
@@ -36,7 +44,10 @@ export default {
 
       // this.msgs.push(msg);
       this.$store.dispatch({ type: "sendChatMsg", msg: this.currMsg });
-      this.currMsg = chatService.getEmptyMsg(this.$store.state.loggedInUser._id, this.member._id);
+      this.currMsg = chatService.getEmptyMsg(
+        this.$store.state.loggedInUser._id,
+        this.member._id
+      );
     },
     getClass(msg) {
       let isOut = msg.fromId === this.$store.state.loggedInUser._id;
@@ -46,10 +57,9 @@ export default {
       };
     },
     startTyping() {
-      if (!this.isTyping) {
-        console.log("start typing");
-        this.$store.dispatch({ type: "startTypingChatMsg", msg: this.currMsg });
-        this.isTyping = true;
+      if (!this.isStartTyping) {
+        this.$store.dispatch({ type: "startTyping", msg: this.currMsg });
+        this.isStartTyping = true;
       }
     }
   }

@@ -68,13 +68,13 @@ io.on('connection', socket => {
     if (targetSocket) targetSocket.emit('chat msg to', msg);
   });
 
-  socket.on('chat msg start typing', msg=>{
+  socket.on('chat start typing', msg=>{
     console.log('start typing', msg);
 
     let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId); 
     console.log('found target socket: ', !!targetSocket);
 
-    if (targetSocket) targetSocket.emit('chat msg start typing', msg);
+    if (targetSocket) targetSocket.emit('chat start typing', msg);
   });
 });
 
