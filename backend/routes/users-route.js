@@ -12,7 +12,7 @@ function addUserRoutes(app) {
     return userService.checkLogin(userCredentials)
             .then(user => {
                 req.session.loggedInUser = user;
-                console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser);
+                console.log('user-route - LOGIN - req.session.loggedInUser.name:', req.session.loggedInUser.name);
                 return res.json(user)
             })
             .catch(err => {
