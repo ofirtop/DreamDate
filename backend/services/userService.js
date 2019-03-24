@@ -23,6 +23,7 @@ function query(query) {
 function checkLogin(userCredentials) {
     return mongoService.connect()
         .then(db => {
+            console.log(`LOGIN ATTEMPT, name: ${userCredentials.name} pass: ${userCredentials.pass}`)
             return db.collection('user').findOne({ $and: [{ "name": userCredentials.name }, { "pass": userCredentials.pass }] })
                 .then(user => {
                     if (user) {
