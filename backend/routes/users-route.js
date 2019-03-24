@@ -25,7 +25,7 @@ function addUserRoutes(app) {
     app.get('/user/logout', (req, res) => {
         console.log('user-route:LOGOUT - req.session.loggedInUser: ',req.session.loggedInUser)
         req.session.destroy();
-        console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
+        // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
         res.json({})
     });
 
