@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     loginDemoFemale() {
-      this.userCredentials.name = "Olga";
+      this.userCredentials.name = "Laura";
       this.userCredentials.pass = "123";
       this.$store.dispatch({
         type: "loginUser",

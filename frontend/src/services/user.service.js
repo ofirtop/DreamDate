@@ -18,7 +18,9 @@ function loginDemo(user){
 async function login(userCredentials){
     console.log('logging in',userCredentials );
     let  res =  await axios.post(`${BASE_URL}/user/login`, userCredentials)
-    return res.data;
+    let loggedInUser = res.data;
+    SOCKET.emit('login', loggedInUser._id);
+    return loggedInUser;
 }
 
 async function logout (userCredentials){
