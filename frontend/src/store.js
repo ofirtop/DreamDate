@@ -31,13 +31,16 @@ export default new Vuex.Store({
     },
     addLikeToMember(state, { member }) {
       let memberFromStore = state.members.find(currMember => currMember._id === member._id);
-      if(memberFromStore) memberFromStore.likes = member.likes;
+      if(memberFromStore) memberFromStore.likes.iLike = true;
     },
-    addLikeFromMember(state, { memberId }) {
-      let member = state.members.find(currMember => currMember._id === memberId);
-      if (member) {
-        member.likes.likeMe = true;
-        member.likes.isRead = false;
+    addLikeFromMember(state, { member }) {
+      console.log('addLikeFromMember', member.memberId);
+      let memberFromStore = state.members.find(currMember => currMember._id === member._id);
+      console.log('addLikeFromMember', memberFromStore);
+      
+      if (memberFromStore) {
+        memberFromStore.likes.likeMe = true;
+        memberFromStore.likes.isRead = false;
       }
     },
     loginMember(state, { memberId }) {

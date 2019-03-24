@@ -5,7 +5,7 @@
       <img :src="member.mainImage">
     </router-link>
     <div class="likes-panel">
-      <font-awesome-icon icon="heart" @click.stop="like" />
+      <font-awesome-icon icon="heart" @click.stop="like"/>
       {{likeStatus}}
       <font-awesome-icon icon="times" @click.stop="notLike"/>
     </div>
@@ -13,28 +13,28 @@
 </template>
 <script>
 export default {
-  props: ['member'],
+  props: ["member"],
   methods: {
     like() {
-      this.$emit('like', this.member);
+      this.$emit("like", this.member);
     },
     notLike() {
-       console.log("I don't like", this.member.name)
-      this.$emit('notLike', this.member._id);
+      console.log("I don't like", this.member.name);
+      this.$emit("notLike", this.member._id);
     }
   },
   computed: {
     memberAge() {
-      let year = +(this.member.dateOfBirth.substring(0,4));
+      let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
     },
     likeStatus() {
       //console.log('likes', this.member.likes, this.member._id);
-      
-      if(this.member.likes){
-        if(this.member.likes.likeMe && this.member.likes.iLike) return 'match';
-        if(this.member.likes.likeMe) return 'like me';
-        if(this.member.likes.iLike) return 'i like';
+
+      if (this.member.likes) {
+        if (this.member.likes.likeMe && this.member.likes.iLike) return "match";
+        if (this.member.likes.likeMe) return "like me";
+        if (this.member.likes.iLike) return "i like";
       }
     }
   }
