@@ -4,7 +4,8 @@
       <h1>For Demo Only:</h1>
       <br>I am
       <button @click="setDemoUser('male')" class="mr-1">Man</button>
-      <button @click="setDemoUser('female')">Woman</button>
+      <button @click="setDemoUser('female')" class="mr-1">Woman</button>
+      <button @click="setDemoUser('random')">Random</button>
     </div>
   </section>
 </template>

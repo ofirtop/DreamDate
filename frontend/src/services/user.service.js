@@ -1,4 +1,4 @@
-import {socket} from './socket.js';
+import {SOCKET} from '@/socket.js';
 import store from '@/store.js';
 
 export default {
@@ -6,5 +6,5 @@ export default {
 };
 
 function loginDemo(user){
-    socket.emit('login', user._id);
+    SOCKET.emit('login', user._id);
 }

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import memberService from '@/services/member.service.js'
 import likeService from '@/services/like.service.js';
 import userService from '@/services/user.service.js';
+import chatService from '@/services/chat.service.js';
 
 Vue.use(Vuex)
 
@@ -10,7 +11,11 @@ export default new Vuex.Store({
   state: {
     members: [],
     loggedInUser: null,
-    likesMap: {},
+    chat: {
+      msgs: [],
+      member: null,
+      isTyping: false
+    }
   },
   mutations: {
     setMembers(state, { members }) {
@@ -23,36 +28,63 @@ export default new Vuex.Store({
       let idx = state.members.findIndex(item => item._id === member._id);
       state.members.splice(idx, 1, member);
     },
-    setLikes(state, { likes }) {
+    loadLikes(state, { likes }) {
+
+      let likesMap = {};
+
       likes.reduce((acc, like) => {
         let memberId = '';
         if (like.from === state.loggedInUser._id) {//member i like
           memberId = like.to;
-          if (!acc[memberId]) acc[memberId] = { iLikeMember: true, memberLikeMe: false };
-          else acc[memberId].iLikeMember = true;
+          if (!acc[memberId]) acc[memberId] =
+            {
+              iLike: true,
+              likeMe: false,
+              isRead: false
+            };
+          else acc[memberId].iLike = true;
         }
         else {//member who likes me
           memberId = like.from;
-          if (!acc[memberId]) acc[memberId] = { iLikeMember: false, memberLikeMe: true };
-          else acc[memberId].memberLikeMe = true;
+          if (!acc[memberId]) acc[memberId] =
+            {
+              iLike: false,
+              likeMe: true,
+              isRead: like.isRead
+            };
+          else {
+            acc[memberId].likeMe = true;
+            acc[memberId].isRead = like.isRead;
+          }
         }
         return acc;
-      }, state.likesMap);
+      }, likesMap);
 
-      console.log('store likes', state.likesMap);
+      console.log('likesMap', likesMap);
+
+      state.members.forEach(member => {
+
+        let likesObj = likesMap[member._id];
+        if (likesObj) member.likes = likesObj;
+        else member.likes = {
+          iLike: false,
+          likeMe: false,
+          isRead: false
+        };
+      });
 
     },
-    addMemberILike(state, { memberId }) {
-      let like = state.likesMap[memberId];
-      if (!like) state.likesMap[memberId] = { iLikeMember: true, memberLikeMe: false };
-      else like.iLikeMember = true;
-      console.log('added like to member', memberId, state.likesMap[memberId]);
+    addLikeToMember(state, { member }) {
+      member.likes.iLike = true;
+      console.log('added like to member', member);
     },
     addMemberWhoLikesMe(state, { memberId }) {
-      let like = state.likesMap[memberId];
-      if (!like) state.likesMap[memberId] = { iLikeMember: false, memberLikeMe: true };
-      else like.memberLikeMe = true;
-      console.log('added like from member', memberId, state.likesMap[memberId]);
+      let member = state.members.find(currMember => currMember._id === memberId);
+      if (member) {
+        member.likes.likeMe = true;
+        member.likes.isRead = false;
+      }
+      console.log('added like from member', memberId, member.likes);
     },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
@@ -61,12 +93,21 @@ export default new Vuex.Store({
     },
     logoutMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
-      member.online = false;
+      if (member) member.online = false;
       console.log('logoutMember', member);
     },
     removeMemberIDontLike(state, { updatedMemberId }) {
       let idx = state.members.findIndex(member => member._id === updatedMemberId);
       state.members.splice(idx, 1);
+    },
+    addChatMsg(state, { msg }) {
+      state.chat.msgs.push(msg);
+    },
+    startChat(state, { member }) {
+      state.chat.member = member;
+    },
+    setIsTypingChatMsg(state, isTyping) {
+      state.chat.isTyping = isTyping;
     }
   },
   getters: {
@@ -76,21 +117,8 @@ export default new Vuex.Store({
     loggedInUser(state) {
       return state.loggedInUser;
     },
-    isMatch(state) {//returns a function. hack for getter with params
-      return (memberId) => {
-        let like = state.likesMap[memberId];
-        if (!like) return false;
-        return like.iLikeMember && like.memberLikeMe;
-      }
-    },
-    likeStatus(state) {
-      return (memberId) => {
-        let like = state.likesMap[memberId];
-        if (!like) return '';
-        if (like.iLikeMember && like.memberLikeMe) return 'match';
-        if (like.iLikeMember) return 'i like';
-        else if (like.memberLikeMe) return 'likes me';
-      };
+    chatMsgs(state) {
+      return state.chat.msgs;
     }
   },
   actions: {
@@ -101,7 +129,9 @@ export default new Vuex.Store({
         })
     },
     setDemoUser({ commit, state, dispatch }, { gender }) {
-      let demoUser = state.members.find(member => member.gender === gender);
+      let demoUser = null;
+      if (gender === 'random') demoUser = state.members[1];
+      else demoUser = state.members.find(member => member.gender === gender);
       commit({ type: 'setLoggedInUser', user: demoUser });
       console.log('user login (demo)', demoUser._id);
 
@@ -120,11 +150,11 @@ export default new Vuex.Store({
     },
     async loadLikes({ commit, state }) {
       let likes = await likeService.query(state.loggedInUser._id);
-      commit({ type: 'setLikes', likes });
+      commit({ type: 'loadLikes', likes });
     },
-    async addLike({ commit, state }, { memberId }) {
-      await likeService.add(state.loggedInUser._id, memberId);
-      commit({ type: 'addMemberILike', memberId });
+    async addLikeToMember({ commit, state }, { member }) {
+      await likeService.add(state.loggedInUser._id, member._id);
+      commit({ type: 'addLikeToMember', member });
     },
     receiveLikeFromMember({ commit }, { memberId }) {
       commit({ type: 'addMemberWhoLikesMe', memberId });
@@ -138,6 +168,16 @@ export default new Vuex.Store({
     notLikeMember({ commit, state }, { memberId }) {
       memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
         .then(updatedMemberId => commit({ type: 'removeMemberIDontLike', updatedMemberId }))
+    },
+    sendChatMsg({ commit }, { msg }) {
+      chatService.sendMsg(msg);
+      commit({ type: 'addChatMsg', msg });
+      commit({ type: 'setIsTypingChatMsg', isTyping: false });
+
+    },
+    startTypingChatMsg({ commit }, { msg }) {
+      chatService.startTyping(msg);
+      commit({ type: 'setIsTypingChatMsg', isTyping: true });
     }
   }
 });

@@ -8,7 +8,7 @@
       <font-awesome-icon icon="heart" @click.stop="like" />
       {{likeStatus}}
       <font-awesome-icon icon="times" @click.stop="notLike"/>
-  </div>
+    </div>
   </section>
 </template>
 <script>
@@ -19,7 +19,7 @@ export default {
       this.$emit('like', this.member);
     },
     notLike() {
-      console.log("I don't like", this.member.name)
+       console.log("I don't like", this.member.name)
       this.$emit('notLike', this.member._id);
     }
   },
@@ -29,7 +29,13 @@ export default {
       return new Date().getFullYear() - year;
     },
     likeStatus() {
-      return this.$store.getters.likeStatus(this.member._id);
+      //console.log('likes', this.member.likes, this.member._id);
+      
+      if(this.member.likes){
+        if(this.member.likes.likeMe && this.member.likes.iLike) return 'match';
+        if(this.member.likes.likeMe) return 'like me';
+        if(this.member.likes.iLike) return 'i like';
+      }
     }
   }
 };

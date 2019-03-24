@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {socket} from './socket.js';
+import {SOCKET} from '@/socket.js';
 import store from '@/store.js';
 
 const BASE_URL = 'http://localhost:3003'
@@ -9,15 +9,21 @@ export default {
     updateNotLikeMember
 }
 
-socket.on('member login', memberId=>{
-    console.log('member login',memberId );
-    store.dispatch({type: 'loginMember', memberId});
-});
-socket.on('member logout', memberId=>{
-    console.log('member logout',memberId );
-    store.dispatch({type: 'logoutMember', memberId});
-});
+_init();
 
+function _init(){
+
+    SOCKET.on('member login', memberId=>{
+        console.log('member login',memberId );
+        store.dispatch({type: 'loginMember', memberId});
+    });
+    
+    SOCKET.on('member logout', memberId=>{
+        console.log('member logout',memberId );
+        store.dispatch({type: 'logoutMember', memberId});
+    });
+    
+}
 // var members = [{_id: '111', name: 'Puki', age: 23}, {_id: '222', name: 'Muki', age: 33}, {_id: '333',name: 'Kuki', age: 43}]
 // function query() {
 //     return members;

@@ -35,12 +35,16 @@ app.get('/', (req, res) => {
 
 addUserRoutes(app);
 
+const connectedSockets = [];
 
 io.on('connection', socket => {
   console.log('user connected', socket.id);
+  connectedSockets.push(socket);
 
   socket.on('disconnect', () => {
     console.log('user disconnected', socket.userId);
+    let idx = connectedSockets.findIndex(currSocket => currSocket.userId === socket.userId);
+    if (idx >= 0) connectedSockets.splice(idx, 1);
     socket.broadcast.emit('member logout', socket.userId);
   });
 
@@ -53,6 +57,24 @@ io.on('connection', socket => {
   socket.on('logout', () => {
     console.log('user logout', socket.userId);
     socket.broadcast.emit('member logout', socket.userId);
+  });
+
+  socket.on('chat msg from', msg => {
+    console.log('received chat msg', msg);
+
+    let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId);
+    console.log('found target socket: ', !!targetSocket);
+
+    if (targetSocket) targetSocket.emit('chat msg to', msg);
+  });
+
+  socket.on('chat msg start typing', msg=>{
+    console.log('start typing', msg);
+
+    let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId); 
+    console.log('found target socket: ', !!targetSocket);
+
+    if (targetSocket) targetSocket.emit('chat msg start typing', msg);
   });
 });
 

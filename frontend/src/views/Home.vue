@@ -13,10 +13,9 @@ import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
 export default {
   methods: {
     async addLike(member) {
-      await this.$store.dispatch({ type: "addLike", memberId: member._id });
-      console.log("is match?", this.$store.getters.isMatch(member._id));
+      await this.$store.dispatch({ type: "addLikeToMember", member });
 
-      if (this.$store.getters.isMatch(member._id)) {
+      if (member.likes.iLike && member.likes.likeMe) {
         EVENT_BUS.$emit(EV_NEW_MATCH, member);
       }
     },
