@@ -17,7 +17,7 @@
 
     <router-view/>
 
-    <incoming-like-indicator
+    <incoming-like-notification
       :member="memberWhoLikeMe"
       v-if="memberWhoLikeMe"
       @chat="openChatFromLikeMeMemberNotification"
@@ -37,7 +37,7 @@
 <script>
 import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
-import incomingLikeIndicator from "@/components/IncomingLikeIndicator.vue";
+import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
 import incomingChatNotification from "@/components/IncomingChatNotification.vue";
 import match from "@/components/Match.vue";
 import {
@@ -124,7 +124,7 @@ export default {
   components: {
     chat,
     login,
-    incomingLikeIndicator,
+    incomingLikeNotification,
     match,
     incomingChatNotification
   }
