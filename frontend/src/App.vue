@@ -101,8 +101,11 @@ export default {
       this.memberForMatch = member;
     });
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
-      console.log(EV_RECEIVED_LIKE, member);
+      //console.log(EV_RECEIVED_LIKE, member);
       this.memberWhoLikeMe = member;
+      setTimeout(() => {
+        this.memberWhoLikeMe = null;
+      },5000);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
