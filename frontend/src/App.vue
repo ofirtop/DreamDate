@@ -39,7 +39,8 @@ import {
   EVENT_BUS,
   EV_START_CHAT,
   EV_NEW_MATCH,
-  EV_CHAT_RECEIVED_MSG
+  EV_CHAT_RECEIVED_MSG,
+  EV_RECEIVED_LIKE
 } from "@/event-bus.js";
 
 export default {
@@ -88,6 +89,10 @@ export default {
     });
     EVENT_BUS.$on(EV_NEW_MATCH, member => {
       this.memberForMatch = member;
+    });
+    EVENT_BUS.$on(EV_RECEIVED_LIKE, payload=>{
+      console.log(EV_RECEIVED_LIKE, payload);
+      this.memberWhoLikeMe = {id: payload.fromId, name: payload.fromName};
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;

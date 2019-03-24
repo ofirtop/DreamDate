@@ -2,8 +2,7 @@ import {SOCKET} from '@/socket.js';
 import store from '@/store.js';
 
 export default {
-    query,
-    add
+    query
 };
 
 _init();
@@ -40,6 +39,3 @@ function query(userId) {
     return Promise.resolve(likes);
 }
 
-function add(userId, memberId) {
-    likes.push(_createLike(userId, memberId));
-}

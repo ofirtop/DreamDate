@@ -31,15 +31,13 @@ export default new Vuex.Store({
     },
     addLikeToMember(state, { member }) {
       member.likes.iLike = true;
-      console.log('added like to member', member);
     },
-    addMemberWhoLikesMe(state, { memberId }) {
+    addLikeFromMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       if (member) {
         member.likes.likeMe = true;
         member.likes.isRead = false;
       }
-      console.log('added like from member', memberId, member.likes);
     },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
@@ -103,11 +101,8 @@ export default new Vuex.Store({
         })
     },
     async addLikeToMember({ commit, state }, { member }) {
-      await likeService.add(state.loggedInUser._id, member._id);
+      await memberService.addLike(state.loggedInUser._id, member._id);
       commit({ type: 'addLikeToMember', member });
-    },
-    receiveLikeFromMember({ commit }, { memberId }) {
-      commit({ type: 'addMemberWhoLikesMe', memberId });
     },
     async loginUser({ commit }, { userCredentials }) {
       let loggedInUser = await userService.login(userCredentials);

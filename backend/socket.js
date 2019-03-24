@@ -1,3 +1,5 @@
+const userService = require('./services/userService');
+
 module.exports = initSocket;
 
 function initSocket(io) {
@@ -50,6 +52,20 @@ function initSocket(io) {
             console.log('found target socket: ', !!targetSocket);
 
             if (targetSocket) targetSocket.emit('chat finish typing', msg);
+        });
+
+        socket.on('add like', msg => {
+            console.log('add like', msg);
+
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.to);
+            console.log('found target socket: ', !!targetSocket);
+
+            if (targetSocket) {
+                userService.getById(msg.to)
+                    .then(user => {
+                        targetSocket.emit('add like', { fromId: msg.from, fromName: user.name });
+                    });
+            }
         });
     });
 }
