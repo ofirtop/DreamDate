@@ -31,6 +31,6 @@ section {
   top: 10px;
   right: 10px;
   padding: 25px;
-  z-index: 3000;
+  z-index: 99;
 }
 </style>

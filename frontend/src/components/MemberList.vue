@@ -11,11 +11,6 @@
 import memberService from '../services/member.service'
 import memberPreview from './MemberPreview'
 export default {
-    data() {
-        return {
-
-        }
-    },
     computed: {
       members() {
         return this.$store.getters.members;

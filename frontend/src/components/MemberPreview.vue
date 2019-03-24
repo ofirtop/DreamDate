@@ -2,10 +2,11 @@
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
       <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
-      <img :src= member.mainImage>
+      <img :src="member.mainImage">
     </router-link>
     <div class="likes-panel">
       <font-awesome-icon icon="heart" @click.stop="like" />
+      {{likeStatus}}
       <font-awesome-icon icon="times" @click.stop="notLike"/>
     </div>
   </section>
@@ -15,11 +16,10 @@ export default {
   props: ['member'],
   methods: {
     like() {
-      console.log('I like', this.member.name)
       this.$emit('like', this.member);
     },
     notLike() {
-      console.log("I don't like", this.member.name)
+       console.log("I don't like", this.member.name)
       this.$emit('notLike', this.member._id);
     }
   },
@@ -27,17 +27,25 @@ export default {
     memberAge() {
       let year = +(this.member.dateOfBirth.substring(0,4));
       return new Date().getFullYear() - year;
+    },
+    likeStatus() {
+      //console.log('likes', this.member.likes, this.member._id);
+      
+      if(this.member.likes){
+        if(this.member.likes.likeMe && this.member.likes.iLike) return 'match';
+        if(this.member.likes.likeMe) return 'like me';
+        if(this.member.likes.iLike) return 'i like';
+      }
     }
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .member-name {
   font-size: 2em;
 }
 a {
-  text-decoration: none;
-  color: black
+  color: black;
 }
 .member-preview {
   width: 250px;

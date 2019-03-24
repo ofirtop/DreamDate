@@ -9,8 +9,14 @@
 .content-center{
     justify-content: center;
 }
+.flex-column{
+    flex-direction: column;
+}
 
 /*UTILS*/
 .mr-1{
     margin-right: 0.8rem;
+}
+.mt-1{
+    margin-top: 0.8rem;
 }

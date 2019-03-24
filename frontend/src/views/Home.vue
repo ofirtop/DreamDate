@@ -1,14 +1,8 @@
 <template>
   <section class="home-page">
-    <member-match
-      v-if="memberForMatch"
-      :member="memberForMatch"
-      @chat="startChat"
-      @close="memberForMatch = null"
-    />
     <main>
       <user-filter @setFilter="setFilter"></user-filter>
-      <member-list @notLike="notLikeMember" @like="likeMember"></member-list>
+      <member-list @notLike="notLikeMember" @like="addLike"></member-list>
     </main>
   </section>
 </template>
@@ -16,8 +10,7 @@
 <script>
 import memberList from "@/components/MemberList.vue";
 import userFilter from "@/components/UserFilter.vue";
-import memberMatch from "@/components/MemberMatch.vue";
-import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
+import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
 
 export default {
   data() {
@@ -33,12 +26,15 @@ export default {
     };
   },
   methods: {
-    likeMember(member) {
-      console.log("like member", member);
-      this.memberForMatch = member;
+    async addLike(member) {
+      await this.$store.dispatch({ type: "addLikeToMember", member });
+
+      if (member.likes.iLike && member.likes.likeMe) {
+        EVENT_BUS.$emit(EV_NEW_MATCH, member);
+      }
     },
     notLikeMember(memberId) {
-      this.$store.dispatch({ type: 'notLikeMember', memberId})
+      this.$store.dispatch({ type: "notLikeMember", memberId });
     },
     startChat(member) {
       this.memberForMatch = null;
@@ -66,7 +62,6 @@ export default {
   },
   components: {
     memberList,
-    memberMatch,
     userFilter
   }
 };
