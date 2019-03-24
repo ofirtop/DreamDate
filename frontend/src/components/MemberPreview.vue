@@ -1,7 +1,10 @@
 <template>
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
-      <h1 class="member-name">{{member.name}}, {{memberAge}}</h1>
+      <h1 class="member-name">
+        <span class="online-status" :class="{on: this.member.online, off: !this.member.online}"/>
+        {{member.name}}, {{memberAge}}
+      </h1>
       <img :src="member.mainImage">
     </router-link>
     <div class="likes-panel">
@@ -11,6 +14,7 @@
     </div>
   </section>
 </template>
+
 <script>
 export default {
   props: ["member"],
@@ -73,5 +77,17 @@ img {
 }
 .font-awesome-icon {
   font-size: 2em;
+}
+.online-status {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  &.on {
+    background-color: green;
+  }
+  &.off {
+    background-color: red;
+  }
 }
 </style>

@@ -25,6 +25,7 @@ async function login(userCredentials) {
 async function logout(userCredentials) {
     console.log('loggint out');
     let res = await axios.get(`${BASE_URL}/user/logout`, userCredentials)
+    SOCKET.emit('logout');
     return res.data;
 }
 

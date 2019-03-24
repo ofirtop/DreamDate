@@ -20,18 +20,23 @@ function _init() {
 
   SOCKET.on('member login', memberId => {
     console.log('member login', memberId);
-    store.dispatch({ type: 'loginMember', memberId });
+    store.commit({ type: 'loginMember', memberId });
   });
 
   SOCKET.on('member logout', memberId => {
     console.log('member logout', memberId);
-    store.dispatch({ type: 'logoutMember', memberId });
+    store.commit({ type: 'logoutMember', memberId });
   });
 
-  SOCKET.on('add like', async ({from}) => {
+  SOCKET.on('members logged in', memberIds => {
+    console.log('members logged in', memberIds);
+    memberIds.forEach(memberId => store.commit({ type: 'loginMember', memberId }));
+  });
+
+  SOCKET.on('add like', async ({ from }) => {
     console.log('ws in', 'add like', from);
     let member = await getMemberById(from);
-    
+
     //TODO remove
     member.likes = {
       iLike: !!((Math.floor(Math.random() * 10)) % 2),
@@ -40,7 +45,7 @@ function _init() {
     };
 
     //console.log('member ', member);
-    
+
     store.commit({ type: 'addLikeFromMember', member });
     EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
   });
@@ -69,6 +74,7 @@ function query(filter) {
             likeMe: idx % 2 === 0,
             isRead: false
           };
+        member.online = false;
       });
 
       console.log('members', members);
@@ -147,7 +153,7 @@ async function addLike(from, to) {
   catch{
     //TODO
   }
-  let obj = {from, to};
+  let obj = { from, to };
   SOCKET.emit('add like', obj);
   return Promise.resolve();
 }

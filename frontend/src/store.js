@@ -45,13 +45,11 @@ export default new Vuex.Store({
     },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
-      member.online = true;
-      console.log('loginMember', member);
+      if(member) member.online = true;
     },
     logoutMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       if (member) member.online = false;
-      console.log('logoutMember', member);
     },
     removeMemberIDontLike(state, { updatedMemberId }) {
       let idx = state.members.findIndex(member => member._id === updatedMemberId);
@@ -123,12 +121,6 @@ export default new Vuex.Store({
       await userService.logout();
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
-    },
-    loginMember({ commit }, { memberId }) {
-      commit({ type: 'loginMember', memberId });
-    },
-    logoutMember({ commit }, { memberId }) {
-      commit({ type: 'logoutMember', memberId });
     },
     notLikeMember({ commit, state }, { memberId }) {
       memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
