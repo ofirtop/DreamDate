@@ -3,14 +3,15 @@
     <div class="login-demo">
       <h1>For Demo Only:</h1>
       <br>I am
-      <button @click="setDemoUser('male')" class="mr-1">Man</button>
-      <button @click="setDemoUser('female')" class="mr-1">Woman</button>
-      <button @click="setDemoUser('random')">Random</button>
-      
+      <button @click="loginDemoMale('male')" class="mr-1">Man</button>
+      <button @click="loginDemoFemale('female')" class="mr-1">Woman</button>
+
       <div class="flex space-between mt-1">
-        <input v-model="userCredentials.name" placeholder="Username" class="mr-1">
-        <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
-        <button @click="doLogin">Login</button>
+        <form>
+          <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
+          <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
+          <button @click.prevent="doLogin">Login</button>
+        </form>
       </div>
     </div>
   </section>
@@ -27,11 +28,27 @@ export default {
     };
   },
   methods: {
-    setDemoUser(gender) {
-      this.$store.dispatch({ type: "setDemoUser", gender });
+    loginDemoFemale() {
+      this.userCredentials.name = "Olga";
+      this.userCredentials.pass = "123";
+      this.$store.dispatch({
+        type: "loginUser",
+        userCredentials: this.userCredentials
+      });
+    },
+    loginDemoMale() {
+      this.userCredentials.name = "Ofir";
+      this.userCredentials.pass = "123";
+      this.$store.dispatch({
+        type: "loginUser",
+        userCredentials: this.userCredentials
+      });
     },
     doLogin() {
-      this.$store.dispatch({ type: "loginUser", userCredentials: this.userCredentials });
+      this.$store.dispatch({
+        type: "loginUser",
+        userCredentials: this.userCredentials
+      });
     }
   }
 };

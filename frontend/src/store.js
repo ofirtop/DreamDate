@@ -86,16 +86,6 @@ export default new Vuex.Store({
           context.commit({ type: 'setMembers', members });
         })
     },
-    setDemoUser({ commit, state, dispatch }, { gender }) {
-      let demoUser = null;
-      if (gender === 'random') demoUser = state.members[1];
-      else demoUser = state.members.find(member => member.gender === gender);
-      commit({ type: 'setLoggedInUser', user: demoUser });
-      console.log('logged in (demo):', demoUser._id);
-      userService.loginDemo(demoUser);
-
-      return Promise.resolve();
-    },
     loadMemberById({ commit }, { memberId }) {
       return memberService.getMemberById(memberId)
         .then(member => {
