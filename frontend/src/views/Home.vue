@@ -42,12 +42,22 @@ export default {
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
-      console.log('filterBy:', filterBy);
-      
       this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
     }
   },
+  computed: {
+      loggedInUser() {
+        return this.$store.getters.loggedInUser;
+      }
+    },
   created() {
+    if (this.loggedInUser) {
+      console.log('creating');
+      
+      this.filterBy.gender = this.loggedInUser.interestedIn.gender;
+      this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
+      this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;
+    }
     this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
   },
   components: {

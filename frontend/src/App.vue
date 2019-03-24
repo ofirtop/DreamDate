@@ -6,8 +6,7 @@
           <img src="@/assets/img/logo.png" alt="logo" class="logo">
         </router-link>
       </nav>
-
-      <div v-if="loggedInUser">
+      <div class="clickable" v-if="loggedInUser" @click="toProfile">
         Hello
         {{loggedInUser.name}}
         <button @click="logout">Logout</button>
@@ -38,6 +37,11 @@ export default {
       memberWhoLikeMe: null,
       memberForMatch: null
     };
+  },
+  methods: {
+    toProfile() {
+      this.$router.push(`/user/${this.loggedInUser._id}`)
+    }
   },
   computed: {
     loggedInUser() {
@@ -87,5 +91,8 @@ export default {
 }
 .logo {
   width: 40px;
+}
+.clickable {
+  cursor: pointer;
 }
 </style>
