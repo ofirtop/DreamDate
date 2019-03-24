@@ -17,7 +17,12 @@
 
     <router-view/>
 
-    <incoming-like-indicator :member="memberWhoLikeMe" v-if="memberWhoLikeMe"/>
+    <incoming-like-indicator
+      :member="memberWhoLikeMe"
+      v-if="memberWhoLikeMe"
+      @chat="openChatFromLikeMeMemberNotification"
+      @viewDetails="viewDetailsFromLikeMeMemberNotification"
+    />
     <incoming-chat-notification
       :member="memberToChatNotifiation"
       v-if="memberToChatNotifiation"
@@ -25,7 +30,7 @@
       @startChat="startChat($event)"
     />
     <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
-    <chat v-if="memberToChat" :member="memberToChat" @close="memberToChat = null"/>
+    <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
 </template>
 
@@ -52,19 +57,6 @@ export default {
       memberForMatch: null
     };
   },
-  methods: {
-    toProfile() {
-      this.$router.push(`/user/${this.loggedInUser._id}`);
-    },
-    closeChatNotification(){
-     this.memberToChatNotifiation = null; 
-    }
-    // ,
-    // closeChat(){
-    //   this.memberToChat = null;
-    //   this.$store.commit({type:'endChat'});
-    // }
-  },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -74,23 +66,41 @@ export default {
     logout() {
       this.$store.dispatch({ type: "logoutUser" });
     },
-    toProfile() {
-      this.$router.push("/");
-    },
-    startChat(member){
+    startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
       this.memberToChatNotifiation = null;
+    },
+    toProfile() {
+      this.$router.push(`/user/${this.loggedInUser._id}`);
+    },
+    closeChatNotification() {
+      this.memberToChatNotifiation = null;
+    },
+    openChatFromLikeMeMemberNotification(member) {
+      this.memberWhoLikeMe = null;
+      this.openChat(member);
+    },
+    viewDetailsFromLikeMeMemberNotification(member) {
+      this.memberWhoLikeMe = null;
+      this.$router.push("/member/" + member._id);
+    },
+    openChat(member) {
+      this.memberToChat = member;
+      this.$store.commit({ type: "startChat", member });
+    },
+    closeChat() {
+      this.memberToChat = null;
+      this.$store.commit({ type: "endChat" });
     }
   },
   created() {
     EVENT_BUS.$on(EV_START_CHAT, member => {
-      this.memberToChat = member;
-      this.$store.commit({ type: "startChat", member });
+      this.openChat(member);
     });
     EVENT_BUS.$on(EV_NEW_MATCH, member => {
       this.memberForMatch = member;
     });
-    EVENT_BUS.$on(EV_RECEIVED_LIKE, member=>{
+    EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       console.log(EV_RECEIVED_LIKE, member);
       this.memberWhoLikeMe = member;
     });

@@ -1,8 +1,9 @@
 <template>
   <section v-if="memberCopy">
-    {{member.name}} likes you!
-    
-    <button @click="startChat">Start Chat</button>
+    <div v-if="!isMatch">{{member.name}} likes you!</div>
+    <div v-if="isMatch">You have a match with {{member.name}}</div>
+    <button @click="$emit('viewDetails', member)">View Details</button>
+    <button v-if="isMatch" @click="$emit('chat', member)">Start Chat</button>
     <br>
     {{member.likes}}
   </section>
@@ -13,15 +14,14 @@ import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
-  data(){
+  data() {
     return {
-      memberCopy:this.member
+      memberCopy: this.member
     };
   },
-  methods: {
-    startChat() {
-      EVENT_BUS.$emit(EV_START_CHAT, this.member);
-      this.memberCopy = null;//hides this notification
+  computed: {
+    isMatch() {
+      return this.member.likes.likeMe && this.member.likes.iLike;
     }
   }
 };
