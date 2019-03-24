@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <login-demo-user v-if="!loggedInUser"/>
+    <login v-if="!loggedInUser"/>
 
     <router-view/>
 
@@ -36,7 +36,7 @@
 
 <script>
 import chat from "@/components/Chat.vue";
-import loginDemoUser from "@/components/LoginDemoUser.vue";
+import login from "@/components/Login.vue";
 import incomingLikeIndicator from "@/components/IncomingLikeIndicator.vue";
 import incomingChatNotification from "@/components/IncomingChatNotification.vue";
 import match from "@/components/Match.vue";
@@ -124,7 +124,7 @@ export default {
   },
   components: {
     chat,
-    loginDemoUser,
+    login,
     incomingLikeIndicator,
     match,
     incomingChatNotification
