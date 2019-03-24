@@ -11,8 +11,8 @@ export default {
 _init();
 
 function _init() {
-    SOCKET.on('chat msg to', msg => {
-        console.log('ws in:', 'chat msg to', msg);
+    SOCKET.on('chat msg', msg => {
+        console.log('ws in:', 'chat msg', msg);
         store.commit({ type: 'addChatMsg', msg });
         store.commit({ type: 'setIsMemberTyping', isTyping: false });
     });
