@@ -62,7 +62,6 @@ export default new Vuex.Store({
     },
     setIsMemberTyping(state, {isTyping}) {
       state.chat.isMemberTyping = isTyping;
-      console.log('state member typing:', state.chat.isMemberTyping );
     }
   },
   getters: {
@@ -125,8 +124,11 @@ export default new Vuex.Store({
       chatService.sendMsg(msg);
       commit({ type: 'addChatMsg', msg });
     },
-    startTyping({ commit }, { msg }) {
+    startTyping({  }, { msg }) {
       chatService.startTyping(msg);
+    },
+    finishTyping({}, {msg}){
+      chatService.finishTyping(msg);
     },
     startMemberTypingChat({commit}, {msg}){
       commit({type:'setIsMemberTyping', isTyping:true});

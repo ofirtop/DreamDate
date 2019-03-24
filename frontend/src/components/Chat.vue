@@ -3,14 +3,14 @@
     <h1>
       Chat with {{member.name}}
       <button @click="$emit('close')">&times;</button>
-      {{isMemberTyping}}
+      <span v-if="isMemberTyping">typing...</span>
     </h1>
     <ul class="flex flex-column">
       <li v-for="(msg, idx) in msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
     </ul>
 
     <div class="flex">
-      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="startTyping">
+      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg">
       <button @click="sendMsg">Send</button>
     </div>
   </section>
@@ -27,7 +27,7 @@ export default {
         this.$store.state.loggedInUser._id,
         this.member._id
       ),
-      isStartTyping: false
+      iAmTyping: false
     };
   },
   computed: {
@@ -35,19 +35,28 @@ export default {
       return this.$store.getters.chatMsgs;
     },
     isMemberTyping() {
-      return this.$store.isMemberTyping;
+      return this.$store.getters.isMemberTyping;
+    }
+  },
+  watch: {
+    currMsg: {
+      handler: function(msg) {
+        if (msg.txt === "" && this.iAmTyping) {
+          this.$store.dispatch({ type: "finishTyping", msg: this.currMsg });
+          this.iAmTyping = false;
+        }
+      },
+      deep: true
     }
   },
   methods: {
     sendMsg() {
-      console.log("sending chat msg: ", this.currMsg);
-
-      // this.msgs.push(msg);
       this.$store.dispatch({ type: "sendChatMsg", msg: this.currMsg });
       this.currMsg = chatService.getEmptyMsg(
         this.$store.state.loggedInUser._id,
         this.member._id
       );
+      this.iAmTyping = false;
     },
     getClass(msg) {
       let isOut = msg.fromId === this.$store.state.loggedInUser._id;
@@ -56,10 +65,10 @@ export default {
         out: isOut
       };
     },
-    startTyping() {
-      if (!this.isStartTyping) {
+    typeMsg() {
+      if (!this.iAmTyping) {
         this.$store.dispatch({ type: "startTyping", msg: this.currMsg });
-        this.isStartTyping = true;
+        this.iAmTyping = true;
       }
     }
   }

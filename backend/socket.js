@@ -42,5 +42,14 @@ function initSocket(io) {
 
             if (targetSocket) targetSocket.emit('chat start typing', msg);
         });
+
+        socket.on('chat finish typing', msg => {
+            console.log('chat finish typing', msg);
+
+            let targetSocket = connectedSockets.find(currSocket => currSocket.userId === msg.toId);
+            console.log('found target socket: ', !!targetSocket);
+
+            if (targetSocket) targetSocket.emit('chat finish typing', msg);
+        });
     });
 }
