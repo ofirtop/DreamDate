@@ -2,7 +2,7 @@
   <section class="flex flex-column">
     <h1>
       Chat with {{member.name}}
-      <button @click="$emit('close')">&times;</button>
+      <button @click="closeChat">&times;</button>
       <span v-if="isMemberTyping">typing...</span>
     </h1>
     <ul class="flex flex-column">
@@ -10,7 +10,7 @@
     </ul>
 
     <div class="flex">
-      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg">
+      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" />
       <button @click="sendMsg">Send</button>
     </div>
   </section>
@@ -59,7 +59,7 @@ export default {
       this.iAmTyping = false;
     },
     getClass(msg) {
-      let isOut = msg.fromId === this.$store.state.loggedInUser._id;
+      let isOut = (msg.from === this.$store.state.loggedInUser._id);
       return {
         in: !isOut,
         out: isOut
@@ -70,6 +70,10 @@ export default {
         this.$store.dispatch({ type: "startTyping", msg: this.currMsg });
         this.iAmTyping = true;
       }
+    },
+    closeChat() {
+      this.$store.commit({ type: "endChat" });
+      this.$emit("close");
     }
   }
 };

@@ -4,6 +4,7 @@ import memberService from '@/services/member.service.js'
 import likeService from '@/services/like.service.js';
 import userService from '@/services/user.service.js';
 import chatService from '@/services/chat.service.js';
+import { EVENT_BUS, EV_CHAT_RECEIVED_MSG } from '@/event-bus.js';
 
 Vue.use(Vuex)
 
@@ -26,7 +27,7 @@ export default new Vuex.Store({
     },
     loadMemberById(state, { member }) {
       let idx = state.members.findIndex(item => item._id === member._id);
-      state.members.splice(idx, 1, member);
+      if (idx > -1) state.members.splice(idx, 1, member);
     },
     addLikeToMember(state, { member }) {
       member.likes.iLike = true;
@@ -34,23 +35,35 @@ export default new Vuex.Store({
       state.members.splice(idx, 1, member);
       console.log('added like to member', member);
     },
-    addMemberWhoLikesMe(state, { memberId }) {
-      let member = state.members.find(currMember => currMember._id === memberId);
-      if (member) {
-        member.likes.likeMe = true;
-        member.likes.isRead = false;
+    addLikeFromMember(state, { member }) {
+      console.log('addLikeFromMember', member.memberId);
+      let memberFromStore = state.members.find(currMember => currMember._id === member._id);
+      console.log('addLikeFromMember', memberFromStore);
+
+      if (memberFromStore) {
+        memberFromStore.likes.likeMe = true;
+        memberFromStore.likes.isRead = false;
       }
-      console.log('added like from member', memberId, member.likes);
+    },
+    addWatchFromMember(state, { memberId }) {
+      let member = state.loggedInUser.membersWhoWatchedMe.find(currMember => currMember.id === memberId)
+      if (member) member.date = new Date();
+      else {
+        state.loggedInUser.membersWhoWatchedMe.push({ id: memberId, isRead: false, date: new Date() });
+      }
+    },
+    markWatchedMeMembersAsRead(state){
+      state.loggedInUser.membersWhoWatchedMe.forEach(member=>{
+        member.isRead = true;
+      });
     },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
-      member.online = true;
-      console.log('loginMember', member);
+      if (member) member.online = true;
     },
     logoutMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       if (member) member.online = false;
-      console.log('logoutMember', member);
     },
     removeMemberIDontLike(state, { updatedMemberId }) {
       let idx = state.members.findIndex(member => member._id === updatedMemberId);
@@ -58,17 +71,27 @@ export default new Vuex.Store({
     },
     addChatMsg(state, { msg }) {
       state.chat.msgs.push(msg);
+      state.chat.isMemberTyping = false;
     },
     startChat(state, { member }) {
       state.chat.member = member;
     },
     setIsMemberTyping(state, { isTyping }) {
       state.chat.isMemberTyping = isTyping;
+    },
+    endChat(state) {
+      state.chat.member = null;
+      state.chat.msgs = [];
     }
   },
   getters: {
     members(state) {
       return state.members
+    },
+    memberById(state) {
+      return (memberId) => {
+        return state.members.find(member => member._id === memberId);
+      }
     },
     loggedInUser(state) {
       return state.loggedInUser;
@@ -78,11 +101,15 @@ export default new Vuex.Store({
     },
     isMemberTyping(state) {
       return state.chat.isMemberTyping;
+    },
+    newMembersWhoWatchedCount(state) {
+      if (state.loggedInUser) {
+        return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
+      }
     }
   },
   actions: {
     loadMembers(context, { filterBy }) {
-      console.log('About to loadMembers ################')
       return memberService.query(filterBy)
         .then(members => {
           context.commit({ type: 'setMembers', members });
@@ -99,25 +126,20 @@ export default new Vuex.Store({
       await likeService.add(member._id);
       commit({ type: 'addLikeToMember', member });
     },
-    receiveLikeFromMember({ commit }, { memberId }) {
-      commit({ type: 'addMemberWhoLikesMe', memberId });
-    },
     async loginUser({ commit }, { userCredentials }) {
-      let loggedInUser = await userService.login(userCredentials);
-      commit({ type: 'setLoggedInUser', user: loggedInUser });
-      console.log('logged in:', loggedInUser._id);
-      return Promise.resolve();
+      try {
+        let loggedInUser = await userService.login(userCredentials);
+        commit({ type: 'setLoggedInUser', user: loggedInUser });
+        console.log('logged in:', loggedInUser._id);
+        return Promise.resolve();
+      } catch{
+        return Promise.reject();
+      }
     },
     async logoutUser({ commit }) {
       await userService.logout();
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
-    },
-    loginMember({ commit }, { memberId }) {
-      commit({ type: 'loginMember', memberId });
-    },
-    logoutMember({ commit }, { memberId }) {
-      commit({ type: 'logoutMember', memberId });
     },
     notLikeMember({ commit, state }, { memberId }) {
       memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
@@ -133,8 +155,16 @@ export default new Vuex.Store({
     finishTyping({ }, { msg }) {
       chatService.finishTyping(msg);
     },
-    startMemberTypingChat({ commit }, { msg }) {
-      commit({ type: 'setIsMemberTyping', isTyping: true });
+    receiveChatMsgFromMember({ commit }, { msg }) {
+      commit({ type: 'addChatMsg', msg });
+      EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
+    },
+    watchMember({ state }, { memberId }) {
+      memberService.watchMember(state.loggedInUser._id, memberId);
+    },
+    markWatchedMeMembersAsRead({commit, state}){
+      commit({type: 'markWatchedMeMembersAsRead'});
+      return userService.update(state.loggedInUser);
     }
   }
 });

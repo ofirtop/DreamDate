@@ -11,65 +11,138 @@
         {{loggedInUser.name}}
         <button @click="logout">Logout</button>
       </div>
+      <div>
+        <button @click="gotoMembersWhoWatchedMe">
+          Watched me:
+          <span>{{newMembersWhoWatchedMeCount}}</span>
+        </button>
+      </div>
     </div>
 
-    <login-demo-user v-if="!loggedInUser"/>
+    <login v-if="!loggedInUser"/>
 
     <router-view/>
 
-    <incoming-like-indicator :member="memberWhoLikeMe" v-if="memberWhoLikeMe"/>
+    <incoming-like-notification
+      :member="memberWhoLikeMe"
+      v-if="memberWhoLikeMe"
+      @chat="openChatFromLikeMeMemberNotification"
+      @viewDetails="viewDetailsFromLikeMeMemberNotification"
+    />
+    <incoming-chat-notification
+      :member="memberToChatNotifiation"
+      v-if="memberToChatNotifiation"
+      @close="memberToChatNotifiation = null"
+      @startChat="startChat($event)"
+    />
     <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
-    <chat v-if="memberToChat" :member="memberToChat" @close="memberToChat = null"/>
+    <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
 </template>
 
 <script>
 import chat from "@/components/Chat.vue";
-import loginDemoUser from "@/components/LoginDemoUser.vue";
-import incomingLikeIndicator from "@/components/IncomingLikeIndicator.vue";
+import login from "@/components/Login.vue";
+import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
+import incomingChatNotification from "@/components/IncomingChatNotification.vue";
 import match from "@/components/Match.vue";
-import { EVENT_BUS, EV_START_CHAT, EV_NEW_MATCH } from "@/event-bus.js";
+import {
+  EVENT_BUS,
+  EV_START_CHAT,
+  EV_NEW_MATCH,
+  EV_CHAT_RECEIVED_MSG,
+  EV_RECEIVED_LIKE
+} from "@/event-bus.js";
 
 export default {
+  name: "App",
   data() {
     return {
       memberToChat: null,
+      memberToChatNotifiation: null,
       memberWhoLikeMe: null,
       memberForMatch: null
     };
   },
-  methods: {
-    toProfile() {
-      this.$router.push(`/user/${this.loggedInUser._id}`)
-    }
-  },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    newMembersWhoWatchedMeCount() {
+      return this.$store.getters.newMembersWhoWatchedCount;
     }
   },
-  methods:{
-    logout(){
-      this.$store.dispatch({type: 'logoutUser'});
+  methods: {
+    logout() {
+      this.$store.dispatch({ type: "logoutUser" });
+    },
+    startChat(member) {
+      EVENT_BUS.$emit(EV_START_CHAT, member);
+      this.memberToChatNotifiation = null;
     },
     toProfile() {
-      this.$router.push('/')
+      this.$router.push(`/user/${this.loggedInUser._id}`);
+    },
+    closeChatNotification() {
+      this.memberToChatNotifiation = null;
+    },
+    openChatFromLikeMeMemberNotification(member) {
+      this.memberWhoLikeMe = null;
+      this.openChat(member);
+    },
+    viewDetailsFromLikeMeMemberNotification(member) {
+      this.memberWhoLikeMe = null;
+      this.$router.push("/member/" + member._id);
+    },
+    openChat(member) {
+      this.memberToChat = member;
+      this.$store.commit({ type: "startChat", member });
+    },
+    closeChat() {
+      this.memberToChat = null;
+    },
+    gotoMembersWhoWatchedMe(){
+      //update watchedMe list
+      this.$store.dispatch({type:'markWatchedMeMembersAsRead'});
+
+      this.$router.push('/members/watched');
     }
   },
   created() {
     EVENT_BUS.$on(EV_START_CHAT, member => {
-      this.memberToChat = member;
-      this.$store.commit({ type: "startChat", member });
+      this.openChat(member);
     });
     EVENT_BUS.$on(EV_NEW_MATCH, member => {
       this.memberForMatch = member;
     });
+    EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
+      //console.log(EV_RECEIVED_LIKE, member);
+      this.memberWhoLikeMe = member;
+      setTimeout(() => {
+        this.memberWhoLikeMe = null;
+      }, 5000);
+    });
+    EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
+      let memberId = msg.from;
+      //console.log(EV_CHAT_RECEIVED_MSG, memberId);
+
+      if (!this.$store.state.chat.member) {
+        //console.log('chat is closed' );
+
+        this.$store
+          .dispatch({ type: "loadMemberById", memberId })
+          .then(member => {
+            this.memberToChatNotifiation = member;
+          });
+      }
+    });
   },
   components: {
     chat,
-    loginDemoUser,
-    incomingLikeIndicator,
-    match
+    login,
+    incomingLikeNotification,
+    match,
+    incomingChatNotification
   }
 };
 </script>

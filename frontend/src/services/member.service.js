@@ -1,12 +1,15 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
 import Axios from 'axios';
+import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 export default {
-    query,
-    getMemberById,
-    updateNotLikeMember,
-    getCities
+  query,
+  getMemberById,
+  updateNotLikeMember,
+  getCities,
+  // addLike,
+  watchMember
 }
 
 const BASE_URL = 'http://localhost:3003'
@@ -22,20 +25,48 @@ _init();
 
 function _init() {
 
-    SOCKET.on('member login', memberId => {
-        console.log('member login', memberId);
-        store.dispatch({ type: 'loginMember', memberId });
-    });
+  SOCKET.on('member login', memberId => {
+    console.log('member login', memberId);
+    store.commit({ type: 'loginMember', memberId });
+  });
 
-    SOCKET.on('member logout', memberId => {
-        console.log('member logout', memberId);
-        store.dispatch({ type: 'logoutMember', memberId });
-    });
+  SOCKET.on('member logout', memberId => {
+    console.log('member logout', memberId);
+    store.commit({ type: 'logoutMember', memberId });
+  });
 
+  SOCKET.on('members logged in', memberIds => {
+    console.log('members logged in', memberIds);
+    memberIds.forEach(memberId => store.commit({ type: 'loginMember', memberId }));
+  });
+
+  SOCKET.on('member is watching', ({ from }) => {
+    console.log('ws in', 'member is watching', from);
+    store.commit({ type: 'addWatchFromMember', memberId: from });
+  });
+
+
+
+  SOCKET.on('add like', async ({ from }) => {
+    console.log('ws in', 'add like', from);
+    let member = await getMemberById(from);
+
+    //TODO remove
+    member.likes = {
+      iLike: !!((Math.floor(Math.random() * 10)) % 2),
+      likeMe: true,
+      isRead: false
+    };
+
+    //console.log('member ', member);
+
+    store.commit({ type: 'addLikeFromMember', member });
+    EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
+  });
 }
 
 function getCities() {
-    return cities
+  return cities
 }
 
 function query(filter) {
@@ -48,82 +79,104 @@ function query(filter) {
     return axios.get(strUrl)
         .then(res => {
             let members = res.data;
-
-            // members.forEach((member, idx) =>{
-            // //temp - add likes
-            // member.likes =
-            // {
-            //     iLike: idx % 3 === 0,
-            //     likeMe: idx % 2 === 0,
-            //     isRead: false
-            //   };
-            // });
-
-            // console.log('members', members);
+            members.forEach((member, idx) =>member.online = false);
+            console.log('members', members);
             return members;
         });
 }
 
-function _loadLikes( likes ) {
 
-    let likesMap = {};
+// function _loadLikes(likes) {
 
-    likes.reduce((acc, like) => {
-      let memberId = '';
-      if (like.from === state.loggedInUser._id) {//member i like
-        memberId = like.to;
-        if (!acc[memberId]) acc[memberId] =
-          {
-            iLike: true,
-            likeMe: false,
-            isRead: false
-          };
-        else acc[memberId].iLike = true;
-      }
-      else {//member who likes me
-        memberId = like.from;
-        if (!acc[memberId]) acc[memberId] =
-          {
-            iLike: false,
-            likeMe: true,
-            isRead: like.isRead
-          };
-        else {
-          acc[memberId].likeMe = true;
-          acc[memberId].isRead = like.isRead;
-        }
-      }
-      return acc;
-    }, likesMap);
+//   let likesMap = {};
 
-    console.log('likesMap', likesMap);
+//   likes.reduce((acc, like) => {
+//     let memberId = '';
+//     if (like.from === state.loggedInUser._id) {//member i like
+//       memberId = like.to;
+//       if (!acc[memberId]) acc[memberId] =
+//         {
+//           iLike: true,
+//           likeMe: false,
+//           isRead: false
+//         };
+//       else acc[memberId].iLike = true;
+//     }
+//     else {//member who likes me
+//       memberId = like.from;
+//       if (!acc[memberId]) acc[memberId] =
+//         {
+//           iLike: false,
+//           likeMe: true,
+//           isRead: like.isRead
+//         };
+//       else {
+//         acc[memberId].likeMe = true;
+//         acc[memberId].isRead = like.isRead;
+//       }
+//     }
+//     return acc;
+//   }, likesMap);
 
-    state.members.forEach(member => {
+//   console.log('likesMap', likesMap);
 
-      let likesObj = likesMap[member._id];
-      if (likesObj) member.likes = likesObj;
-      else member.likes = {
-        iLike: false,
-        likeMe: false,
-        isRead: false
-      };
-    });
+//   state.members.forEach(member => {
 
-  }
+//     let likesObj = likesMap[member._id];
+//     if (likesObj) member.likes = likesObj;
+//     else member.likes = {
+//       iLike: false,
+//       likeMe: false,
+//       isRead: false
+//     };
+//   });
+
+// }
 
 
 
 function getMemberById(userId) {
-    return axios.get(`${BASE_URL}/user/${userId}`)
-        .then(res => res.data)
-        .catch(err => console.log('Error:', err));
+  return axios.get(`${BASE_URL}/user/${userId}`)
+    .then(res => res.data)
+    .catch(err => console.log('Error:', err));
 }
 
 function updateNotLikeMember(memberIdToUpdate, loggedInUserId) {
-    return getMemberById(memberIdToUpdate)
-        .then(memberToUpdate => {
-            memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
-            return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
-                .then(res => res.data._id)
-        });
+  return getMemberById(memberIdToUpdate)
+    .then(memberToUpdate => {
+      memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
+      return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
+        .then(res => res.data._id)
+    });
+}
+
+// async function addLike(from, to) {
+//   try {
+//     await axios.post(`${BASE_URL}/user/likes`, { from, to });
+//   }
+//   catch{
+//     //TODO
+//   }
+//   let obj = { from, to };
+//   SOCKET.emit('add like', obj);
+//   return Promise.resolve();
+// }
+
+async function watchMember(from, to) {
+  try {
+    /*
+    TODO ask ofir how to update watch
+    on server - add isRead: false, date: new Date()
+    if exists - only update the date to now
+
+    { id: memberId, isRead: false, date: new Date() }
+    */
+    
+    let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
+  } catch{
+    //TODO
+  }
+  SOCKET.emit('watch member', { from, to });
+
+
 }
