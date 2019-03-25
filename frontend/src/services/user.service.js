@@ -4,7 +4,8 @@ import axios from 'axios';
 
 export default {
     login,
-    logout
+    logout,
+    update
 };
 
 const BASE_URL = 'http://localhost:3003'
@@ -15,8 +16,6 @@ async function login(userCredentials) {
         let res = await axios.post(`${BASE_URL}/user/login`, userCredentials)
         let loggedInUser = res.data;
         SOCKET.emit('login', loggedInUser._id);
-        //TODO add to db
-        loggedInUser.membersWhoWatchedMe = [];
         return Promise.resolve(loggedInUser);
     } catch{
         console.log('login failed');
@@ -31,3 +30,13 @@ async function logout(userCredentials) {
     return res.data;
 }
 
+async function update(user) {
+    try {
+        //TODO delete axcess properties
+        //TODO with Ofir
+        await axios.put(`${BASE_URL}/user/${user._id}`, user);
+    } catch{
+        //TODO handle
+    }
+    return Promise.resolve();
+}

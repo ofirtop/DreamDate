@@ -50,6 +50,11 @@ export default new Vuex.Store({
         state.loggedInUser.membersWhoWatchedMe.push({ id: memberId, isRead: false, date: new Date() });
       }
     },
+    markWatchedMeMembersAsRead(state){
+      state.loggedInUser.membersWhoWatchedMe.forEach(member=>{
+        member.isRead = true;
+      });
+    },
     loginMember(state, { memberId }) {
       let member = state.members.find(currMember => currMember._id === memberId);
       if (member) member.online = true;
@@ -154,6 +159,10 @@ export default new Vuex.Store({
     },
     watchMember({ state }, { memberId }) {
       memberService.watchMember(state.loggedInUser._id, memberId);
+    },
+    markWatchedMeMembersAsRead({commit, state}){
+      commit({type: 'markWatchedMeMembersAsRead'});
+      return userService.update(state.loggedInUser);
     }
   }
 });

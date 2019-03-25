@@ -12,8 +12,10 @@
         <button @click="logout">Logout</button>
       </div>
       <div>
-        Watched me:
-        <span>{{newMembersWhoWatchedMeCount}}</span>
+        <button @click="gotoMembersWhoWatchedMe">
+          Watched me:
+          <span>{{newMembersWhoWatchedMeCount}}</span>
+        </button>
       </div>
     </div>
 
@@ -53,7 +55,7 @@ import {
 } from "@/event-bus.js";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
       memberToChat: null,
@@ -66,7 +68,7 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    newMembersWhoWatchedMeCount(){
+    newMembersWhoWatchedMeCount() {
       return this.$store.getters.newMembersWhoWatchedCount;
     }
   },
@@ -98,6 +100,12 @@ export default {
     },
     closeChat() {
       this.memberToChat = null;
+    },
+    gotoMembersWhoWatchedMe(){
+      //update watchedMe list
+      this.$store.dispatch({type:'markWatchedMeMembersAsRead'});
+
+      this.$router.push('/members/watched');
     }
   },
   created() {
