@@ -1,5 +1,5 @@
 <template>
-  <section class="home-page">
+  <section v-if="loggedInUser" class="home-page">
     <main>
       <user-filter @setFilter="setFilter"></user-filter>
       <member-list @notLike="notLikeMember" @like="addLike"></member-list>
@@ -27,11 +27,13 @@ export default {
   },
   methods: {
     async addLike(member) {
+      console.log('like');
+      
       await this.$store.dispatch({ type: "addLikeToMember", member });
 
-      if (member.likes.iLike && member.likes.likeMe) {
-        EVENT_BUS.$emit(EV_NEW_MATCH, member);
-      }
+      // if (member.likes.iLike && member.likes.likeMe) {
+      //   EVENT_BUS.$emit(EV_NEW_MATCH, member);
+      // }
     },
     notLikeMember(memberId) {
       this.$store.dispatch({ type: "notLikeMember", memberId });
@@ -42,6 +44,7 @@ export default {
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
+      console.log('About to loadMembers ################')
       this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
     }
   },
@@ -57,9 +60,15 @@ export default {
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
       this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
       this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;
+      console.log('About to loadMembers ################')
+      this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
     }
-    this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
   },
+  watched: {
+   loggedInUser() {
+     if (this.loggedInUser) this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
+   }
+ },
   components: {
     memberList,
     userFilter

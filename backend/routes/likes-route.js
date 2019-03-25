@@ -29,15 +29,13 @@ function addLikeRoutes(app) {
     })
 
     //ADD (CREATE)
-    app.post('/like', (req, res) => {//CHANGE FUNCTION - SEE REMARK !!!!!!!!!!!!!!!!!!!!!!!
-        //like body should be from "to._Id" only the from Id will be retrieved from session
-        var like = req.body;
-        console.log('LIKE: ', like);
-        console.log('req.session.loggedInUser', req.session.loggedInUser);
-        console.log('req.session.loggedInUser._id', req.session.loggedInUse);//._id)
-        console.log('like.from._id', like.from._id)
-        // if (req.session.loggedInUser._id === like.from._id) //THIS WILL GO ACTIVE AFTER LOGIN USER IS WORKING
-        likeService.add(like)
-            .then(receivedLike => res.json(receivedLike))
-    })
+//     app.put('/user/like', (req, res) => {//CHANGE FUNCTION - SEE REMARK !!!!!!!!!!!!!!!!!!!!!!!
+//         //like body should be from "to._Id" only the from Id will be retrieved from session
+//         var like = req.body;
+//         console.log('LIKE: ', like);
+//         console.log('req.session.loggedInUser.name', req.session.loggedInUser.name);
+//         // if (req.session.loggedInUser._id === like.from._id) //THIS WILL GO ACTIVE AFTER LOGIN USER IS WORKING
+//         likeService.add(like)
+//             .then(receivedLike => res.json(receivedLike))
+//     })
 }

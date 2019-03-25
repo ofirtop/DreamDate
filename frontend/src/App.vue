@@ -11,13 +11,19 @@
         {{loggedInUser.name}}
         <button @click="logout">Logout</button>
       </div>
+      <div>
+        <button @click="gotoMembersWhoWatchedMe">
+          Watched me:
+          <span>{{newMembersWhoWatchedMeCount}}</span>
+        </button>
+      </div>
     </div>
 
-    <login-demo-user v-if="!loggedInUser"/>
+    <login v-if="!loggedInUser"/>
 
     <router-view/>
 
-    <incoming-like-indicator
+    <incoming-like-notification
       :member="memberWhoLikeMe"
       v-if="memberWhoLikeMe"
       @chat="openChatFromLikeMeMemberNotification"
@@ -36,8 +42,8 @@
 
 <script>
 import chat from "@/components/Chat.vue";
-import loginDemoUser from "@/components/LoginDemoUser.vue";
-import incomingLikeIndicator from "@/components/IncomingLikeIndicator.vue";
+import login from "@/components/Login.vue";
+import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
 import incomingChatNotification from "@/components/IncomingChatNotification.vue";
 import match from "@/components/Match.vue";
 import {
@@ -49,6 +55,7 @@ import {
 } from "@/event-bus.js";
 
 export default {
+  name: "App",
   data() {
     return {
       memberToChat: null,
@@ -60,6 +67,9 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    newMembersWhoWatchedMeCount() {
+      return this.$store.getters.newMembersWhoWatchedCount;
     }
   },
   methods: {
@@ -90,7 +100,12 @@ export default {
     },
     closeChat() {
       this.memberToChat = null;
-      this.$store.commit({ type: "endChat" });
+    },
+    gotoMembersWhoWatchedMe(){
+      //update watchedMe list
+      this.$store.dispatch({type:'markWatchedMeMembersAsRead'});
+
+      this.$router.push('/members/watched');
     }
   },
   created() {
@@ -105,7 +120,7 @@ export default {
       this.memberWhoLikeMe = member;
       setTimeout(() => {
         this.memberWhoLikeMe = null;
-      },5000);
+      }, 5000);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
@@ -124,8 +139,8 @@ export default {
   },
   components: {
     chat,
-    loginDemoUser,
-    incomingLikeIndicator,
+    login,
+    incomingLikeNotification,
     match,
     incomingChatNotification
   }

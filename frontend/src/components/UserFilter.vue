@@ -83,8 +83,10 @@ export default {
       return { value: city, label: city };
     });
     this.cities.unshift({ value: '', label: 'All cities' });
-    if (this.loggedInUser) this.loggedInUserSet()
-    this.setFilter();
+    if (this.loggedInUser) {
+      this.loggedInUserSet()
+      this.setFilter();
+      }
   }
 };
 </script>

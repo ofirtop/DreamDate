@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],

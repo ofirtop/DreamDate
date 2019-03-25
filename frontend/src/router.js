@@ -4,7 +4,6 @@ import Router from 'vue-router';
 import home from './views/Home.vue';
 import userProfile from './views/UserProfile.vue';
 import memberDetails from './views/MemberDetails.vue';
-import login from './views/Login.vue';
 import userProfileEdit from './views/UserProfileEdit.vue';
 
 Vue.use(Router)
@@ -14,8 +13,7 @@ export default new Router({
     { path: '/', component: home },
     { path: '/user/edit/:userId?', component: userProfileEdit },
     { path: '/user/:userId', component: userProfile },
-    { path: '/member/:userId', component: memberDetails },
-    { path: '/login', component: login },
+    { path: '/member/:userId', component: memberDetails }
     //,
     // {
     //   path: '/about',
