@@ -2,9 +2,7 @@
   <section v-if="user" class="user-profile">
     <div class="title">
       <h1>My Profile</h1>
-      <router-link to="/">
-        <h3 class="backToAll">GALLERY</h3>
-      </router-link>
+      <el-button type="primary" @click="toAll" >Back to All</el-button>
     </div>
     <hr>
     <hr>
@@ -27,7 +25,7 @@
         <h4>Marital status: {{user.maritalStatus}}</h4>
         <h4>Children: {{childrenInfo}}</h4>
         <hr>
-        <h2>I want to meet:</h2>
+        <h2>I want to meet</h2>
         <h4>{{partnerGenderNAge}}</h4>
       </div>
     
@@ -108,6 +106,9 @@ export default {
     },
     editProfile() {
       this.isEdit = true;
+    },
+    toAll() {
+      this.$router.push('/')
     }
   },
   computed: {
@@ -154,21 +155,27 @@ export default {
 }
   a {
     text-decoration: none;
-    color: black
+    color: white
   }
   .user-profile {
+    padding: 10px;
+    background-color: rgb(45, 45, 61);
     display: flex;
     flex-direction: column;
-    color: rgb(54, 53, 53);
+    color: white;
     display: flex;
     align-items: flex-start;
-    justify-content: center
+    justify-content: center;
+    border: 1px solid gray;
+    width: 80%;
+    margin: 0 10%;
   }
   .img-section {
     margin-right: 30px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    border: 1px solid gray;
   }
   .mainImg {
     width: 300px;
@@ -179,6 +186,7 @@ export default {
     width: 70px;
     height: 70px;
     object-fit: cover;
+    border: 1px solid gray
   }
   h1 {
     font-size: 3em;
@@ -192,6 +200,7 @@ export default {
     display: flex;
     width: 300px;
     cursor: pointer;
+    border: 1px solid gray
   }
   .details-section {
     display: flex;
@@ -202,18 +211,18 @@ export default {
     max-width: 300px;
     max-height: 400px
   }
-.backToAll {
-  padding: 5px;
-  border: gray;
-  background-color: lightblue
-}
+
 .edit-profile {
   width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end
+  align-items: flex-end;
+  border: 1px solid gray
 }
-.edit-profile >* {
-  width: 400px;
+button {
+  margin: 10px;
+}
+input {
+  width: 50%;
 }
 </style>
