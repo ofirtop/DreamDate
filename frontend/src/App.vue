@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
+    <login v-if="!loggedInUser" :isError="loginFailed" @login="login"/>
 
     <router-view/>
 
-    <login v-if="!loggedInUser" :isError="loginFailed" @login="login"/>
     <incoming-like-notification 
       :member="memberWhoLikeMe"
       v-if="memberWhoLikeMe"
@@ -120,9 +120,9 @@ export default {
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       //console.log(EV_RECEIVED_LIKE, member);
       this.memberWhoLikeMe = member;
-      // setTimeout(() => {
-      //   this.memberWhoLikeMe = null;
-      // }, 5000);
+      setTimeout(() => {
+        this.memberWhoLikeMe = null;
+      }, 5000);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
