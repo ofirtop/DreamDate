@@ -142,7 +142,6 @@ function getMemberById(userId) {
 
 function updateNotLikeMember(memberIdToUpdate) {
   console.log(memberIdToUpdate);
-
   return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
     .then(res => res.data._id)
 }
