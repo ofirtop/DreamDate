@@ -13,7 +13,6 @@ function addUserRoutes(app) {
             .then(user => {
                 // console.log('user: ', user)
                 req.session.loggedInUser = user;
-                res.cookie('testTest', 'check123')
                 console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser.name);
                 return res.json(user)
             })
@@ -25,6 +24,7 @@ function addUserRoutes(app) {
 
     //LOGOUT
     app.get('/user/logout', (req, res) => {
+        console.log('ABOUT TO DESTROY!!!')
         // console.log('user-route:LOGOUT - req.session.loggedInUser: ', req.session.loggedInUser.name)
         req.session.destroy();
         // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
@@ -46,7 +46,7 @@ function addUserRoutes(app) {
     //GET single
     app.get('/user/:userId', (req, res) => {
         let userId = req.params.userId;
-        userService.getByIdTemp(userId, req.session.loggedInUser)
+        userService.getMemberById(userId, req.session.loggedInUser)
             .then(user => res.json(user))
     })
 

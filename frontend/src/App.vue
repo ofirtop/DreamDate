@@ -9,8 +9,8 @@
       <div class="clickable" v-if="loggedInUser" @click="toProfile">
         Hello
         {{loggedInUser.name}}
-        <button @click="logout">Logout</button>
       </div>
+        <button @click="logout">Logout</button>
       <div>
         <button @click="gotoMembersWhoWatchedMe">
           Watched me:

@@ -11,7 +11,7 @@ module.exports = {
     checkLogin,
     updateLike,
     updateDoNotLike,
-    getByIdTemp
+    getMemberById
 }
 
 function query(query, loggedUser) {
@@ -19,7 +19,8 @@ function query(query, loggedUser) {
     var queryToMongo = createQueryToMongo(query);
     return mongoService.connect()
         .then(db => {
-            return db.collection('user').find(queryToMongo).toArray()
+            // return db.collection('user').find(queryToMongo).toArray()
+            return db.collection('user').find({}).toArray()
                 .then(members => {
                     if (members) {
                         members = members.filter(currMember => {
@@ -141,19 +142,14 @@ function getById(userId) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
-        .then(memberToModify => {
-            var userToSend = _modifyUserBeforeSend(memberToModify);
-            console.log(userToSend);
-            return userToSend;
-        })
 }
 
-function getByIdTemp(userId, loggedUser) {
+function getMemberById(userId,loggedInUser) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
         .then(memberToModify => {
-            var userToSend = _modifyUserBeforeSend(memberToModify, loggedUser);
+            var userToSend = _modifyUserBeforeSend(memberToModify,loggedInUser);
             console.log(userToSend);
             return userToSend;
         })
