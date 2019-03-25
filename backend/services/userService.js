@@ -140,6 +140,11 @@ function getById(userId) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
+        .then(memberToModify => {
+            var userToSend = _modifyUserBeforeSend(memberToModify, loggedUser);
+            console.log(userToSend);
+            return userToSend;
+        })
 }
 
 function remove(userId) {
