@@ -1,6 +1,6 @@
 import {SOCKET} from '@/socket.js';
 import store from '@/store.js';
-import axios from 'axios';
+import Axios from 'axios';
 
 export default {
     loginDemo,
@@ -10,6 +10,9 @@ export default {
 
 const BASE_URL = 'http://localhost:3003'
 
+var axios = Axios.create({
+	withCredentials: true
+});
 
 function loginDemo(user){
     SOCKET.emit('login', user._id);
@@ -18,7 +21,9 @@ function loginDemo(user){
 async function login(userCredentials){
     console.log('logging in',userCredentials );
     let  res =  await axios.post(`${BASE_URL}/user/login`, userCredentials)
-    return res.data;
+    let loggedInUser = res.data;
+    SOCKET.emit('login', loggedInUser._id);
+    return loggedInUser;
 }
 
 async function logout (userCredentials){
@@ -26,4 +31,3 @@ async function logout (userCredentials){
     let  res =  await axios.get(`${BASE_URL}/user/logout`, userCredentials)
     return res.data;
 }
-

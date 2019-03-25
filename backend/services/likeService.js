@@ -28,6 +28,7 @@ function remove(likeId) {
 }
 
 function add(like) {
+    console.log('BACKEND - userService:add() like received (maybe its not like but memberId):',like);
     return mongoService.connect()
         .then(db => db.collection('like').insertOne(like))
         .then(result => {

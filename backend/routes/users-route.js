@@ -8,37 +8,41 @@ function addUserRoutes(app) {
     app.post('/user/login', (req, res) => {
 
         const userCredentials = req.body;
-        console.log('userCredentials', userCredentials); 
-    return userService.checkLogin(userCredentials)
+        // console.log('userCredentials', userCredentials); 
+        return userService.checkLogin(userCredentials)
             .then(user => {
+                // console.log('user: ', user)
                 req.session.loggedInUser = user;
-                console.log('user-route - LOGIN - req.session.loggedInUser.name:', req.session.loggedInUser.name);
+                res.cookie('testTest', 'check123')
+                console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser.name);
                 return res.json(user)
             })
             .catch(err => {
                 console.log('user-route: LOGIN catch:', err);
                 res.status(500).send('Wrong Credentials')
-            })      
+            })
     })
 
     //LOGOUT
     app.get('/user/logout', (req, res) => {
-        console.log('user-route:LOGOUT - req.session.loggedInUser: ',req.session.loggedInUser)
+        // console.log('user-route:LOGOUT - req.session.loggedInUser: ', req.session.loggedInUser.name)
         req.session.destroy();
         // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
-        res.json({})
+        // res.json({})
+
+        res.end()
     });
 
     //GET list
     app.get('/user', (req, res) => {
-        console.log('Entering user-route: GET list');
-         let query = req.query; //contains the filter
-        userService.query(query)
-        .then(users => {
-            return res.json(users)
-        });
+        let query = req.query; //contains the filter                     
+        // console.log('users-toute:GET list - req.session.loggedInUser: ', req.session.loggedInUser)
+        userService.query(query, req.session.loggedInUser)
+            .then(users => {
+                return res.json(users)
+            });
     })
-    
+
     //GET single
     app.get('/user/:userId', (req, res) => {
         let userId = req.params.userId;
@@ -66,12 +70,23 @@ function addUserRoutes(app) {
     // UPDATE
     app.put('/user/:userId', (req, res) => {
         const user = req.body;
-        console.log('User UPDATE: ',user)
+        console.log('User UPDATE: ', user)
         userService.update(user)
             .then(updatedUser => {
-                console.log('UPDATED User RECEIVED FROM Service: ',updatedUser)
+                console.log('UPDATED User RECEIVED FROM Service: ', updatedUser)
                 return res.json(updatedUser)
             })
     })
 
+    //UPDATE LIKE
+    app.put('/like', (req, res) => {
+        let userId = req.session.loggedInUser._id;
+        let memberId = req.body._id;
+        
+        userService.updateLike(userId, memberId)
+            .then(() => {
+                console.log('updated like');
+                res.json({ message: 'Updated' })
+            })
+    })
 }

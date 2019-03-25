@@ -1,6 +1,5 @@
 <template>
   <section class="member-list">
-    <!-- <h1>Members list</h1> -->
       <ul class="flex content-center">
        <li class="member" v-for="member in members" :member="member" :key="member._id">
             <member-preview @notLike="$emit('notLike', $event)" :member="member" @like="$emit('like', $event)"></member-preview>

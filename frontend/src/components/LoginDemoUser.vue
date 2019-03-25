@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     loginDemoFemale() {
-      this.userCredentials.name = "Olga";
+      this.userCredentials.name = "Laura";
       this.userCredentials.pass = "123";
       this.$store.dispatch({
         type: "loginUser",
@@ -48,7 +48,7 @@ export default {
       this.$store.dispatch({
         type: "loginUser",
         userCredentials: this.userCredentials
-      });
+      }).then(() => this.$emit('loadMembers'))
     }
   }
 };
@@ -70,6 +70,6 @@ export default {
 
   background-size: cover;
   background-position: center;
-  z-index: 99;
+  z-index: 3000;
 }
 </style>

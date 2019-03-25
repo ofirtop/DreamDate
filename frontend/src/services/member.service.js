@@ -1,14 +1,20 @@
-import axios from 'axios';
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
+import Axios from 'axios';
 
-const BASE_URL = 'http://localhost:3003'
 export default {
     query,
     getMemberById,
     updateNotLikeMember,
     getCities
 }
+
+const BASE_URL = 'http://localhost:3003'
+
+var axios = Axios.create({
+	withCredentials: true
+});
+
 //temporary - until we have collection cities in DB 
 var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];
 
@@ -43,17 +49,17 @@ function query(filter) {
         .then(res => {
             let members = res.data;
 
-            members.forEach((member, idx) =>{
-            //temp - add likes
-            member.likes =
-            {
-                iLike: idx % 3 === 0,
-                likeMe: idx % 2 === 0,
-                isRead: false
-              };
-            });
+            // members.forEach((member, idx) =>{
+            // //temp - add likes
+            // member.likes =
+            // {
+            //     iLike: idx % 3 === 0,
+            //     likeMe: idx % 2 === 0,
+            //     isRead: false
+            //   };
+            // });
 
-            console.log('members', members);
+            // console.log('members', members);
             return members;
         });
 }

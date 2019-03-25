@@ -4,31 +4,43 @@ import store from '@/store.js';
 export default {
     sendMsg,
     startTyping,
-    getEmptyMsg
+    getEmptyMsg,
+    finishTyping
 };
 
 _init();
 
 function _init() {
     SOCKET.on('chat msg to', msg => {
-        console.log('received chat msg:', msg.txt);
+        console.log('ws in:', 'chat msg to', msg);
         store.commit({ type: 'addChatMsg', msg });
+        store.commit({ type: 'setIsMemberTyping', isTyping: false });
     });
 
     SOCKET.on('chat start typing', msg => {
-        console.log('chat member started typing...', msg.txt);
-         store.commit({type: 'setIsMemberTyping', isTyping:true});
+        console.log('ws in:', 'chat start typing', msg);
+        store.commit({ type: 'setIsMemberTyping', isTyping: true });
+    });
+
+    SOCKET.on('chat finish typing', msg => {
+        console.log('ws in:', 'chat finish typing', msg);
+        store.commit({ type: 'setIsMemberTyping', isTyping: false });
     });
 }
 
 function sendMsg(msg) {
-    console.log('sending chat msg:', msg.txt);
-    SOCKET.emit('chat msg from', msg);
+    console.log('ws out:', 'chat msg', msg.txt);
+    SOCKET.emit('chat msg', msg);
 }
 
 function startTyping(msg) {
-    console.log('send start typing');
+    console.log('ws out:', 'chat start typing');
     SOCKET.emit('chat start typing', msg);
+}
+
+function finishTyping(msg) {
+    console.log('ws out:', 'chat finish typing');
+    SOCKET.emit('chat finish typing', msg);
 }
 
 function getEmptyMsg(fromId, toId) {

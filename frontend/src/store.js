@@ -30,6 +30,8 @@ export default new Vuex.Store({
     },
     addLikeToMember(state, { member }) {
       member.likes.iLike = true;
+      let idx = state.members.findIndex(currMember => currMember._id === member._id)
+      state.members.splice(idx, 1, member);
       console.log('added like to member', member);
     },
     addMemberWhoLikesMe(state, { memberId }) {
@@ -60,9 +62,8 @@ export default new Vuex.Store({
     startChat(state, { member }) {
       state.chat.member = member;
     },
-    setIsMemberTyping(state, {isTyping}) {
+    setIsMemberTyping(state, { isTyping }) {
       state.chat.isMemberTyping = isTyping;
-      console.log('state member typing:', state.chat.isMemberTyping );
     }
   },
   getters: {
@@ -75,12 +76,13 @@ export default new Vuex.Store({
     chatMsgs(state) {
       return state.chat.msgs;
     },
-    isMemberTyping(state){
+    isMemberTyping(state) {
       return state.chat.isMemberTyping;
     }
   },
   actions: {
-    loadMembers(context, { filterBy }) {   
+    loadMembers(context, { filterBy }) {
+      console.log('About to loadMembers ################')
       return memberService.query(filterBy)
         .then(members => {
           context.commit({ type: 'setMembers', members });
@@ -93,20 +95,20 @@ export default new Vuex.Store({
           return member;
         })
     },
-    async addLikeToMember({ commit, state }, { member }) {
-      await likeService.add(state.loggedInUser._id, member._id);
+    async addLikeToMember({ commit }, { member }) {
+      await likeService.add(member._id);
       commit({ type: 'addLikeToMember', member });
     },
     receiveLikeFromMember({ commit }, { memberId }) {
       commit({ type: 'addMemberWhoLikesMe', memberId });
     },
-    async loginUser({commit}, {userCredentials}){
+    async loginUser({ commit }, { userCredentials }) {
       let loggedInUser = await userService.login(userCredentials);
       commit({ type: 'setLoggedInUser', user: loggedInUser });
       console.log('logged in:', loggedInUser._id);
       return Promise.resolve();
     },
-    async logoutUser({commit}){
+    async logoutUser({ commit }) {
       await userService.logout();
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
@@ -125,11 +127,14 @@ export default new Vuex.Store({
       chatService.sendMsg(msg);
       commit({ type: 'addChatMsg', msg });
     },
-    startTyping({ commit }, { msg }) {
+    startTyping({ }, { msg }) {
       chatService.startTyping(msg);
     },
-    startMemberTypingChat({commit}, {msg}){
-      commit({type:'setIsMemberTyping', isTyping:true});
+    finishTyping({ }, { msg }) {
+      chatService.finishTyping(msg);
+    },
+    startMemberTypingChat({ commit }, { msg }) {
+      commit({ type: 'setIsMemberTyping', isTyping: true });
     }
   }
 });
