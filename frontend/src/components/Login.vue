@@ -2,10 +2,10 @@
   <section class="login-demo-wrapper flex items-center content-center">
     <div class="login-demo">
       <div class="flex space-between">
-        <form>
+        <form @submit.prevent="$emit('login', userCredentials)">
           <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
           <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
-          <button @click.prevent="login">Login</button>
+          <button>Login</button>
         </form>
       </div>
 
@@ -14,47 +14,35 @@
         <button @click="loginDemoMale('male')" class="mr-1">Man</button>
         <button @click="loginDemoFemale('female')" class="mr-1">Woman</button>
       </div>
-      <div v-if="isLoginFailed" class="text-danger mt-1">Wrong username or password</div>
+      <div v-if="isError" class="text-danger mt-1">Wrong username or password</div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
+  name: 'login',
+  props:['isError'],
   data() {
     return {
       userCredentials: {
         name: "",
         pass: ""
-      },
-      isLoginFailed: false
+      }
     };
   },
   methods: {
     loginDemoFemale() {
       this.userCredentials.name = "Laura";
       this.userCredentials.pass = "123";
-      this.$store.dispatch({
-        type: "loginUser",
-        userCredentials: this.userCredentials
-      });
+      this.$emit('login', this.userCredentials);
     },
     loginDemoMale() {
       this.userCredentials.name = "Ofir";
       this.userCredentials.pass = "123";
-      this.$store.dispatch({
-        type: "loginUser",
-        userCredentials: this.userCredentials
-      });
-    },
-    async login() {
-      this.isLoginFailed = false;
-      try {
-        await this.$store.dispatch({type: "loginUser",userCredentials: this.userCredentials});
-      } catch {
-        this.isLoginFailed = true;
-      }
+      this.$emit('login', this.userCredentials);
     }
+    
   }
 };
 </script>

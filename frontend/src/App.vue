@@ -1,29 +1,11 @@
 <template>
   <div id="app">
-    <div class="flex items-center">
-      <nav id="nav" class="flex items-center">
-        <router-link to="/">
-          <img src="@/assets/img/logo.png" alt="logo" class="logo">
-        </router-link>
-      </nav>
-      <div class="clickable" v-if="loggedInUser" @click="toProfile">
-        Hello
-        {{loggedInUser.name}}
-      </div>
-        <button @click="logout">Logout</button>
-      <div>
-        <button @click="gotoMembersWhoWatchedMe">
-          Watched me:
-          <span>{{newMembersWhoWatchedMeCount}}</span>
-        </button>
-      </div>
-    </div>
-
-    <login v-if="!loggedInUser"/>
+    <app-header :loggedInUser="loggedInUser" @logout="logout"/>
+    <login v-if="!loggedInUser" :isError="loginFailed" @login="login"/>
 
     <router-view/>
 
-    <incoming-like-notification
+    <incoming-like-notification 
       :member="memberWhoLikeMe"
       v-if="memberWhoLikeMe"
       @chat="openChatFromLikeMeMemberNotification"
@@ -45,7 +27,10 @@ import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
 import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
 import incomingChatNotification from "@/components/IncomingChatNotification.vue";
+import appHeader from "@/components/Header.vue";
 import match from "@/components/Match.vue";
+import utilService from "@/services/util.service.js";
+
 import {
   EVENT_BUS,
   EV_START_CHAT,
@@ -61,7 +46,9 @@ export default {
       memberToChat: null,
       memberToChatNotifiation: null,
       memberWhoLikeMe: null,
-      memberForMatch: null
+      memberForMatch: null,
+      loginFailed: false,
+      showLogin: false
     };
   },
   computed: {
@@ -73,15 +60,9 @@ export default {
     }
   },
   methods: {
-    logout() {
-      this.$store.dispatch({ type: "logoutUser" });
-    },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
       this.memberToChatNotifiation = null;
-    },
-    toProfile() {
-      this.$router.push(`/user/${this.loggedInUser._id}`);
     },
     closeChatNotification() {
       this.memberToChatNotifiation = null;
@@ -101,14 +82,35 @@ export default {
     closeChat() {
       this.memberToChat = null;
     },
-    gotoMembersWhoWatchedMe(){
+    gotoMembersWhoWatchedMe() {
       //update watchedMe list
-      this.$store.dispatch({type:'markWatchedMeMembersAsRead'});
+      this.$store.dispatch({ type: "markWatchedMeMembersAsRead" });
 
-      this.$router.push('/members/watched');
+      this.$router.push("/members/watched");
+    },
+    async login(userCredentials) {
+      console.log("user cred", userCredentials);
+
+      this.loginFailed = false;
+      try {
+        let loggedInUser = await this.$store.dispatch({type: "loginUser",userCredentials});
+        utilService.saveToStorage("loggedInUser", loggedInUser);
+      } catch {
+        this.loginFailed = true;
+      }
+    },
+    logout() {
+      localStorage.removeItem('loggedInUser');
+      this.$store.dispatch({ type: "logoutUser" });
     }
   },
-  created() {
+  async created() {
+    //login
+    let user = utilService.getFromStorage("loggedInUser");
+    if (user) await this.login({ name: user.name, pass: '123' });
+    else this.showLogin = true;
+
+
     EVENT_BUS.$on(EV_START_CHAT, member => {
       this.openChat(member);
     });
@@ -118,9 +120,9 @@ export default {
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       //console.log(EV_RECEIVED_LIKE, member);
       this.memberWhoLikeMe = member;
-      // setTimeout(() => {
-      //   this.memberWhoLikeMe = null;
-      // }, 5000);
+      setTimeout(() => {
+        this.memberWhoLikeMe = null;
+      }, 5000);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
@@ -142,7 +144,8 @@ export default {
     login,
     incomingLikeNotification,
     match,
-    incomingChatNotification
+    incomingChatNotification,
+    appHeader
   }
 };
 </script>
