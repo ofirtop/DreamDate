@@ -131,7 +131,7 @@ export default new Vuex.Store({
         let loggedInUser = await userService.login(userCredentials);
         commit({ type: 'setLoggedInUser', user: loggedInUser });
         console.log('logged in:', loggedInUser._id);
-        return Promise.resolve();
+        return Promise.resolve(loggedInUser);
       } catch{
         return Promise.reject();
       }
