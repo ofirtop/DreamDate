@@ -15,7 +15,7 @@ export default {
 const BASE_URL = 'http://localhost:3003'
 
 var axios = Axios.create({
-	withCredentials: true
+  withCredentials: true
 });
 
 //temporary - until we have collection cities in DB 
@@ -70,19 +70,19 @@ function getCities() {
 }
 
 function query(filter) {
-    let strUrl = `${BASE_URL}/user/?`
-    if (filter.gender) strUrl += `gender=${filter.gender}`
-    if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
-    if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
-    if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
-    if (filter.city) strUrl += `&&city=${filter.city}`
-    return axios.get(strUrl)
-        .then(res => {
-            let members = res.data;
-            members.forEach((member, idx) =>member.online = false);
-            console.log('members', members);
-            return members;
-        });
+  let strUrl = `${BASE_URL}/user/?`
+  if (filter.gender) strUrl += `gender=${filter.gender}`
+  if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
+  if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
+  if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
+  if (filter.city) strUrl += `&&city=${filter.city}`
+  return axios.get(strUrl)
+    .then(res => {
+      let members = res.data;
+      members.forEach((member, idx) => member.online = false);
+      console.log('members', members);
+      return members;
+    });
 }
 
 
@@ -141,13 +141,11 @@ function getMemberById(userId) {
     .catch(err => console.log('Error:', err));
 }
 
-function updateNotLikeMember(memberIdToUpdate, loggedInUserId) {
-  return getMemberById(memberIdToUpdate)
-    .then(memberToUpdate => {
-      memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
-      return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
-        .then(res => res.data._id)
-    });
+function updateNotLikeMember(memberIdToUpdate) {
+  console.log(memberIdToUpdate);
+
+  return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
+    .then(res => res.data._id)
 }
 
 // async function addLike(from, to) {
@@ -171,7 +169,7 @@ async function watchMember(from, to) {
 
     { id: memberId, isRead: false, date: new Date() }
     */
-    
+
     let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
   } catch{
     //TODO
