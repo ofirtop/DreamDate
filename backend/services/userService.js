@@ -15,12 +15,14 @@ module.exports = {
 }
 
 function query(query, loggedUser) {
-    // console.log('User SERVICE: about to connect to DreamDateDB')
+    console.log('ENTER QUERY: ',query)
     var queryToMongo = createQueryToMongo(query);
+    console.log('ENTER QUERY (queryToMongo): ',queryToMongo)
+
     return mongoService.connect()
         .then(db => {
-            // return db.collection('user').find(queryToMongo).toArray()
-            return db.collection('user').find({}).toArray()
+            return db.collection('user').find(queryToMongo).toArray()
+            // return db.collection('user').find({}).toArray()
                 .then(members => {
                     if (members) {
                         members = members.filter(currMember => {
@@ -72,8 +74,8 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
     //Does the userToModify likes the loggedInUser?
     if (memberToModify.membersILike.length !== 0) {
         let memberILikeId = memberToModify.membersILike.find(memberILike => {
-            if (memberILike === undefined) console.log('MEMBER TO MODIFY: (memberILike===undefined)', memberToModify.name)
-            if (loggedUser === undefined) console.log('MEMBER TO MODIFY: (loggedUser===undefined) ', memberToModify.name)
+            // if (memberILike === undefined) console.log('MEMBER TO MODIFY: (memberILike===undefined)', memberToModify.name)
+            // if (loggedUser === undefined) console.log('MEMBER TO MODIFY: (loggedUser===undefined) ', memberToModify.name)
             if (memberILike) return (memberILike._id + '') === (loggedUser._id + '');
             return false;
         })
@@ -114,16 +116,19 @@ function checkLogin(userCredentials) {
 function createQueryToMongo(query) {
     let queryToMongo = {};
 
-    if (query.city) {
-        queryToMongo.city = { '$regex': query.city };
-    }
-    if (query.minHeight) {
-        queryToMongo.height = { $gte: +query.minHeight }
-    }
-    if (query.gender) queryToMongo.gender = query.gender;
+    // if (query.city) {
+    //     queryToMongo.city = { '$regex': query.city };
+    // }
+    // if (query.minHeight) {
+    //     queryToMongo.height = { $gte: +query.minHeight }
+    // }
+    // if (query.gender) queryToMongo.gender = query.gender;
     if (query.minAge && query.maxAge) {
         var minDate = _getMinDate(query.minAge)
         var maxDate = _getMaxDate(query.maxAge)
+        console.log('filter minAge: ', query.minAge, 'maxAge: ', query.maxAge);
+        console.log('Mongo minDate: ', minDate, 'maxDate: ', maxDate);
+        
         queryToMongo.dateOfBirth = { $lt: minDate, $gte: maxDate }
     }
     else if (query.minAge) {
