@@ -10,12 +10,15 @@
     <div class="likes-panel">
       <font-awesome-icon icon="heart" @click.stop="like"/>
       {{likeStatus}}
+      <button v-if="isMatch" @click="showMatch">Chat</button>
       <font-awesome-icon icon="times" @click.stop="notLike"/>
     </div>
   </section>
 </template>
 
 <script>
+import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
+
 export default {
   props: ["member"],
   methods: {
@@ -25,6 +28,9 @@ export default {
     notLike() {
       console.log("I don't like", this.member.name);
       this.$emit("notLike", this.member._id);
+    },
+    showMatch(){
+        EVENT_BUS.$emit(EV_NEW_MATCH, this.member);
     }
   },
   computed: {
@@ -40,6 +46,9 @@ export default {
         if (this.member.likes.likeMe) return "like me";
         if (this.member.likes.iLike) return "i like";
       }
+    },
+    isMatch() {
+      return this.member.likes.likeMe && this.member.likes.iLike;
     }
   }
 };

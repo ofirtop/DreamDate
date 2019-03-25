@@ -122,8 +122,8 @@ export default new Vuex.Store({
           return member;
         })
     },
-    async addLikeToMember({ commit }, { member }) {
-      await likeService.add(member._id);
+    async addLikeToMember({ commit, state }, { member }) {
+      await likeService.add(state.loggedInUser._id, member._id);
       commit({ type: 'addLikeToMember', member });
     },
     async loginUser({ commit }, { userCredentials }) {

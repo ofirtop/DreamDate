@@ -12,6 +12,7 @@
 <script>
 
 export default {
+  name: 'incomingLikeNotification',
   props: ["member"],
   data() {
     return {
