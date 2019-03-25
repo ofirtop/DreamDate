@@ -103,12 +103,13 @@ export default {
       this.isEdit = false;
       this.saveImgBtn = false;
       console.log('Save updated profile: ', this.user);
+      this.$store.dispatch({type: 'updateUser', user: this.user})
     },
     editProfile() {
       this.isEdit = true;
     },
     toAll() {
-      this.$router.push('/')
+      this.$router.push('/');
     }
   },
   computed: {

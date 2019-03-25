@@ -82,7 +82,7 @@ export default new Vuex.Store({
     endChat(state) {
       state.chat.member = null;
       state.chat.msgs = [];
-    }
+    },
   },
   getters: {
     members(state) {
@@ -126,6 +126,14 @@ export default new Vuex.Store({
       await likeService.add(member._id);
       commit({ type: 'addLikeToMember', member });
     },
+    async updateUser({ commit }, { updatedUser }) {
+        await userService.updateUser(updatedUser);
+        commit({ type: 'setLoggedInUser', user: updatedUser });
+    },
+    async addNewUser({ commit }, { user }) {
+        let newUser = await userService.addNewUser(user);
+        commit({ type: 'setLoggedInUser', user: newUser})
+    },
     async loginUser({ commit }, { userCredentials }) {
       try {
         let loggedInUser = await userService.login(userCredentials);
@@ -142,8 +150,8 @@ export default new Vuex.Store({
       console.log('logged out');
     },
     notLikeMember({ commit, state }, { memberId }) {
-      memberService.updateNotLikeMember(memberId, state.loggedInUser._id)
-        .then(updatedMemberId => commit({ type: 'removeMemberIDontLike', updatedMemberId }))
+      memberService.updateNotLikeMember(memberId)
+        .then(memberId => commit({ type: 'removeMemberIDontLike', memberId }))
     },
     sendChatMsg({ commit }, { msg }) {
       chatService.sendMsg(msg);

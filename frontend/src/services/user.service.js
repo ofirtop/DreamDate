@@ -5,7 +5,8 @@ import Axios from 'axios';
 export default {
     login,
     logout,
-    update
+    updateUser,
+    // addNewUser
 };
 
 const BASE_URL = 'http://localhost:3003'
@@ -34,13 +35,37 @@ async function logout(userCredentials) {
     return res.data;
 }
 
-async function update(user) {
-    try {
-        //TODO delete axcess properties
-        //TODO with Ofir
-        await axios.put(`${BASE_URL}/user/${user._id}`, user);
-    } catch{
-        //TODO handle
-    }
-    return Promise.resolve();
+async function updateUser(user) {
+    return await axios.put(`${BASE_URL}/user/${user._id}`, user)
+            .then(res => res.data._id)
 }
+
+//FOR NEW USER - AFTER SIGNUP IS READY TO USE
+// async function addNewUser(user) {
+//     return axios.post(`${BASE_URL}/user`, user)
+//         .then(res => res.data)
+// }
+
+// function _getEmptyUser() {
+//     return {
+//         "name" : "", 
+//         "pass" : "", 
+//         "email" : "", 
+//         "gender" : "", 
+//         "dateOfBirth" : "", 
+//         "city" : "", 
+//         "maritalStatus" : "", 
+//         "numOfChildren" : NumberInt(), 
+//         "height" : NumberInt(), 
+//         "interestedIn" : {
+//             "minAge" : NumberInt(), 
+//             "maxAge" : NumberInt(), 
+//             "gender" : ""
+//         }, 
+//         "mainImage" : "", 
+//         "images" : [
+//             "", 
+//             ""
+//         ], 
+//     }
+// }

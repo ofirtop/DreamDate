@@ -141,13 +141,9 @@ function getMemberById(userId) {
     .catch(err => console.log('Error:', err));
 }
 
-function updateNotLikeMember(memberIdToUpdate, loggedInUserId) {
-  return getMemberById(memberIdToUpdate)
-    .then(memberToUpdate => {
-      memberToUpdate.MemberWhoDidNotLikeMe.push(loggedInUserId)
-      return axios.put(`${BASE_URL}/user/${memberIdToUpdate}`, memberToUpdate)
+function updateNotLikeMember(memberIdToUpdate) {
+      return axios.put(`${BASE_URL}/notlike`, memberIdToUpdate)
         .then(res => res.data._id)
-    });
 }
 
 // async function addLike(from, to) {
