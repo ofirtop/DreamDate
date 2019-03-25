@@ -4,14 +4,13 @@
     <div v-if="isMatch">You have a match with {{member.name}}</div>
     <button @click="$emit('viewDetails', member)">View Details</button>
     <button v-if="isMatch" @click="$emit('chat', member)">Start Chat</button>
-    <br>
-    {{member.likes}}
   </section>
 </template>
 
 <script>
 
 export default {
+  name: 'incomingLikeNotification',
   props: ["member"],
   data() {
     return {

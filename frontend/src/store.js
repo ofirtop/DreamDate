@@ -122,8 +122,8 @@ export default new Vuex.Store({
           return member;
         })
     },
-    async addLikeToMember({ commit }, { member }) {
-      await likeService.add(member._id);
+    async addLikeToMember({ commit, state }, { member }) {
+      await likeService.add(state.loggedInUser._id, member._id);
       commit({ type: 'addLikeToMember', member });
     },
     async updateUser({ commit }, { updatedUser }) {
@@ -139,7 +139,7 @@ export default new Vuex.Store({
         let loggedInUser = await userService.login(userCredentials);
         commit({ type: 'setLoggedInUser', user: loggedInUser });
         console.log('logged in:', loggedInUser._id);
-        return Promise.resolve();
+        return Promise.resolve(loggedInUser);
       } catch{
         return Promise.reject();
       }
@@ -151,7 +151,7 @@ export default new Vuex.Store({
     },
     notLikeMember({ commit, state }, { memberId }) {
       memberService.updateNotLikeMember(memberId)
-        .then(memberId => commit({ type: 'removeMemberIDontLike', memberId }))
+        .then(() => commit({ type: 'removeMemberIDontLike', memberId }))
     },
     sendChatMsg({ commit }, { msg }) {
       chatService.sendMsg(msg);

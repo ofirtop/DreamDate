@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
-    add,
+    // add,
     remove
 }
 
@@ -27,14 +27,14 @@ function remove(likeId) {
 
 }
 
-function add(like) {
-    console.log('BACKEND - userService:add() like received (maybe its not like but memberId):',like);
-    return mongoService.connect()
-        .then(db => db.collection('like').insertOne(like))
-        .then(result => {
-            like._id = result.insertedId;
+// function add(memberId) {
+//     console.log('BACKEND - userService:add() like received (maybe its not like but memberId):',like);
+//     return mongoService.connect()
+//         .then(db => db.collection('like').insertOne(like))
+//         .then(result => {
+//             like._id = result.insertedId;
 
-            console.log('DB RES: inserted ID: ',like._id)
-            return like;
-        })
-}
+//             console.log('DB RES: inserted ID: ',like._id)
+//             return like;
+//         })
+// }

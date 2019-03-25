@@ -13,7 +13,6 @@ function addUserRoutes(app) {
             .then(user => {
                 // console.log('user: ', user)
                 req.session.loggedInUser = user;
-                res.cookie('testTest', 'check123')
                 console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser.name);
                 return res.json(user)
             })
@@ -25,6 +24,7 @@ function addUserRoutes(app) {
 
     //LOGOUT
     app.get('/user/logout', (req, res) => {
+        console.log('ABOUT TO DESTROY!!!')
         // console.log('user-route:LOGOUT - req.session.loggedInUser: ', req.session.loggedInUser.name)
         req.session.destroy();
         // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
@@ -46,7 +46,7 @@ function addUserRoutes(app) {
     //GET single
     app.get('/user/:userId', (req, res) => {
         let userId = req.params.userId;
-        userService.getById(userId)
+        userService.getMemberById(userId, req.session.loggedInUser)
             .then(user => res.json(user))
     })
 
@@ -82,10 +82,22 @@ function addUserRoutes(app) {
     app.put('/like', (req, res) => {
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
-        
+
         userService.updateLike(userId, memberId)
             .then(() => {
                 console.log('updated like');
+                res.json({ message: 'Updated' })
+            })
+    })
+
+    //UPDATE NOT LIKE
+    app.put('/notlike', (req, res) => {
+        let userId = req.session.loggedInUser._id;
+        let memberId = req.body._id;
+        console.log('INSIDE USER ROUTE: ', memberId)
+        userService.updateDoNotLike(userId, memberId)
+            .then(() => {
+                console.log('updated NOT like');
                 res.json({ message: 'Updated' })
             })
     })

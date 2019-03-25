@@ -8,14 +8,13 @@ export default {
   getMemberById,
   updateNotLikeMember,
   getCities,
-  // addLike,
   watchMember
 }
 
 const BASE_URL = 'http://localhost:3003'
 
 var axios = Axios.create({
-	withCredentials: true
+  withCredentials: true
 });
 
 //temporary - until we have collection cities in DB 
@@ -51,12 +50,12 @@ function _init() {
     console.log('ws in', 'add like', from);
     let member = await getMemberById(from);
 
-    //TODO remove
-    member.likes = {
-      iLike: !!((Math.floor(Math.random() * 10)) % 2),
-      likeMe: true,
-      isRead: false
-    };
+    // //TODO remove
+    // member.likes = {
+    //   iLike: !!((Math.floor(Math.random() * 10)) % 2),
+    //   likeMe: true,
+    //   isRead: false
+    // };
 
     //console.log('member ', member);
 
@@ -70,19 +69,19 @@ function getCities() {
 }
 
 function query(filter) {
-    let strUrl = `${BASE_URL}/user/?`
-    if (filter.gender) strUrl += `gender=${filter.gender}`
-    if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
-    if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
-    if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
-    if (filter.city) strUrl += `&&city=${filter.city}`
-    return axios.get(strUrl)
-        .then(res => {
-            let members = res.data;
-            members.forEach((member, idx) =>member.online = false);
-            console.log('members', members);
-            return members;
-        });
+  let strUrl = `${BASE_URL}/user/?`
+  if (filter.gender) strUrl += `gender=${filter.gender}`
+  if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
+  if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
+  if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
+  if (filter.city) strUrl += `&&city=${filter.city}`
+  return axios.get(strUrl)
+    .then(res => {
+      let members = res.data;
+      members.forEach((member, idx) => member.online = false);
+      console.log('members', members);
+      return members;
+    });
 }
 
 
@@ -142,21 +141,10 @@ function getMemberById(userId) {
 }
 
 function updateNotLikeMember(memberIdToUpdate) {
-      return axios.put(`${BASE_URL}/notlike`, memberIdToUpdate)
-        .then(res => res.data._id)
+  console.log(memberIdToUpdate);
+  return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
+    .then(res => res.data._id)
 }
-
-// async function addLike(from, to) {
-//   try {
-//     await axios.post(`${BASE_URL}/user/likes`, { from, to });
-//   }
-//   catch{
-//     //TODO
-//   }
-//   let obj = { from, to };
-//   SOCKET.emit('add like', obj);
-//   return Promise.resolve();
-// }
 
 async function watchMember(from, to) {
   try {
@@ -167,7 +155,7 @@ async function watchMember(from, to) {
 
     { id: memberId, isRead: false, date: new Date() }
     */
-    
+
     let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
   } catch{
     //TODO
