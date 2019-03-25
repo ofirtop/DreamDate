@@ -15,17 +15,18 @@ module.exports = {
 }
 
 function query(query, loggedUser) {
-    console.log('ENTER QUERY: ',query)
+    console.log('ENTER QUERY: ', query)
     var queryToMongo = createQueryToMongo(query);
-    console.log('ENTER QUERY (queryToMongo): ',queryToMongo)
+    console.log('ENTER QUERY (queryToMongo): ', queryToMongo)
 
     return mongoService.connect()
         .then(db => {
             return db.collection('user').find(queryToMongo).toArray()
-            // return db.collection('user').find({}).toArray()
+                // return db.collection('user').find({}).toArray()
                 .then(members => {
                     if (members) {
                         members = members.filter(currMember => {
+                            if (currMember._id + '' === loggedUser._id + '') return false;
                             var idx = currMember.MemberWhoDidNotLikeMe.findIndex(item => {
                                 return item._id + '' === loggedUser._id + ''
                             })
@@ -58,10 +59,13 @@ function updateLike(userId, memberId) {
 }
 
 function updateDoNotLike(userId, memberId) {
-    console.log('userService:updateDoNotLike(): ', memberId);
+    console.log('userService:updateDoNotLike() memberId: ', memberId);
+    console.log('userService:updateDoNotLike() userId: ', userId);
 
     return getById(memberId)
         .then(member => {
+            console.log('userService: updateDoNotLike(): ', member)
+
             member.MemberWhoDidNotLikeMe.push({ "_id": new ObjectId(userId) })
             return update(member);
         })
@@ -116,19 +120,19 @@ function checkLogin(userCredentials) {
 function createQueryToMongo(query) {
     let queryToMongo = {};
 
-    // if (query.city) {
-    //     queryToMongo.city = { '$regex': query.city };
-    // }
-    // if (query.minHeight) {
-    //     queryToMongo.height = { $gte: +query.minHeight }
-    // }
-    // if (query.gender) queryToMongo.gender = query.gender;
+    if (query.city) {
+        queryToMongo.city = { '$regex': query.city };
+    }
+    if (query.minHeight) {
+        queryToMongo.height = { $gte: +query.minHeight }
+    }
+    if (query.gender) queryToMongo.gender = query.gender;
     if (query.minAge && query.maxAge) {
         var minDate = _getMinDate(query.minAge)
         var maxDate = _getMaxDate(query.maxAge)
         console.log('filter minAge: ', query.minAge, 'maxAge: ', query.maxAge);
         console.log('Mongo minDate: ', minDate, 'maxDate: ', maxDate);
-        
+
         queryToMongo.dateOfBirth = { $lt: minDate, $gte: maxDate }
     }
     else if (query.minAge) {
@@ -149,12 +153,12 @@ function getById(userId) {
         .then(db => db.collection('user').findOne({ _id: id }))
 }
 
-function getMemberById(userId,loggedInUser) {
+function getMemberById(userId, loggedInUser) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
         .then(memberToModify => {
-            var userToSend = _modifyUserBeforeSend(memberToModify,loggedInUser);
+            var userToSend = _modifyUserBeforeSend(memberToModify, loggedInUser);
             console.log(userToSend);
             return userToSend;
         })
