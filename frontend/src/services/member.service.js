@@ -8,7 +8,6 @@ export default {
   getMemberById,
   updateNotLikeMember,
   getCities,
-  // addLike,
   watchMember
 }
 
@@ -51,12 +50,12 @@ function _init() {
     console.log('ws in', 'add like', from);
     let member = await getMemberById(from);
 
-    //TODO remove
-    member.likes = {
-      iLike: !!((Math.floor(Math.random() * 10)) % 2),
-      likeMe: true,
-      isRead: false
-    };
+    // //TODO remove
+    // member.likes = {
+    //   iLike: !!((Math.floor(Math.random() * 10)) % 2),
+    //   likeMe: true,
+    //   isRead: false
+    // };
 
     //console.log('member ', member);
 
@@ -147,18 +146,6 @@ function updateNotLikeMember(memberIdToUpdate) {
   return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
     .then(res => res.data._id)
 }
-
-// async function addLike(from, to) {
-//   try {
-//     await axios.post(`${BASE_URL}/user/likes`, { from, to });
-//   }
-//   catch{
-//     //TODO
-//   }
-//   let obj = { from, to };
-//   SOCKET.emit('add like', obj);
-//   return Promise.resolve();
-// }
 
 async function watchMember(from, to) {
   try {

@@ -50,14 +50,28 @@ function query(userId) {
     return Promise.resolve(likes);
 }
 
-function add(memberId) {
-    console.log('like.service:add() memberId:',memberId)
-    return axios.put(`${BASE_URL}/like`, {_id: memberId})
+function add(from, to) {
+    console.log('like.service:add() memberId:',to)
+    return axios.put(`${BASE_URL}/like`, {_id: to})
         .then(res => {
-            console.log('FRONT: like.service:add() - res received from server: ',res.data);
-            return res.data
+            //console.log('FRONT: like.service:add() - res received from server: ',res.data);
+            let obj = { from, to };
+            SOCKET.emit('add like', obj);
+            //return res.data
         })
 }
+
+// async function addLike(from, to) {
+//   try {
+//     await axios.post(`${BASE_URL}/user/likes`, { from, to });
+//   }
+//   catch{
+//     //TODO
+//   }
+//   let obj = { from, to };
+//   SOCKET.emit('add like', obj);
+//   return Promise.resolve();
+// }
 
 
 

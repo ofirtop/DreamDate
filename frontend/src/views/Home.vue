@@ -31,9 +31,9 @@ export default {
       
       await this.$store.dispatch({ type: "addLikeToMember", member });
 
-      // if (member.likes.iLike && member.likes.likeMe) {
-      //   EVENT_BUS.$emit(EV_NEW_MATCH, member);
-      // }
+      if (member.likes.iLike && member.likes.likeMe) {
+        EVENT_BUS.$emit(EV_NEW_MATCH, member);
+      }
     },
     notLikeMember(memberId) {
       this.$store.dispatch({ type: "notLikeMember", memberId });
