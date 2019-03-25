@@ -98,7 +98,7 @@ function addUserRoutes(app) {
         userService.updateDoNotLike(userId, memberId)
             .then(() => {
                 console.log('updated NOT like');
-                res.json({ message: 'Updated' })
+                res.json({ "_id": memberId })
             })
     })
 }

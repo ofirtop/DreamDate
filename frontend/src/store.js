@@ -66,6 +66,7 @@ export default new Vuex.Store({
       if (member) member.online = false;
     },
     removeMemberIDontLike(state, { updatedMemberId }) {
+      console.log('about to remove member I dont like. memberId:',updatedMemberId)
       let idx = state.members.findIndex(member => member._id === updatedMemberId);
       state.members.splice(idx, 1);
     },
@@ -150,8 +151,9 @@ export default new Vuex.Store({
       console.log('logged out');
     },
     notLikeMember({ commit, state }, { memberId }) {
+      console.log('store - action:notLikeMember() - memberId: ',memberId)
       memberService.updateNotLikeMember(memberId)
-        .then(() => commit({ type: 'removeMemberIDontLike', memberId }))
+        .then((updatedMemberId) => commit({ type: 'removeMemberIDontLike', updatedMemberId }))
     },
     sendChatMsg({ commit }, { msg }) {
       chatService.sendMsg(msg);
