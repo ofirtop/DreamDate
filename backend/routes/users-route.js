@@ -46,7 +46,7 @@ function addUserRoutes(app) {
     //GET single
     app.get('/user/:userId', (req, res) => {
         let userId = req.params.userId;
-        userService.getById(userId, req.session.loggedInUser)
+        userService.getByIdTemp(userId, req.session.loggedInUser)
             .then(user => res.json(user))
     })
 
