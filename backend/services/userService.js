@@ -10,7 +10,8 @@ module.exports = {
     update,
     checkLogin,
     updateLike,
-    updateDoNotLike
+    updateDoNotLike,
+    getByIdTemp
 }
 
 function query(query, loggedUser) {
@@ -137,6 +138,17 @@ function createQueryToMongo(query) {
 }
 
 function getById(userId) {
+    var id = new ObjectId(userId);
+    return mongoService.connect()
+        .then(db => db.collection('user').findOne({ _id: id }))
+        .then(memberToModify => {
+            var userToSend = _modifyUserBeforeSend(memberToModify);
+            console.log(userToSend);
+            return userToSend;
+        })
+}
+
+function getByIdTemp(userId, loggedUser) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
