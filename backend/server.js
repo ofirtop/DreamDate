@@ -9,7 +9,7 @@ const socketIo = require('socket.io');
 const addUserRoutes = require('./routes/users-route')
 const addLikesRoutes = require('./routes/likes-route')
 const addUtilRoutes = require('./routes/util-route')
-const addSocket = require('./socket.js');
+const webSocket = require('./socket.js');
 
 
 const app = express();
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 addUserRoutes(app)
 addLikesRoutes(app)
 addUtilRoutes(app)
-addSocket(io);
+webSocket.init(io);
 
 
 const PORT = process.env.PORT || 3003;
