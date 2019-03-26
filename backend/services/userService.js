@@ -1,6 +1,7 @@
 const mongoService = require('./mongo-service')
 const ObjectId = require('mongodb').ObjectId;
 const imgService = require('./imgService')
+const socket = require('../socket')
 
 module.exports = {
     query,
@@ -88,6 +89,9 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
         })
         memberToModify.likes.iLike = memberWhoLikeMeId ? true : false;
     } else { memberToModify.likes.iLike = false; }
+
+    //online status
+    memberToModify.online = (socket.getSocketByUserId(memberToModify._id)) ? true : false;
 
     return memberToModify;
 }

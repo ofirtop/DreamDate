@@ -34,31 +34,14 @@ function _init() {
     store.commit({ type: 'logoutMember', memberId });
   });
 
-  SOCKET.on('members logged in', memberIds => {
-    console.log('members logged in', memberIds);
-    memberIds.forEach(memberId => store.commit({ type: 'loginMember', memberId }));
-  });
-
   SOCKET.on('member is watching', ({ from }) => {
     console.log('ws in', 'member is watching', from);
     store.commit({ type: 'addWatchFromMember', memberId: from });
   });
 
-
-
   SOCKET.on('add like', async ({ from }) => {
     console.log('ws in', 'add like', from);
     let member = await getMemberById(from);
-
-    // //TODO remove
-    // member.likes = {
-    //   iLike: !!((Math.floor(Math.random() * 10)) % 2),
-    //   likeMe: true,
-    //   isRead: false
-    // };
-
-    //console.log('member ', member);
-
     store.commit({ type: 'addLikeFromMember', member });
     EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
   });
@@ -76,63 +59,8 @@ function query(filter) {
   if (filter.minHeight) strUrl += `&&minHeight=${filter.minHeight}`
   if (filter.city) strUrl += `&&city=${filter.city}`
   return axios.get(strUrl)
-    .then(res => {
-      let members = res.data;
-      members.forEach((member, idx) => member.online = false);
-      console.log('members', members);
-      return members;
-    });
+    .then(res => res.data);
 }
-
-
-// function _loadLikes(likes) {
-
-//   let likesMap = {};
-
-//   likes.reduce((acc, like) => {
-//     let memberId = '';
-//     if (like.from === state.loggedInUser._id) {//member i like
-//       memberId = like.to;
-//       if (!acc[memberId]) acc[memberId] =
-//         {
-//           iLike: true,
-//           likeMe: false,
-//           isRead: false
-//         };
-//       else acc[memberId].iLike = true;
-//     }
-//     else {//member who likes me
-//       memberId = like.from;
-//       if (!acc[memberId]) acc[memberId] =
-//         {
-//           iLike: false,
-//           likeMe: true,
-//           isRead: like.isRead
-//         };
-//       else {
-//         acc[memberId].likeMe = true;
-//         acc[memberId].isRead = like.isRead;
-//       }
-//     }
-//     return acc;
-//   }, likesMap);
-
-//   console.log('likesMap', likesMap);
-
-//   state.members.forEach(member => {
-
-//     let likesObj = likesMap[member._id];
-//     if (likesObj) member.likes = likesObj;
-//     else member.likes = {
-//       iLike: false,
-//       likeMe: false,
-//       isRead: false
-//     };
-//   });
-
-// }
-
-
 
 function getMemberById(userId) {
   return axios.get(`${BASE_URL}/user/${userId}`)
@@ -164,6 +92,4 @@ async function watchMember(from, to) {
     //TODO
   }
   SOCKET.emit('watch member', { from, to });
-
-
 }

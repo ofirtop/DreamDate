@@ -1,9 +1,15 @@
-const userService = require('./services/userService');
+module.exports ={
+    init,
+    getSocketByUserId
+};
 
-module.exports = initSocket;
+const sockets = [];
 
-function initSocket(io) {
-    const sockets = [];
+function getSocketByUserId(userId){
+    return sockets.find(socket => socket.userId == userId);
+}
+
+function init(io) {
 
     io.on('connection', socket => {
         console.log('ws in', 'user connected');
@@ -20,7 +26,6 @@ function initSocket(io) {
             socket.userId = userId;
             sockets.push(socket);
             socket.broadcast.emit('member login', userId);
-            socket.emit('members logged in', sockets.map(currSocket => currSocket.userId));
         });
 
         socket.on('logout', () => {
