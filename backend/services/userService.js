@@ -186,6 +186,7 @@ function add(user) {
 
 function update(user) {
     const strId = user._id
+    user.dateOfBirth = new Date(user.dateOfBirth);
     user._id = new ObjectId(user._id)
     return mongoService.connect()
         .then(db => db.collection('user').updateOne({ _id: user._id }, { $set: user }))
