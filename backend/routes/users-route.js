@@ -24,6 +24,25 @@ function addUserRoutes(app) {
             })
     })
 
+    //SIGNUP
+    app.post('/user/signup', (req, res) => {
+
+        const userCredentials = req.body;
+        
+        return userService.signUp(userCredentials)
+            .then(user => {
+                req.session.loggedInUser = user;
+                console.log('**********************************************************');
+                console.log('NEW LOGIN (AFTER SIGNUP) : ', req.session.loggedInUser.name);
+                console.log('**********************************************************');
+                return res.json(user)
+            })
+            .catch(err => {
+                console.log('user-route: SIGNUP catch:', err);
+                res.status(500).send('Problem Signup')
+            })
+    })    
+
     //LOGOUT
     app.get('/user/logout', (req, res) => {
         if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');

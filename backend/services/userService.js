@@ -10,6 +10,7 @@ module.exports = {
     remove,
     update,
     checkLogin,
+    signUp,
     updateLike,
     updateDoNotLike,
     getMemberById
@@ -18,7 +19,7 @@ module.exports = {
 function query(query, loggedUser) {
     console.log(`Query Details:`)
     var queryToMongo = createQueryToMongo(query);
-    
+
     return mongoService.connect()
         .then(db => {
             return db.collection('user').find(queryToMongo).toArray()
@@ -97,7 +98,7 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
 }
 
 function checkLogin(userCredentials) {
-   
+
     // console.log('userCredentials', userCredentials);
 
     return mongoService.connect()
@@ -113,6 +114,30 @@ function checkLogin(userCredentials) {
                         return Promise.reject('Wrong Credentials: ')
                     }
                 })
+        })
+}
+
+function signUp(userCredentials) {
+    if (userCredentials.pass.length < 3) return Promise.reject('Wrong Credentials: password must be at list 3 characters');
+    //fetch empty user
+    return getById('5c9a2d561a42991a487faa8d')
+        .then(user => {
+            user.name = userCredentials.name;
+            user.pass = userCredentials.pass;
+            delete user._id
+            console.log('User about to be inserted to DB (NO ID): ', user);
+
+            add(user)
+                .then(user => {
+                    console.log('AFTER SIGNUP RECEIVED FROM DB:');
+                    console.log(`User Name: ${user.name}`);
+                    console.log(`User Pass: ${user.pass}`);
+                    console.log(`User DOB: ${user.dateOfBirth}`);
+                    console.log(`User ID: ${user._id}`);
+                    user.pass = '';
+                    return Promise.resolve(user);
+                })
+                .catch(err => { Promise.reject(`Could not create new user : ${err}`) })
         })
 }
 
