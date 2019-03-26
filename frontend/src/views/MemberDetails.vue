@@ -8,15 +8,18 @@
         <span class="online-status" :class="{on: this.member.online, off: !this.member.online}"/>
         {{member.name}}, {{memberAge}}
       </h1>
-      <img class="mainImg" :src="member.mainImage">
-      <div class="img-gallery">
-        <div class="member-img" v-for="(img, idx) in member.images" :key="idx" :src="img">
-          <img :src="img">
-        </div>
-      </div>
+      <!-- <img class="mainImg" :src="member.mainImage"> -->
+      <!-- <div class="img-gallery"> -->
+        <el-carousel :interval="4000" type="card" height="200px">
+            <el-carousel-item v-for="(img, idx) in allImgs" :key="idx">
+                <img :src="img">
+            </el-carousel-item>
+        </el-carousel>
+    <!-- </div> -->
     </div>
     <div class="details-section">
       <h2>{{member.name}}'s details</h2>
+      <h4>About: {{member.descr}}</h4>
       <h4>Height: {{member.height}}cm</h4>
       <h4>City: {{member.city}}</h4>
       <h4>Marital status: {{member.maritalStatus}}</h4>
@@ -39,6 +42,11 @@ export default {
     };
   },
   computed: {
+    allImgs() {
+      let imgs = this.member.images;
+      imgs.unshift(this.member.mainImage)
+      return imgs;
+    },
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
@@ -69,6 +77,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+
 a {
   text-decoration: none;
   color: black;
@@ -90,7 +99,13 @@ a {
 }
 .img-gallery {
   display: flex;
-  width: 500px;
+  // width: 500px;
+  justify-content: center;
+}
+.member-img img {
+  // width: 150px;
+  // height: 150px;
+  object-fit: cover;
 }
 h1 {
   font-size: 3em;
@@ -99,10 +114,6 @@ h1 {
 h2 {
   font-size: 2em;
   font-weight: bold;
-}
-.img-gallery {
-  display: flex;
-  flex-direction: column;
 }
 .details-section {
   margin-top: 100px;
@@ -127,6 +138,12 @@ img {
   border: gray;
   background-color: lightblue;
 }
+  .el-carousel__item {
+    background-color: #99a9bf;
+    width: 300px;
+    height: 300px;
+  }
+
 .online-status {
   display: inline-block;
   width: 16px;
