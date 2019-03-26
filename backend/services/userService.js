@@ -10,15 +10,15 @@ module.exports = {
     remove,
     update,
     checkLogin,
+    signUp,
     updateLike,
     updateDoNotLike,
     getMemberById
 }
 
 function query(query, loggedUser) {
-    console.log('ENTER QUERY: ', query)
+    console.log(`Query Details:`)
     var queryToMongo = createQueryToMongo(query);
-    console.log('ENTER QUERY (queryToMongo): ', queryToMongo)
 
     return mongoService.connect()
         .then(db => {
@@ -31,7 +31,6 @@ function query(query, loggedUser) {
                             var idx = currMember.MemberWhoDidNotLikeMe.findIndex(item => {
                                 return item._id + '' === loggedUser._id + ''
                             })
-                            console.log('idx:', idx)
                             if (idx === -1) return true;
                             return false;
                         })
@@ -73,14 +72,10 @@ function updateDoNotLike(userId, memberId) {
 }
 
 function _modifyUserBeforeSend(memberToModify, loggedUser) {
-    console.log('memberToModify.name: ', memberToModify.name)
-
     memberToModify.likes = { "iLike": false, "likeMe": false, "isRead": false };
     //Does the userToModify likes the loggedInUser?
     if (memberToModify.membersILike.length !== 0) {
         let memberILikeId = memberToModify.membersILike.find(memberILike => {
-            // if (memberILike === undefined) console.log('MEMBER TO MODIFY: (memberILike===undefined)', memberToModify.name)
-            // if (loggedUser === undefined) console.log('MEMBER TO MODIFY: (loggedUser===undefined) ', memberToModify.name)
             if (memberILike) return (memberILike._id + '') === (loggedUser._id + '');
             return false;
         })
@@ -103,6 +98,7 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
 }
 
 function checkLogin(userCredentials) {
+
     // console.log('userCredentials', userCredentials);
 
     return mongoService.connect()
@@ -121,33 +117,63 @@ function checkLogin(userCredentials) {
         })
 }
 
+function signUp(userCredentials) {
+    if (userCredentials.pass.length < 3) return Promise.reject('Wrong Credentials: password must be at list 3 characters');
+    //fetch empty user
+    return getById('5c9a2d561a42991a487faa8d')
+        .then(user => {
+            user.name = userCredentials.name;
+            user.pass = userCredentials.pass;
+            delete user._id
+            console.log('User about to be inserted to DB (NO ID): ', user);
+
+            add(user)
+                .then(user => {
+                    console.log('AFTER SIGNUP RECEIVED FROM DB:');
+                    console.log(`User Name: ${user.name}`);
+                    console.log(`User Pass: ${user.pass}`);
+                    console.log(`User DOB: ${user.dateOfBirth}`);
+                    console.log(`User ID: ${user._id}`);
+                    user.pass = '';
+                    return Promise.resolve(user);
+                })
+                .catch(err => { Promise.reject(`Could not create new user : ${err}`) })
+        })
+}
+
 function createQueryToMongo(query) {
     let queryToMongo = {};
 
     if (query.city) {
         queryToMongo.city = { '$regex': query.city };
+        console.log(`City: ${queryToMongo.city}`)
     }
     if (query.minHeight) {
         queryToMongo.height = { $gte: +query.minHeight }
+        console.log(`Min Height: ${queryToMongo.height}`)
     }
-    if (query.gender) queryToMongo.gender = query.gender;
+    if (query.gender) {
+        queryToMongo.gender = query.gender;
+        console.log(`Gender: ${queryToMongo.gender}`)
+    }
     if (query.minAge && query.maxAge) {
         var minDate = _getMinDate(query.minAge)
         var maxDate = _getMaxDate(query.maxAge)
-        console.log('filter minAge: ', query.minAge, 'maxAge: ', query.maxAge);
-        console.log('Mongo minDate: ', minDate, 'maxDate: ', maxDate);
-
         queryToMongo.dateOfBirth = { $lt: minDate, $gte: maxDate }
+
+        console.log(`Min Age: ${query.minAge} (DBO: ${minDate})`)
+        console.log(`Max Age: ${query.maxAge} (DBO: ${maxDate})`)
     }
     else if (query.minAge) {
         var minDate = _getMinDate(query.minAge)
         queryToMongo.dateOfBirth = { $lt: minDate }
+        console.log(`Min Age: ${query.minAge} (DBO: ${minDate})`)
     }
     else if (query.maxAge) {
         var maxDate = _getMaxDate(query.maxAge)
         queryToMongo.dateOfBirth = { $gte: maxDate }
+        console.log(`Max Age: ${query.maxAge} (DBO: ${maxDate})`)
     }
-    console.log(queryToMongo)
     return queryToMongo;
 }
 
@@ -188,6 +214,7 @@ function update(user) {
     const strId = user._id
     user.dateOfBirth = new Date(user.dateOfBirth);
     user._id = new ObjectId(user._id)
+
     return mongoService.connect()
         .then(db => db.collection('user').updateOne({ _id: user._id }, { $set: user }))
         .then(() => user)

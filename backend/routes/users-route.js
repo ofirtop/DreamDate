@@ -13,7 +13,9 @@ function addUserRoutes(app) {
             .then(user => {
                 // console.log('user: ', user)
                 req.session.loggedInUser = user;
-                console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser.name);
+                console.log('**********************************************************');
+                console.log('NEW LOGIN : ', req.session.loggedInUser.name);
+                console.log('**********************************************************');
                 return res.json(user)
             })
             .catch(err => {
@@ -22,12 +24,33 @@ function addUserRoutes(app) {
             })
     })
 
+    //SIGNUP
+    app.post('/user/signup', (req, res) => {
+
+        const userCredentials = req.body;
+        
+        return userService.signUp(userCredentials)
+            .then(user => {
+                req.session.loggedInUser = user;
+                console.log('**********************************************************');
+                console.log('NEW LOGIN (AFTER SIGNUP) : ', req.session.loggedInUser.name);
+                console.log('**********************************************************');
+                return res.json(user)
+            })
+            .catch(err => {
+                console.log('user-route: SIGNUP catch:', err);
+                res.status(500).send('Problem Signup')
+            })
+    })    
+
     //LOGOUT
     app.get('/user/logout', (req, res) => {
-        console.log('ABOUT TO DESTROY!!!')
-        // console.log('user-route:LOGOUT - req.session.loggedInUser: ', req.session.loggedInUser.name)
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+        console.log('**********************************************************');
+        console.log('LOGOUT : ', req.session.loggedInUser.name);
+        console.log('**********************************************************');
+
         req.session.destroy();
-        // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
         // res.json({})
 
         res.end()
@@ -35,16 +58,26 @@ function addUserRoutes(app) {
 
     //GET list
     app.get('/user', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let query = req.query; //contains the filter                     
-        // console.log('users-toute:GET list - req.session.loggedInUser: ', req.session.loggedInUser)
+        console.log(`New Members List - Request by ** ${req.session.loggedInUser.name} **`)
         userService.query(query, req.session.loggedInUser)
             .then(users => {
+                console.log(`List Requested by ** ${req.session.loggedInUser.name} ** Retrieved:`)
+                users.forEach(user => {
+                    console.log(`   >>   ${user.name}`)
+                });
+                console.log(`********** END OF LIST **********`)
+
                 return res.json(users)
             });
     })
 
     //GET single
     app.get('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let userId = req.params.userId;
         userService.getMemberById(userId, req.session.loggedInUser)
             .then(user => res.json(user))
@@ -52,23 +85,25 @@ function addUserRoutes(app) {
 
     //DELETE
     app.delete('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
         let userId = req.params.userId;
-        console.log('this is the params', userId)
-
         userService.remove(userId)
             .then(() => res.json({}))
     })
 
     //ADD (CREATE)
     app.post('/user', (req, res) => {
-        var user = req.body;
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
 
+        var user = req.body;
         userService.add(user)
             .then(user => res.json(user))
     })
 
     // UPDATE
     app.put('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         const user = req.body;
         console.log('User UPDATE: ', user)
         userService.update(user)
@@ -80,25 +115,29 @@ function addUserRoutes(app) {
 
     //UPDATE LIKE
     app.put('/like', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
-
+        console.log(`New Update <LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateLike(userId, memberId)
             .then(() => {
-                console.log('updated like');
+                console.log('<LIKE> Request Confirmed');
                 res.json({ message: 'Updated' })
             })
     })
 
     //UPDATE NOT LIKE
     app.put('/notlike', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+        
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
-        console.log('INSIDE USER ROUTE: ', memberId)
+        console.log(`New Update <NOT LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateDoNotLike(userId, memberId)
             .then(() => {
-                console.log('updated NOT like');
-                res.json({ message: 'Updated' })
+                console.log('<NOT LIKE> Request Confirmed');
+                res.json({ "_id": memberId })
             })
     })
 }
