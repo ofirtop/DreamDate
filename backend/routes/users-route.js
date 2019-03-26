@@ -13,21 +13,25 @@ function addUserRoutes(app) {
             .then(user => {
                 // console.log('user: ', user)
                 req.session.loggedInUser = user;
-                console.log('user-route - LOGIN - req.session.loggedInUser:', req.session.loggedInUser.name);
+                console.log('**********************************************************');
+                console.log('NEW LOGIN : ', req.session.loggedInUser.name);
+                console.log('**********************************************************');
                 return res.json(user)
             })
             .catch(err => {
                 console.log('user-route: LOGIN catch:', err);
                 res.status(500).send('Wrong Credentials')
             })
-    })
-
-    //LOGOUT
-    app.get('/user/logout', (req, res) => {
-        console.log('ABOUT TO DESTROY!!!')
-        // console.log('user-route:LOGOUT - req.session.loggedInUser: ', req.session.loggedInUser.name)
+        })
+        
+        //LOGOUT
+        app.get('/user/logout', (req, res) => {
+            
+            console.log('**********************************************************');
+            console.log('LOGOUT : ', req.session.loggedInUser.name);
+            console.log('**********************************************************');
+        
         req.session.destroy();
-        // console.log('user-route:LOGOUT - AFTER DESTROY: req.session.loggedInUser: ',req.session.loggedInUser)
         // res.json({})
 
         res.end()
@@ -36,9 +40,15 @@ function addUserRoutes(app) {
     //GET list
     app.get('/user', (req, res) => {
         let query = req.query; //contains the filter                     
-        // console.log('users-toute:GET list - req.session.loggedInUser: ', req.session.loggedInUser)
+        console.log(`New Members List - Request by ** ${req.session.loggedInUser.name} **`)
         userService.query(query, req.session.loggedInUser)
             .then(users => {
+                console.log(`List Requested by ** ${req.session.loggedInUser.name} ** Retrieved:`)
+                users.forEach(user => {
+                    console.log(`   >>   ${user.name}`)
+                });
+                console.log(`********** END OF LIST **********`)
+                
                 return res.json(users)
             });
     })
@@ -53,8 +63,6 @@ function addUserRoutes(app) {
     //DELETE
     app.delete('/user/:userId', (req, res) => {
         let userId = req.params.userId;
-        console.log('this is the params', userId)
-
         userService.remove(userId)
             .then(() => res.json({}))
     })
@@ -82,22 +90,22 @@ function addUserRoutes(app) {
     app.put('/like', (req, res) => {
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
-
+        console.log(`New Update <LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateLike(userId, memberId)
-            .then(() => {
-                console.log('updated like');
-                res.json({ message: 'Updated' })
-            })
+        .then(() => {
+            console.log('<LIKE> Request Confirmed');
+            res.json({ message: 'Updated' })
+        })
     })
-
+    
     //UPDATE NOT LIKE
     app.put('/notlike', (req, res) => {
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
-        console.log('INSIDE USER ROUTE: ', memberId)
+        console.log(`New Update <NOT LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateDoNotLike(userId, memberId)
-            .then(() => {
-                console.log('updated NOT like');
+        .then(() => {
+            console.log('<NOT LIKE> Request Confirmed');
                 res.json({ "_id": memberId })
             })
     })
