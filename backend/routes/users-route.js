@@ -22,15 +22,15 @@ function addUserRoutes(app) {
                 console.log('user-route: LOGIN catch:', err);
                 res.status(500).send('Wrong Credentials')
             })
-        })
-        
-        //LOGOUT
-        app.get('/user/logout', (req, res) => {
-            
-            console.log('**********************************************************');
-            console.log('LOGOUT : ', req.session.loggedInUser.name);
-            console.log('**********************************************************');
-        
+    })
+
+    //LOGOUT
+    app.get('/user/logout', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+        console.log('**********************************************************');
+        console.log('LOGOUT : ', req.session.loggedInUser.name);
+        console.log('**********************************************************');
+
         req.session.destroy();
         // res.json({})
 
@@ -39,6 +39,8 @@ function addUserRoutes(app) {
 
     //GET list
     app.get('/user', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let query = req.query; //contains the filter                     
         console.log(`New Members List - Request by ** ${req.session.loggedInUser.name} **`)
         userService.query(query, req.session.loggedInUser)
@@ -48,13 +50,15 @@ function addUserRoutes(app) {
                     console.log(`   >>   ${user.name}`)
                 });
                 console.log(`********** END OF LIST **********`)
-                
+
                 return res.json(users)
             });
     })
 
     //GET single
     app.get('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let userId = req.params.userId;
         userService.getMemberById(userId, req.session.loggedInUser)
             .then(user => res.json(user))
@@ -62,6 +66,7 @@ function addUserRoutes(app) {
 
     //DELETE
     app.delete('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
         let userId = req.params.userId;
         userService.remove(userId)
             .then(() => res.json({}))
@@ -69,14 +74,17 @@ function addUserRoutes(app) {
 
     //ADD (CREATE)
     app.post('/user', (req, res) => {
-        var user = req.body;
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
 
+        var user = req.body;
         userService.add(user)
             .then(user => res.json(user))
     })
 
     // UPDATE
     app.put('/user/:userId', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         const user = req.body;
         console.log('User UPDATE: ', user)
         userService.update(user)
@@ -88,24 +96,28 @@ function addUserRoutes(app) {
 
     //UPDATE LIKE
     app.put('/like', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
         console.log(`New Update <LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateLike(userId, memberId)
-        .then(() => {
-            console.log('<LIKE> Request Confirmed');
-            res.json({ message: 'Updated' })
-        })
+            .then(() => {
+                console.log('<LIKE> Request Confirmed');
+                res.json({ message: 'Updated' })
+            })
     })
-    
+
     //UPDATE NOT LIKE
     app.put('/notlike', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+        
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
         console.log(`New Update <NOT LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
         userService.updateDoNotLike(userId, memberId)
-        .then(() => {
-            console.log('<NOT LIKE> Request Confirmed');
+            .then(() => {
+                console.log('<NOT LIKE> Request Confirmed');
                 res.json({ "_id": memberId })
             })
     })

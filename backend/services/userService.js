@@ -97,6 +97,7 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
 }
 
 function checkLogin(userCredentials) {
+   
     // console.log('userCredentials', userCredentials);
 
     return mongoService.connect()
@@ -134,18 +135,19 @@ function createQueryToMongo(query) {
         var minDate = _getMinDate(query.minAge)
         var maxDate = _getMaxDate(query.maxAge)
         queryToMongo.dateOfBirth = { $lt: minDate, $gte: maxDate }
-        console.log(`Min DBO: ${minDate}`)
-        console.log(`Max DBO: ${maxDate}`)
+
+        console.log(`Min Age: ${query.minAge} (DBO: ${minDate})`)
+        console.log(`Max Age: ${query.maxAge} (DBO: ${maxDate})`)
     }
     else if (query.minAge) {
         var minDate = _getMinDate(query.minAge)
         queryToMongo.dateOfBirth = { $lt: minDate }
-        console.log(`Min DBO: ${minDate}`)
+        console.log(`Min Age: ${query.minAge} (DBO: ${minDate})`)
     }
     else if (query.maxAge) {
         var maxDate = _getMaxDate(query.maxAge)
         queryToMongo.dateOfBirth = { $gte: maxDate }
-        console.log(`Max DBO: ${maxDate}`)
+        console.log(`Max Age: ${query.maxAge} (DBO: ${maxDate})`)
     }
     return queryToMongo;
 }
@@ -186,6 +188,7 @@ function add(user) {
 function update(user) {
     const strId = user._id
     user._id = new ObjectId(user._id)
+
     return mongoService.connect()
         .then(db => db.collection('user').updateOne({ _id: user._id }, { $set: user }))
         .then(() => user)
