@@ -1,6 +1,7 @@
 @import 'reset';
 @import 'variables';
 @import 'helpers';
+@import url('https://fonts.googleapis.com/css?family=ABeeZee');
 
 *{
     box-sizing: border-box;
@@ -8,6 +9,7 @@
 
 body{
     color: $color_primary;
+    font-family: 'ABeeZee', sans-serif;
 }
 
 .text-danger{

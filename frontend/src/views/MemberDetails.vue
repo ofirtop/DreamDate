@@ -1,37 +1,44 @@
 <template>
   <section v-if="member" class="member-details">
-    <router-link to="/">
+    <!-- <router-link to="/">
       <h3 class="backToAll">BACK TO ALL</h3>
-    </router-link>
-    <div class="img-section">
-      <h1>
-        <span class="online-status" :class="{on: this.member.online, off: !this.member.online}"/>
-        {{member.name}}, {{memberAge}}
-      </h1>
-      <!-- <img class="mainImg" :src="member.mainImage"> -->
-      <!-- <div class="img-gallery"> -->
-        <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="(img, idx) in allImgs" :key="idx">
-                <img :src="img">
-            </el-carousel-item>
-        </el-carousel>
-    <!-- </div> -->
-    </div>
-    <div class="details-section">
-      <h2>{{member.name}}'s details</h2>
-      <h4>About: {{member.descr}}</h4>
-      <h4>Height: {{member.height}}cm</h4>
-      <h4>City: {{member.city}}</h4>
-      <h4>Marital status: {{member.maritalStatus}}</h4>
-      <h4>Children: {{childrenInfo}}</h4>
-      <hr>
-      <h2>{{member.name}} wants to meet:</h2>
-      <h4>{{partnerGenderNAge}}</h4>
-      <div class="likes-panel">
-        <font-awesome-icon icon="heart" @click.stop="like"/>
-        <font-awesome-icon icon="times" @click.stop="notLike"/>
+    </router-link> -->
+    <div class="container">
+    <div class="main-section">
+      <div class="info">
+        <div class="name-section flex items-center">
+          <span class="online-status mr-1" :class="{on: this.member.online, off: !this.member.online}"/>
+          <h1>{{member.name}}, {{memberAge}}</h1>
+        </div>
+        <div class="details">
+          <hr>
+          <!-- <h2>{{member.name}}'s details</h2> -->
+          <h4>About: {{member.descr}}</h4>
+          <hr>
+          <h4>Height: {{member.height}}cm</h4>
+          <h4>I'm from {{member.city}}</h4>
+          <h4>I'm {{member.maritalStatus}}</h4>
+          <h4>I have {{childrenInfo}}</h4>
+          <hr>
+          <h2>I want to meet:</h2>
+          <h4>{{partnerGenderNAge}}</h4>
+        </div>
+      </div>
+      <div class="main-img">
+        <div class="mainImg" :style="{backgroundImage: `url(${member.mainImage})`}"></div>
+        <div class="likes-panel">
+            <font-awesome-icon icon="heart" @click.stop="like"/>
+            <font-awesome-icon icon="times" @click.stop="notLike"/>
+        </div>
       </div>
     </div>
+      <h4>Gallery</h4>
+    <div class="img-gallery mt-1">
+        <div class="member-img" :style="{backgroundImage: `url(${img})`}" v-for="(img, idx) in member.images" :key="idx" >
+        </div>
+    </div>
+   </div>   
+    
   </section>
 </template>
 <script>
@@ -42,11 +49,6 @@ export default {
     };
   },
   computed: {
-    allImgs() {
-      let imgs = this.member.images;
-      imgs.unshift(this.member.mainImage)
-      return imgs;
-    },
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
@@ -84,47 +86,68 @@ a {
 }
 .member-details {
   display: flex;
-  color: rgb(54, 53, 53);
-  display: flex;
-  align-items: flex-start;
+  flex-direction: center;
+  align-items: center;
   justify-content: center;
+  border: 1px solid gray;
 }
-.img-section {
-  margin-right: 30px;
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  background-color: gray;
+  margin: 20px;
+}
+.main-section {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
 }
 .mainImg {
-  width: 300px;
-  max-height: 400px;
-  object-fit: contain;
+    width: 200px;
+    height: 250px;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .img-gallery {
   display: flex;
-  // width: 500px;
+  width: 100%;
   justify-content: center;
+  border: 1px solid gray;
+}
+.member-img {
+  width: 150px;
+  height: 150px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .member-img img {
-  // width: 150px;
-  // height: 150px;
-  object-fit: cover;
+  
+  width: 100%;
+  height: 100%;
 }
+
 h1 {
   font-size: 3em;
   font-weight: bold;
 }
-h2 {
-  font-size: 2em;
-  font-weight: bold;
-}
-.details-section {
-  margin-top: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-img {
-  max-width: 300px;
-  max-height: 400px;
-}
+// h2 {
+//   font-size: 2em;
+//   font-weight: bold;
+// }
+// .details-section {
+//   margin-top: 100px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   border: 1px solid gray;
+// }
+// img {
+//   max-width: 300px;
+//   max-height: 400px;
+// }
 .likes-panel {
   width: 100%;
   display: flex;
@@ -138,12 +161,6 @@ img {
   border: gray;
   background-color: lightblue;
 }
-  .el-carousel__item {
-    background-color: #99a9bf;
-    width: 300px;
-    height: 300px;
-  }
-
 .online-status {
   display: inline-block;
   width: 16px;
