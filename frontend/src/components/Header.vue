@@ -1,5 +1,5 @@
 <template>
-  <header class="app-header flex items-center">
+  <header v-if="loggedInUser" class="app-header flex items-center">
     <nav id="nav" class="flex">
       <div class="logo-name">
         <router-link to="/">
