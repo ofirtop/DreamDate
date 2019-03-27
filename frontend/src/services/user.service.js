@@ -37,7 +37,7 @@ async function logout(userCredentials) {
 
 async function updateUser(user) {
     return await axios.put(`${BASE_URL}/user/${user._id}`, user)
-            .then(res => res.data._id)
+            .then(res => res.data)
 }
 
 //FOR NEW USER - AFTER SIGNUP IS READY TO USE
