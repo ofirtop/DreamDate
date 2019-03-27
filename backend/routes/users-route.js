@@ -39,7 +39,7 @@ function addUserRoutes(app) {
             })
             .catch(err => {
                 console.log('user-route: SIGNUP catch:', err);
-                res.status(500).send('Problem Signup')
+                res.status(500).send('Problem Signup',err);
             })
     })    
 
