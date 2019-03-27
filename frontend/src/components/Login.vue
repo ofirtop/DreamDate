@@ -1,5 +1,8 @@
 <template>
   <section class="login-demo-wrapper flex items-center content-center">
+      <div class="welcome-msg">
+      <h1>Welcome to DreamDate!</h1>
+      </div>
     <div class="login-demo">
       <div class="flex space-between">
         <form @submit.prevent="$emit('login', userCredentials)">
@@ -15,6 +18,9 @@
         <button @click="loginDemoFemale('female')" class="mr-1">Woman</button>
       </div>
       <div v-if="isError" class="text-danger mt-1">Wrong username or password</div>
+    </div>
+    <div class="welcome-msg">
+      <h2>Dream your love.. And love your dreams</h2>
     </div>
   </section>
 </template>
@@ -47,7 +53,7 @@ export default {
 };
 </script>
 
-<style scoped  >
+<style scoped >
 .login-demo {
   background-color: white;
   opacity: 0.8;
@@ -58,11 +64,22 @@ export default {
 .login-demo-wrapper {
   position: fixed;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background: url("../assets/img/home-bg.jpg") no-repeat;
 
   background-size: cover;
   background-position: center;
   z-index: 3000;
+  flex-direction: column;
+  justify-content: space-around
+}
+.welcome-msg {
+  z-index: 3001;
+  justify-self: flex-start;
+}
+.welcome-msg>* {
+  color:white;
+  text-shadow: 0px 1px 15px rgba(36,19,19,0.67);
+  font-size: 3em;
 }
 </style>
