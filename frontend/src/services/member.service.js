@@ -5,6 +5,7 @@ import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 export default {
   query,
+  queryMatch,
   getMemberById,
   updateNotLikeMember,
   getCities,
@@ -62,6 +63,12 @@ function query(filter) {
     .then(res => res.data);
 }
 
+function queryMatch() {
+  let strUrl = `${BASE_URL}/match`
+  return axios.get(strUrl)
+    .then(res => res.data);
+}
+
 function getMemberById(userId) {
   return axios.get(`${BASE_URL}/user/${userId}`)
     .then(res => res.data)
@@ -72,7 +79,7 @@ function updateNotLikeMember(memberIdToUpdate) {
   console.log(memberIdToUpdate);
   return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
     .then(res => {
-      console.log('member.service: updateNotLikeMember() res.data._id: ',res.data._id)
+      console.log('member.service: updateNotLikeMember() res.data._id: ', res.data._id)
       return res.data._id
     })
 }

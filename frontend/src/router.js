@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import home from './views/Home.vue';
+import match from './views/Match.vue';
 import userProfile from './views/UserProfile.vue';
 import memberDetails from './views/MemberDetails.vue';
 import userProfileEdit from './views/UserProfileEdit.vue';
@@ -11,6 +12,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     { path: '/', component: home },
+    { path: '/match', component: match },
     { path: '/user/edit/:userId?', component: userProfileEdit },
     { path: '/user/:userId', component: userProfile },
     { path: '/member/:userId', component: memberDetails }

@@ -15,11 +15,12 @@
 import memberService from "../services/member.service";
 import memberPreview from "./MemberPreview";
 export default {
-  computed: {
-    members() {
-      return this.$store.getters.members;
-    }
-  },
+  props:['members'],
+  // computed: {
+    // members() {
+    //   return this.$store.getters.members;
+    // }
+  // },
   components: {
     memberPreview
   }

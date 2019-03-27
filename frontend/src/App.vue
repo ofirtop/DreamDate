@@ -48,6 +48,7 @@ export default {
   },
   computed: {
     loggedInUser() {
+      console.log('this.$store.getters.loggedInUser: ',this.$store.getters.loggedInUser)
       return this.$store.getters.loggedInUser;
     },
     newMembersWhoWatchedMeCount() {
@@ -64,9 +65,6 @@ export default {
     },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
-      this.memberToChatNotifiation = null;
-    },
-    closeChatNotification() {
       this.memberToChatNotifiation = null;
     },
     openChatFromNotification(member) {
