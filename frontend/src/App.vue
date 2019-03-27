@@ -164,13 +164,13 @@ export default {
 }
 #nav {
   a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: $color_primary;
-    }
+    // font-weight: bold;
+    color: black;
+//     &.router-link-exact-active {
+//       color: $color_primary;
   }
 }
+
 .logo {
   width: 40px;
 }

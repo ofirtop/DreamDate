@@ -1,8 +1,8 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
+    <member-filter @setFilter="setFilter"/>
     <main>
-      <member-filter @setFilter="setFilter" />
-      <member-list @notLike="notLikeMember" @like="addLike" />
+      <member-list @notLike="notLikeMember" @like="addLike"/>
     </main>
   </section>
 </template>
@@ -17,18 +17,18 @@ export default {
     return {
       memberForMatch: null,
       filterBy: {
-           gender: '',
-           minAge: null,
-           maxAge: null,
-           minHeight: null,
-           city: ''
-          },
+        gender: "",
+        minAge: null,
+        maxAge: null,
+        minHeight: null,
+        city: ""
+      }
     };
   },
   methods: {
     async addLike(member) {
-      console.log('like');
-      
+      console.log("like");
+
       await this.$store.dispatch({ type: "addLikeToMember", member });
 
       if (member.likes.iLike && member.likes.likeMe) {
@@ -44,31 +44,32 @@ export default {
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
-      console.log('About to loadMembers ################')
-      this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
+      console.log("About to loadMembers ################");
+      this.$store.dispatch({ type: "loadMembers", filterBy: this.filterBy });
     }
   },
   computed: {
-      loggedInUser() {
-        return this.$store.getters.loggedInUser;
-      }
-    },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  },
   created() {
     if (this.loggedInUser) {
-      console.log('creating');
-      
+      console.log("creating");
+
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
       this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
       this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;
-      console.log('About to loadMembers ################')
-      this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
+      console.log("About to loadMembers ################");
+      this.$store.dispatch({ type: "loadMembers", filterBy: this.filterBy });
     }
   },
   watched: {
-   loggedInUser() {
-     if (this.loggedInUser) this.$store.dispatch({ type: 'loadMembers', filterBy: this.filterBy})
-   }
- },
+    loggedInUser() {
+      if (this.loggedInUser)
+        this.$store.dispatch({ type: "loadMembers", filterBy: this.filterBy });
+    }
+  },
   components: {
     memberList,
     memberFilter
@@ -78,7 +79,7 @@ export default {
 
 <style scoped>
 main {
-  max-width: 900px;
-  margin: auto;
+  width: 100%;
+  padding: 20px 20px;
 }
 </style>
