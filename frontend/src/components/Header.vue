@@ -7,7 +7,7 @@
         </router-link>
         <div class="main-header">DREAM DATE</div>
       </div>
-      <div class="nav-links flex">
+      <div class="nav-links flex items-center">
         <div class="user-img" v-if="loggedInUser">
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>
