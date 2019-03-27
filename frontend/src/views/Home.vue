@@ -1,15 +1,15 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
     <main>
-      <user-filter @setFilter="setFilter"></user-filter>
-      <member-list @notLike="notLikeMember" @like="addLike"></member-list>
+      <member-filter @setFilter="setFilter" />
+      <member-list @notLike="notLikeMember" @like="addLike" />
     </main>
   </section>
 </template>
 
 <script>
 import memberList from "@/components/MemberList.vue";
-import userFilter from "@/components/UserFilter.vue";
+import memberFilter from "@/components/MemberFilter.vue";
 import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
 
 export default {
@@ -71,7 +71,7 @@ export default {
  },
   components: {
     memberList,
-    userFilter
+    memberFilter
   }
 };
 </script>
