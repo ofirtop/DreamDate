@@ -16,13 +16,16 @@
         Or choose a demo user:
         <button @click="loginDemoMale('male')" class="mr-1">Man</button>
         <button @click="loginDemoFemale('female')" class="mr-1">Woman</button>
+        <br>
+        <br>
       </div>
-      <div v-if="isError" class="text-danger mt-1">Wrong username or password</div>
-      <br>
-      <br>
+
+      <div v-if="errMsg" class="text-danger mt-1">Wrong username or password</div>
+
       <h3 class="mb-1"  v-if="!isNewUser">First time here? Register and meet your dream</h3>
-      <button @click="isNewUser = true" v-if="!isNewUser">Register</button>
+      <button @click="register" v-if="!isNewUser">Register</button>
       <div class="signup mb-1 flex" v-if="isNewUser">
+        <h4 class="mb-1">Back to <button @click="isNewUser=false">Login</button></h4>
         <h4 class="mb-1">Choose your username and password</h4>
         <form @submit.prevent="signup">
           <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
@@ -40,7 +43,7 @@
 <script>
 export default {
   name: 'login',
-  props:['isError'],
+  props:['isError','isSignUpErr'],
   data() {
     return {
       userCredentials: {
@@ -61,9 +64,22 @@ export default {
       this.userCredentials.pass = "123";
       this.$emit('login', this.userCredentials);
     },
+    register() {
+      this.isNewUser = true;
+      this.errMsg = false;
+      this.$emit('register')
+    },
     signup(){
       this.$emit('signup', this.userCredentials);
       this.isNewUser = false;
+      this.userCredentials.name = '';
+      this.userCredentials.pass = '';
+
+    }
+  },
+  computed: {
+    errMsg() {
+      return (this.isError || this.isSignUpErr);
     }
   }
 };

@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
-    <login v-if="!loggedInUser" :isError="loginFailed" @login="login" @signup="signup"/>
+    <login v-if="!loggedInUser" :isError="loginFailed" :isSignUpErr="signupFailed" 
+          @login="login" @signup="signup" @register="register"/>
 
     <router-view/>
 
@@ -104,6 +105,7 @@ export default {
     async signup(userCredentials) {
       console.log('Signing up (HOME):', userCredentials);
       this.signupFailed = false;
+      this.loginFailed = false;
       try {
         let loggedInUser = await this.$store.dispatch({type: "signupUser",userCredentials});
         utilService.saveToStorage("loggedInUser", loggedInUser);
@@ -115,6 +117,10 @@ export default {
     logout() {
       localStorage.removeItem('loggedInUser');
       this.$store.dispatch({ type: "logoutUser" });
+    },
+    register() {
+      this.signupFailed = false;
+      this.loginFailed = false;
     }
   },
   async created() {
