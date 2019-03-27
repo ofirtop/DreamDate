@@ -91,7 +91,6 @@ export default {
   },
   created() {
     this.user = this.profile;
-    console.log(this.user, this.profile);
     let namesCities = memberService.getCities();
     this.cities = namesCities.map(city => {
       return { value: city, label: city };
@@ -102,6 +101,8 @@ export default {
     saveProfile() {
       this.isEdit = false;
       this.saveImgBtn = false;
+      this.user.interestedIn.minAge = this.age[0];
+      this.user.interestedIn.maxAge = this.age[1];
       this.$emit('saveProfile', this.user);
       this.$emit('close');
     },

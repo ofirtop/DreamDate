@@ -22,7 +22,7 @@
           <hr>
           <h2>I want to meet</h2>
           <h4>{{partnerGenderNAge}}</h4>
-          <el-button @click="editProfile" type="primary">Edit Profile</el-button>
+          <el-button @click="editProfile" type="primary">Edit Details</el-button>
         </div>
         </div>
         <div class="img-section">
@@ -78,7 +78,7 @@ export default {
     saveProfile(user) {
       this.isEdit = false;
       this.user = user;
-      console.log('Save updated profile: ', this.user);
+      console.log('Save updated PROFILE: ', this.user);
       this.$store.dispatch({ type: 'updateUser', user: this.user });
     },
     editProfile() {
@@ -111,7 +111,7 @@ export default {
       else return `I have ${this.user.numOfChildren} kids`;
     },
     partnerGenderNAge() {
-      if(!this.user.interestedIn.gender || !this.user.interestedIn.minAge || !this.interestedIn.maxAge) return '...';
+      if(!this.user.interestedIn.gender || !this.user.interestedIn.minAge || !this.user.interestedIn.maxAge) return '...';
       if (this.user.interestedIn.gender === 'female') {
         return `Woman, ${this.user.interestedIn.minAge} - ${
           this.user.interestedIn.maxAge
