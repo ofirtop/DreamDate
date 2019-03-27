@@ -61,7 +61,7 @@ function queryMatch(loggedUser) {
                             return _modifyUserBeforeSend(member, loggedUser)
                         })
                         var filteredMembers = modifiedMembers.filter(currMember => {
-                            if(currMember._id + '' === loggedUser._id + '') return false;
+                            if (currMember._id + '' === loggedUser._id + '') return false;
                             return currMember.likes.iLike && currMember.likes.likeMe;
                         })
                         // console.log(modifiedMembers)
@@ -124,11 +124,8 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
 
 function checkLogin(userCredentials) {
 
-    // console.log('userCredentials', userCredentials);
-
     return mongoService.connect()
         .then(db => {
-            // console.log(`LOGIN ATTEMPT, name: ${userCredentials.name} pass: ${userCredentials.pass}`)
             return db.collection('user').findOne({ $and: [{ "name": userCredentials.name }, { "pass": userCredentials.pass }] })
                 .then(user => {
                     if (user) {
@@ -143,27 +140,45 @@ function checkLogin(userCredentials) {
 }
 
 function signUp(userCredentials) {
+    console.log('userService signup')
     if (userCredentials.pass.length < 3) return Promise.reject('Wrong Credentials: password must be at list 3 characters');
-    //fetch empty user
-    return getById('5c9a2d561a42991a487faa8d')
-        .then(user => {
-            user.name = userCredentials.name;
-            user.pass = userCredentials.pass;
-            delete user._id
-            console.log('User about to be inserted to DB (NO ID): ', user);
 
-            add(user)
-                .then(user => {
-                    console.log('AFTER SIGNUP RECEIVED FROM DB:');
-                    console.log(`User Name: ${user.name}`);
-                    console.log(`User Pass: ${user.pass}`);
-                    console.log(`User DOB: ${user.dateOfBirth}`);
-                    console.log(`User ID: ${user._id}`);
-                    user.pass = '';
-                    return Promise.resolve(user);
-                })
-                .catch(err => { Promise.reject(`Could not create new user : ${err}`) })
+    var user = _getEmptyUser(userCredentials);
+
+    return add(user)
+        .then(user => {
+            user.pass = '';
+            return Promise.resolve(user);
         })
+        .catch(err => { Promise.reject(`Could not create new user : ${err}`) })
+}
+
+function _getEmptyUser(userCredentials) {
+    return {
+        name: userCredentials.name,
+        pass: userCredentials.pass,
+        email: '',
+        gender: '',
+        dateOfBirth: new Date(),
+        city: '',
+        maritalStatus: '',
+        numOfChildren: 0,
+        height: 0,
+        interestedIn: {
+            minAge: 0,
+            maxAge: 0,
+            gender: ''
+        },
+        descr: '',
+        mainImage: '',
+        images: [],
+        membersILike: [],
+        membersWhoLikeMe: [],
+        membersIWatched: [],
+        membersWhoWatchedMe: [],
+        MemberWhoDidNotLikeMe: []
+    }
+
 }
 
 function createQueryToMongo(query) {
