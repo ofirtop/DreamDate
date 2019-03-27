@@ -157,6 +157,16 @@ export default new Vuex.Store({
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
     },
+    async signupUser({ commit }, { userCredentials }) {
+      try {
+        let loggedInUser = await userService.signup(userCredentials);
+        commit({ type: 'setLoggedInUser', user: loggedInUser });
+        console.log('logged in:', loggedInUser._id);
+        return Promise.resolve(loggedInUser);
+      } catch{
+        return Promise.reject();
+      }
+    },
     loadMatches(context) {
       return memberService.queryMatch()
         .then(members => {

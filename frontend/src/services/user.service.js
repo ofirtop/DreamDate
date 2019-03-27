@@ -6,6 +6,7 @@ export default {
     login,
     logout,
     updateUser,
+    signup,
     // addNewUser
 };
 
@@ -39,7 +40,18 @@ async function updateUser(user) {
     return await axios.put(`${BASE_URL}/user/${user._id}`, user)
             .then(res => res.data)
 }
-
+async function signup(userCredentials) {
+    console.log('signing in (ServiceClient)', userCredentials);
+    // try {
+    //     let res = await axios.post(`${BASE_URL}/user/signup`, userCredentials)
+    //     let loggedInUser = res.data;
+    //     SOCKET.emit('login', loggedInUser._id);
+    //     return Promise.resolve(loggedInUser);
+    // } catch{
+    //     console.log('signup failed');
+    //     return Promise.reject();
+    // }
+}
 //FOR NEW USER - AFTER SIGNUP IS READY TO USE
 // async function addNewUser(user) {
 //     return axios.post(`${BASE_URL}/user`, user)
