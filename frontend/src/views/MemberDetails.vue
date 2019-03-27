@@ -6,14 +6,14 @@
     <div class="container">
     <div class="main-section">
       <div class="info">
-        <div class="name-section flex items-center">
+        <div class="name-section flex items-center content-center">
           <span class="online-status mr-1" :class="{on: this.member.online, off: !this.member.online}"/>
           <h1>{{member.name}}, {{memberAge}}</h1>
         </div>
         <div class="details">
           <hr>
           <!-- <h2>{{member.name}}'s details</h2> -->
-          <h4>About: {{member.descr}}</h4>
+          <h4>{{member.descr}}</h4>
           <hr>
           <h4>Height: {{member.height}}cm</h4>
           <h4>I'm from {{member.city}}</h4>
@@ -26,15 +26,18 @@
       </div>
       <div class="main-img">
         <div class="mainImg" :style="{backgroundImage: `url(${member.mainImage})`}"></div>
-        <div class="likes-panel">
+        <div class="likes-panel clickable">
             <font-awesome-icon icon="heart" @click.stop="like"/>
             <font-awesome-icon icon="times" @click.stop="notLike"/>
         </div>
       </div>
     </div>
       <h4>Gallery</h4>
-    <div class="img-gallery mt-1">
-        <div class="member-img" :style="{backgroundImage: `url(${img})`}" v-for="(img, idx) in member.images" :key="idx" >
+    <div class="img-gallery mt-1 mb-1">
+        <div class="member-img clickable" 
+            :style="{backgroundImage: `url(${img})`}" 
+            v-for="(img, idx) in member.images" :key="idx" 
+            @click="changeMainImg(img, idx)">
         </div>
     </div>
    </div>   
@@ -48,23 +51,30 @@ export default {
       member: null
     };
   },
+  methods: {
+    changeMainImg(imgSrc, idx) {
+      let img = this.member.mainImage;
+      this.member.mainImage = imgSrc;
+      this.member.images.splice(idx, 1, img);
+    },
+  },
   computed: {
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
     },
     childrenInfo() {
-      if (!this.member.numOfChildren) return `No`;
+      if (!this.member.numOfChildren) return `no kids`;
       if (this.member.numOfChildren === 1) return `1 child`;
       else return `${this.member.numOfChildren} kids`;
     },
     partnerGenderNAge() {
       if (this.member.interestedIn.gender === "female") {
-        return `Lady, ${this.member.interestedIn.minAge} - ${
+        return `Woman, ${this.member.interestedIn.minAge} - ${
           this.member.interestedIn.maxAge
         } years old`;
       } else
-        return `Gentelman, ${this.member.interestedIn.minAge} - ${
+        return `Man, ${this.member.interestedIn.minAge} - ${
           this.member.interestedIn.maxAge
         } years old`;
     }
@@ -86,22 +96,32 @@ a {
 }
 .member-details {
   display: flex;
-  flex-direction: center;
   align-items: center;
   justify-content: center;
-  border: 1px solid gray;
 }
 .container {
+  max-width: 60%;
   display: flex;
   flex-direction: column;
-  width: 50%;
-  background-color: gray;
-  margin: 20px;
+  align-items: center;
+  background-color: rgba(248, 248, 248, 1);
+  border-radius: 2px;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.container:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .main-section {
   display: flex;
   justify-content: space-around;
   margin: 10px;
+}
+.details {
+  max-width: 50%;
+  margin: 1em;
 }
 .mainImg {
     width: 200px;
@@ -112,9 +132,7 @@ a {
 }
 .img-gallery {
   display: flex;
-  width: 100%;
   justify-content: center;
-  border: 1px solid gray;
 }
 .member-img {
   width: 150px;
@@ -122,45 +140,39 @@ a {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
+  margin: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .member-img img {
-  
   width: 100%;
   height: 100%;
 }
-
+.member-img:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
 h1 {
-  font-size: 3em;
+  font-size: 2em;
   font-weight: bold;
 }
-// h2 {
-//   font-size: 2em;
-//   font-weight: bold;
-// }
-// .details-section {
-//   margin-top: 100px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   border: 1px solid gray;
-// }
-// img {
-//   max-width: 300px;
-//   max-height: 400px;
-// }
 .likes-panel {
-  width: 100%;
+  font-size: 1.5em;
   display: flex;
   justify-content: space-around;
   margin: 10px;
   align-items: center;
-  height: 50px;
+  height: 40px;
 }
-.backToAll {
-  padding: 5px;
-  border: gray;
-  background-color: lightblue;
+.likes-panel>*{
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+.likes-panel>*:hover {
+  font-size: 2em;
+}
+// .backToAll {
+//   padding: 5px;
+//   border: gray;
+//   background-color: lightblue;
+// }
 .online-status {
   display: inline-block;
   width: 16px;
@@ -172,5 +184,32 @@ h1 {
   &.off {
     background-color: red;
   }
+}
+ @media (max-width: 800px) {
+    .container {
+      width: 100%;
+      max-width: unset;
+    }
+    .main-section {
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+    .mainImg {
+      width: 100%;
+    }
+    .member-img {
+    width: 100%;
+    height: 80vh;
+    margin: 0;
+    }
+    .details {
+      width: 95%;
+      max-width: unset;
+      margin:0;
+    }
+    .img-gallery {
+      flex-direction: column;
+      width: 100%;
+    }
 }
 </style>
