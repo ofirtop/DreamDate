@@ -6,12 +6,12 @@
       <!-- <h2>{{user.name}}</h2> -->
       <div>
         <label>Height</label>
-        <el-input-number size="mini" v-model="user.height"></el-input-number>
+        <el-input-number class="editInput" size="mini" v-model="user.height"></el-input-number>
       </div>
       <div>
         <label>City</label>
-        <el-select v-model="user.city" size="mini" allow-create placeholder="Choose your city">
-          <el-option
+        <el-select class="editInput" v-model="user.city" size="mini" allow-create placeholder="Choose your city">
+          <el-option 
             size="mini"
             v-for="(city, idx) in cities"
             :key="idx"
@@ -22,7 +22,7 @@
       </div>
       <div>
         <label>Marital status</label>
-        <el-select v-model="user.maritalStatus" size="mini" placeholder="Select your status">
+        <el-select class="editInput" v-model="user.maritalStatus" size="mini" placeholder="Select your status">
           <el-option
             size="mini"
             v-for="(status, idx) in statuses"
@@ -34,11 +34,11 @@
       </div>
       <div>
         <label>Children</label>
-        <el-input-number size="mini" v-model="user.numOfChildren"></el-input-number>
+        <el-input-number class="editInput" size="mini" v-model="user.numOfChildren"></el-input-number>
       </div>
       <div>
         <label>Date of Birth</label>
-        <el-date-picker
+        <el-date-picker class="editInput"
           v-model="user.dateOfBirth"
           type="date"
           size="mini"
@@ -46,11 +46,11 @@
         ></el-date-picker>
       </div>
       <hr>
-      <h2>Dream your partner</h2>
-      <h4>I'd like to meet:</h4>
+      <h2>Dream your partner!</h2>
+      <h4></h4>
       <div>
         <label>Gender</label>
-        <el-select size="mini" v-model="user.interestedIn.gender" placeholder="Select gender">
+        <el-select size="mini" class="editInput" v-model="user.interestedIn.gender" placeholder="Select gender">
           <el-option
             v-for="(gender, idx) in genders"
             :key="idx"
@@ -61,9 +61,9 @@
       </div>
       <div>
         <label>Age</label>
-        <el-slider v-model="age" range :min="18" :max="120"></el-slider>
-        <el-button size="mini" type="success" @click="saveProfile">Save Profile</el-button>
+        <el-slider class="editInput" v-model="age" range :min="18" :max="120"></el-slider>
       </div>
+        <el-button size="mini" type="info" @click="saveProfile">Save Profile</el-button>
     </div>
   </section>
 </template>
@@ -139,7 +139,9 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import '@/sass/_variables.scss';
+
 .edit-profile {
   position: fixed;
   top: 10%;
@@ -163,6 +165,7 @@ export default {
     display: flex;
     justify-content: space-between;
     margin: 5px;
+    align-content: center
 }
 label {
     color: black;
@@ -171,16 +174,24 @@ h1 {
   font-size: 2em;
   font-weight: bold;
 }
-button {
-  margin: 10px;
-}
 .el-icon-close {
     align-self: flex-end;
     cursor: pointer;
     font-size: 2em;
     font-weight: bold;
 }
-/* input {
-  width: 50%;
-} */
+.editInput,
+.el-date-editor.el-input {
+  width: 150px;
+}
+.el-slider__bar {
+    background-color: $clr1;
+}
+
+button {
+  margin: 10px;
+  width: 100px;
+  align-self: center;
+  background-color: $clr1;
+}
 </style>
