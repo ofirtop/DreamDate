@@ -26,6 +26,8 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    
+    position:relative;
+    top:6rem;
+
   }
 </style>
