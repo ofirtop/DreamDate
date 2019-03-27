@@ -52,8 +52,8 @@ export default new Vuex.Store({
         state.loggedInUser.membersWhoWatchedMe.push({ id: memberId, isRead: false, date: new Date() });
       }
     },
-    markWatchedMeMembersAsRead(state){
-      state.loggedInUser.membersWhoWatchedMe.forEach(member=>{
+    markWatchedMeMembersAsRead(state) {
+      state.loggedInUser.membersWhoWatchedMe.forEach(member => {
         member.isRead = true;
       });
     },
@@ -66,7 +66,7 @@ export default new Vuex.Store({
       if (member) member.online = false;
     },
     removeMemberIDontLike(state, { updatedMemberId }) {
-      console.log('about to remove member I dont like. memberId:',updatedMemberId)
+      console.log('about to remove member I dont like. memberId:', updatedMemberId)
       let idx = state.members.findIndex(member => member._id === updatedMemberId);
       state.members.splice(idx, 1);
     },
@@ -128,12 +128,12 @@ export default new Vuex.Store({
       commit({ type: 'addLikeToMember', member });
     },
     async updateUser({ commit }, { user }) {
-        await userService.updateUser(user);
-        commit({ type: 'setLoggedInUser', user });
+      await userService.updateUser(user);
+      commit({ type: 'setLoggedInUser', user });
     },
     async addNewUser({ commit }, { user }) {
-        let newUser = await userService.addNewUser(user);
-        commit({ type: 'setLoggedInUser', user: newUser})
+      let newUser = await userService.addNewUser(user);
+      commit({ type: 'setLoggedInUser', user: newUser })
     },
     async loginUser({ commit }, { userCredentials }) {
       try {
@@ -150,8 +150,14 @@ export default new Vuex.Store({
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
     },
+    match(context) {
+      return memberService.queryMatch()
+        .then(members => {
+          context.commit({ type: 'setMembers', members });
+        })
+    },
     notLikeMember({ commit, state }, { memberId }) {
-      console.log('store - action:notLikeMember() - memberId: ',memberId)
+      console.log('store - action:notLikeMember() - memberId: ', memberId)
       memberService.updateNotLikeMember(memberId)
         .then((updatedMemberId) => commit({ type: 'removeMemberIDontLike', updatedMemberId }))
     },
@@ -172,8 +178,8 @@ export default new Vuex.Store({
     watchMember({ state }, { memberId }) {
       memberService.watchMember(state.loggedInUser._id, memberId);
     },
-    markWatchedMeMembersAsRead({commit, state}){
-      commit({type: 'markWatchedMeMembersAsRead'});
+    markWatchedMeMembersAsRead({ commit, state }) {
+      commit({ type: 'markWatchedMeMembersAsRead' });
       return userService.update(state.loggedInUser);
     }
   }

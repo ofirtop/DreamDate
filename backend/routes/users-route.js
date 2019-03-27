@@ -73,6 +73,24 @@ function addUserRoutes(app) {
                 return res.json(users)
             });
     })
+    
+    //GET list of Matches
+    app.get('/match', (req, res) => {
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
+        // let query = req.query; //contains the filter                     
+        console.log(`New MATCH Members List - Request by ** ${req.session.loggedInUser.name} **`)
+        userService.queryMatch(req.session.loggedInUser)
+            .then(users => {
+                console.log(`MATCH List Requested by ** ${req.session.loggedInUser.name} ** Retrieved:`)
+                users.forEach(user => {
+                    console.log(`   >>   ${user.name}`)
+                });
+                console.log(`********** END OF LIST **********`)
+
+                return res.json(users)
+            });
+    })
 
     //GET single
     app.get('/user/:userId', (req, res) => {

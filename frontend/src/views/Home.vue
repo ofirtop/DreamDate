@@ -1,7 +1,7 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
     <member-filter @setFilter="setFilter"/>
-      <!-- <main class="flex align-start"> -->
+    <!-- <main class="flex align-start"> -->
     <main>
       <member-list @notLike="notLikeMember" @like="addLike"/>
     </main>
@@ -45,7 +45,6 @@ export default {
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
-      console.log("About to loadMembers ################");
       this.$store.dispatch({ type: "loadMembers", filterBy: this.filterBy });
     }
   },
@@ -56,12 +55,9 @@ export default {
   },
   created() {
     if (this.loggedInUser) {
-      console.log("creating");
-
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
       this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
       this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;
-      console.log("About to loadMembers ################");
       this.$store.dispatch({ type: "loadMembers", filterBy: this.filterBy });
     }
   },

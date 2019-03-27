@@ -13,7 +13,8 @@ module.exports = {
     signUp,
     updateLike,
     updateDoNotLike,
-    getMemberById
+    getMemberById,
+    queryMatch
 }
 
 function query(query, loggedUser) {
@@ -45,6 +46,30 @@ function query(query, loggedUser) {
                     }
                 })
 
+        })
+}
+
+function queryMatch(loggedUser) {
+    console.log(`Query Match Details:`)
+
+    return mongoService.connect()
+        .then(db => {
+            return db.collection('user').find().toArray()
+                .then(members => {
+                    if (members) {
+                        let modifiedMembers = members.map(member => {
+                            return _modifyUserBeforeSend(member, loggedUser)
+                        })
+                        var filteredMembers = modifiedMembers.filter(currMember => {
+                            if(currMember._id + '' === loggedUser._id + '') return false;
+                            return currMember.likes.iLike && currMember.likes.likeMe;
+                        })
+                        // console.log(modifiedMembers)
+                        return filteredMembers;
+                    } else {
+                        return Promise.reject("No Clients")
+                    }
+                })
         })
 }
 
