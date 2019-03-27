@@ -3,7 +3,7 @@
     <member-filter @setFilter="setFilter"/>
     <!-- <main class="flex align-start"> -->
     <main>
-      <member-list @notLike="notLikeMember" @like="addLike"/>
+      <member-list :members="members" @notLike="notLikeMember" @like="addLike"/>
     </main>
   </section>
 </template>
@@ -51,6 +51,9 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    members() {
+      return this.$store.getters.members;
     }
   },
   created() {

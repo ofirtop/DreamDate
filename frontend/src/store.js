@@ -11,6 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     members: [],
+    matches: [],
     loggedInUser: null,
     chat: {
       msgs: [],
@@ -21,6 +22,9 @@ export default new Vuex.Store({
   mutations: {
     setMembers(state, { members }) {
       state.members = members
+    },
+    setMatches(state, { members }) {
+      state.matches = members
     },
     setLoggedInUser(state, { user }) {
       state.loggedInUser = user;
@@ -89,6 +93,9 @@ export default new Vuex.Store({
     members(state) {
       return state.members
     },
+    matches(state) {
+      return state.matches;
+    },
     memberById(state) {
       return (memberId) => {
         return state.members.find(member => member._id === memberId);
@@ -150,10 +157,10 @@ export default new Vuex.Store({
       commit({ type: 'setLoggedInUser', user: null });
       console.log('logged out');
     },
-    match(context) {
+    loadMatches(context) {
       return memberService.queryMatch()
         .then(members => {
-          context.commit({ type: 'setMembers', members });
+          context.commit({ type: 'setMatches', members });
         })
     },
     notLikeMember({ commit, state }, { memberId }) {

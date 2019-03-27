@@ -1,7 +1,7 @@
 <template>
   <section v-if="loggedInUser" class="match-page">
     <main>
-      <member-list/>
+      <member-list :members="matches"/>
     </main>
   </section>
 </template>
@@ -13,14 +13,7 @@ import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
 export default {
   data() {
     return {
-      memberForMatch: null,
-      filterBy: {
-        gender: "",
-        minAge: null,
-        maxAge: null,
-        minHeight: null,
-        city: ""
-      }
+      memberForMatch: null
     };
   },
   methods: {
@@ -32,11 +25,14 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    matches(){
+      return this.$store.getters.matches;
     }
   },
   created() {
     if (this.loggedInUser) {
-      this.$store.dispatch({ type: "match" });
+      this.$store.dispatch({ type: "loadMatches" });
     }
   },
   // watched: {
