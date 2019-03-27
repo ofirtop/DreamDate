@@ -1,5 +1,5 @@
 <template>
-  <header class="flex items-center">
+  <header class="app-header flex items-center">
     <nav id="nav" class="flex items-center">
       <router-link to="/">
         <img src="@/assets/img/logo.png" alt="logo" class="logo">
@@ -26,4 +26,12 @@ export default {
 </script>
 
 <style>
+.app-header{
+    position: fixed;
+    background-color: white;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+    height: 3rem;
+}
 </style>

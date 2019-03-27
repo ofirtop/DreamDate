@@ -1,9 +1,9 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
-    <main>
-      <member-filter @setFilter="setFilter" />
-      <member-list @notLike="notLikeMember" @like="addLike" />
-    </main>
+      <member-filter @setFilter="setFilter"/>
+      <main class="flex align-start">
+        <member-list @notLike="notLikeMember" @like="addLike" />
+      </main>
   </section>
 </template>
 
