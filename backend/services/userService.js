@@ -123,7 +123,6 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
 }
 
 function checkLogin(userCredentials) {
-
     return mongoService.connect()
         .then(db => {
             return db.collection('user').findOne({ $and: [{ "name": userCredentials.name }, { "pass": userCredentials.pass }] })
@@ -142,6 +141,9 @@ function checkLogin(userCredentials) {
 function signUp(userCredentials) {
     console.log('userService signup')
     if (userCredentials.pass.length < 3) return Promise.reject('Wrong Credentials: password must be at list 3 characters');
+    var existingUser = _getByName(userCredentials.name);
+    console.log('Problem with Signup - user already exists!');
+    if (existingUser) return Promise.reject('User Allready Exists!');
 
     var user = _getEmptyUser(userCredentials);
 
@@ -221,6 +223,11 @@ function getById(userId) {
     var id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection('user').findOne({ _id: id }))
+}
+
+function _getByName(userName) {
+    return mongoService.connect()
+        .then(db => db.collection('user').findOne({ name: userName }))
 }
 
 function getMemberById(userId, loggedInUser) {
