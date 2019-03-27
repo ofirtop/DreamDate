@@ -47,8 +47,8 @@ async function signup(userCredentials) {
         let loggedInUser = res.data;
         SOCKET.emit('login', loggedInUser._id);
         return Promise.resolve(loggedInUser);
-    } catch{
-        console.log('signup failed');
+    } catch(err){
+        console.log('signup failed! Error: ', err);
         return Promise.reject();
     }
 }
