@@ -10,7 +10,7 @@
           <span class="online-status mr-1" :class="{on: this.member.online, off: !this.member.online}"/>
           <h1>{{member.name}}, {{memberAge}}</h1>
         </div>
-        <div class="details">
+        <div class="details flex">
           <hr>
           <!-- <h2>{{member.name}}'s details</h2> -->
           <h4>{{member.descr}}</h4>
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-      <h4>Gallery</h4>
+      <!-- <h4>Gallery</h4> -->
     <div class="img-gallery mt-1 mb-1">
         <div class="member-img clickable" 
             :style="{backgroundImage: `url(${img})`}" 
@@ -95,6 +95,7 @@ a {
   color: black;
 }
 .member-details {
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,8 +121,10 @@ a {
   margin: 10px;
 }
 .details {
-  max-width: 50%;
-  margin: 1em;
+  // max-width: 50%;
+  margin: 2em;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .mainImg {
     width: 200px;
