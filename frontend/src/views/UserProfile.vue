@@ -1,96 +1,72 @@
 <template>
   <section v-if="user" class="user-profile">
+    <div class="screen" v-if="isEdit"></div>
     <div class="title">
       <h1>My Profile</h1>
-      <el-button type="primary" @click="toAll" >Back to All</el-button>
+      <el-button type="primary" @click="toAll">Back to All</el-button>
     </div>
-    <hr>
-    <hr>
+    <edit-profile @saveProfile="saveProfile" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
     <div class="container">
-      <div class="img-section">
-        <h2>My pictures</h2>
-        <img class="mainImg" :src="user.mainImage">
-        <div class="img-gallery">
-          <img class="user-img" @click="changeMainImg(img, idx)" v-for="(img, idx) in user.images" :key="idx" :src="img">
-          <input type="file" name="pic" accept="image/*">
+      <div class="main-section">
+        <div class="info">
+        <div class="name-section flex items-center">
+          <h1>{{user.name}}, {{userAge}}</h1>
         </div>
-        <el-button @click="saveProfile" v-if="saveImgBtn" type="primary">Save main image</el-button>
+        <div class="details-section">
+          <h4>{{user.descr}}</h4>
+          <hr>
+          <h4>Height: {{user.height}}cm</h4>
+          <h4>I'm from {{user.city}}</h4>
+          <h4>{{user.maritalStatus}}</h4>
+          <h4>I have {{childrenInfo}}</h4>
+          <hr>
+          <h2>I want to meet</h2>
+          <h4>{{partnerGenderNAge}}</h4>
+          <el-button @click="editProfile" type="primary">Edit Profile</el-button>
+        </div>
+        </div>
+        <div class="img-section">
+          <img class="mainImg" :src="user.mainImage">
+        </div>
       </div>
-      <div class="details-section" v-if="!isEdit">
-        <el-button @click="editProfile" type="primary">Edit Profile</el-button>
-        <h2>My details</h2>
-        <h3> {{user.name}}</h3>
-        <h4>Height: {{user.height}}cm</h4>
-        <h4>City: {{user.city}}</h4>
-        <h4>Marital status: {{user.maritalStatus}}</h4>
-        <h4>Children: {{childrenInfo}}</h4>
-        <hr>
-        <h2>I want to meet</h2>
-        <h4>{{partnerGenderNAge}}</h4>
+      <div class="img-gallery mt-1 mb-1">
+        <div
+          class="user-img clickable"
+          :style="{backgroundImage: `url(${img})`}"
+          v-for="(img, idx) in user.images"
+          :key="idx"
+          @click="changeMainImg(img, idx)"
+        ></div>
       </div>
-    
-    <div v-if="isEdit" class="edit-profile">
-      <h2>Edit your details</h2>
-      <h3>{{user.name}}</h3>
-      <label>Height</label>
-      <el-input-number size="small" v-model="user.height"></el-input-number>
-      <label>City</label>
-      <el-select v-model="user.city" allow-create placeholder="Choose or add your city">
-        <el-option v-for="(city, idx) in cities" :key="idx" :label="city.label" :value="city.value"></el-option>
-      </el-select>
-      <label>Marital status</label>
-      <el-select v-model="user.maritalStatus" placeholder="Select your status">
-        <el-option v-for="(status, idx) in statuses" :key="idx" :label="status.label" :value="status.value"></el-option>
-      </el-select>
-      <label>Children</label>
-      <el-input-number size="small" v-model="user.numOfChildren"></el-input-number>
-      <label>Date of Birth</label>
-      <el-date-picker v-model="user.dateOfBirth" type="date" placeholder="Pick a date"></el-date-picker>
-      <hr>
-      <h2>Dream your partner</h2>
-      <h4>I'd like to meet:</h4>
-      <label>Gender</label>
-      <el-select v-model="user.interestedIn.gender" placeholder="Select gender">
-        <el-option v-for="(gender, idx) in genders" :key="idx" :label="gender.label" :value="gender.value"></el-option>
-      </el-select>
-      <label>Age</label>
-      <el-slider v-model="age" range :min="18" :max="120"></el-slider>
-      <el-button type="success" @click="saveProfile" >Save Profile</el-button>
       </div>
-    </div>
+      <div class="img-btns flex">
+      <el-button  @click="saveProfile" v-if="saveImgBtn" type="primary">Save main image</el-button>
+      <el-button  @click="clearChanges" v-if="saveImgBtn" type="primary">Cancel changes</el-button>
+      </div>
   </section>
 </template>
 <script>
 import memberService from '../services/member.service';
+import editProfile from '@/components/EditProfile.vue'
+
 export default {
   data() {
     return {
       user: null,
       saveImgBtn: false,
       isEdit: false,
-      cities: [],
-      statuses: [{value: 'single', label: 'single'},{value: 'divorced', label: 'divorced'}, {value: 'married', label: 'married'}, {value: 'born to be free!', label: 'born to be free!'}],
-      genders: [{value: 'female', label: 'female'},{value: 'male', label: 'male'}],
-      age: []
     };
   },
   created() {
     let userId = this.$route.params.userId;
-    if (!this.loggedInUser || this.loggedInUser._id !== userId) this.$router.push("/");
+    if (!this.loggedInUser || this.loggedInUser._id !== userId)
+      this.$router.push('/');
     else {
-      this.$store.dispatch({ type: "loadMemberById", memberId: userId })
-        .then(res => this.user = res)
-        .then(() => {
-          let namesCities = memberService.getCities();
-          this.cities = namesCities.map(city => {
-            return { value: city, label: city };
-          });
-          this.age = [this.user.interestedIn.minAge, this.user.interestedIn.maxAge]
-        })
+      this.$store
+        .dispatch({ type: 'loadMemberById', memberId: userId })
+        .then(res => (this.user = res))
     }
     console.log('LoggedInUser', this.loggedInUser);
-    
-
   },
   methods: {
     changeMainImg(imgSrc, idx) {
@@ -99,14 +75,21 @@ export default {
       this.user.images.splice(idx, 1, img);
       this.saveImgBtn = true;
     },
-    saveProfile() {
+    saveProfile(user) {
       this.isEdit = false;
-      this.saveImgBtn = false;
+      this.user = user;
       console.log('Save updated profile: ', this.user);
-      this.$store.dispatch({type: 'updateUser', user: this.user})
+      this.$store.dispatch({ type: 'updateUser', user: this.user });
     },
     editProfile() {
       this.isEdit = true;
+    },
+    clearChanges() {
+      this.user = this.loggedInUser;
+      this.age = [
+        this.user.interestedIn.minAge,
+        this.user.interestedIn.maxAge
+      ];
     },
     toAll() {
       this.$router.push('/');
@@ -121,109 +104,164 @@ export default {
       return new Date().getFullYear() - year;
     },
     childrenInfo() {
-      if (!this.user.numOfChildren) return `No`;
+      if (!this.user.numOfChildren) return `no kids`;
       if (this.user.numOfChildren === 1) return `1 child`;
       else return `${this.user.numOfChildren} kids`;
     },
     partnerGenderNAge() {
-      if (this.user.interestedIn.gender === "female") {
-        return `Lady, ${this.user.interestedIn.minAge} - ${
+      if (this.user.interestedIn.gender === 'female') {
+        return `Woman, ${this.user.interestedIn.minAge} - ${
           this.user.interestedIn.maxAge
         } years old`;
       } else
-        return `Gentelman, ${this.user.interestedIn.minAge} - ${
+        return `Man, ${this.user.interestedIn.minAge} - ${
           this.user.interestedIn.maxAge
         } years old`;
     }
+
   },
   watch: {
     loggedInUser() {
       let userId = this.$route.params.userId;
-      if (!this.loggedInUser || this.loggedInUser._id !== userId) this.$router.push("/");
+      if (!this.loggedInUser || this.loggedInUser._id !== userId)
+        this.$router.push('/');
     }
   },
+  components: {
+    editProfile
+  }
 };
 </script>
 <style scoped>
-
+.screen {
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(248, 244, 244, 0.932);
+  z-index: 3;
+}
 .title {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 .container {
-  display: flex;
-}
-  a {
-    text-decoration: none;
-    color: white
-  }
-  .user-profile {
-    padding: 10px;
-    background-color: rgb(45, 45, 61);
-    display: flex;
-    flex-direction: column;
-    color: white;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    border: 1px solid gray;
-    width: 80%;
-    margin: 0 10%;
-  }
-  .img-section {
-    margin-right: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border: 1px solid gray;
-  }
-  .mainImg {
-    width: 300px;
-    max-height: 400px;
-    object-fit: contain
-  }
-  .img-gallery img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border: 1px solid gray
-  }
-  h1 {
-    font-size: 3em;
-    font-weight: bold;
-  }
-  h2 {
-    font-size: 2em;
-    font-weight: bold;
-  }
-  .img-gallery {
-    display: flex;
-    width: 300px;
-    cursor: pointer;
-    border: 1px solid gray
-  }
-  .details-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start
-  }
-  img {
-    max-width: 300px;
-    max-height: 400px
-  }
-
-.edit-profile {
-  width: 400px;
+  max-width: 60%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  border: 1px solid gray
+  align-items: center;
+  background-color: rgba(248, 248, 248, 1);
+  border-radius: 2px;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+.container:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.main-section {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+.user-profile {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 10%;
+}
+.img-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mainImg {
+  width: 200px;
+  /* max-height: 250px; */
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.img-gallery {
+  display: flex;
+  justify-content: center;
+}
+.user-img {
+  width: 150px;
+  height: 150px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.user-img img {
+  width: 100%;
+  height: 100%;
+}
+.user-img:hover,
+.mainImg:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+.img-gallery {
+  display: flex;
+  width: 300px;
+  cursor: pointer;
+}
+.details-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 1em;
+
+}
+.name-section {
+  margin-left: 2em;
+}
+
 button {
   margin: 10px;
 }
 input {
   width: 50%;
+}
+@media (max-width: 700px){
+  .user-img {
+  width: 100%;
+  height: 80vh;
+  margin: 0;
+}
+.details {
+  width: 95%;
+  max-width: unset;
+  margin: 0;
+} 
+.img-gallery {
+    flex-direction: column;
+    width: 100%;
+  }
+.mainImg {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain
+}
 }
 </style>

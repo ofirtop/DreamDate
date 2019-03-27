@@ -32,7 +32,6 @@
         </div>
       </div>
     </div>
-      <!-- <h4>Gallery</h4> -->
     <div class="img-gallery mt-1 mb-1">
         <div class="member-img clickable" 
             :style="{backgroundImage: `url(${img})`}" 
@@ -41,7 +40,6 @@
         </div>
     </div>
    </div>   
-    
   </section>
 </template>
 <script>
@@ -132,6 +130,7 @@ a {
     background-position: center top;
     background-repeat: no-repeat;
     background-size: cover;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .img-gallery {
   display: flex;
@@ -150,7 +149,8 @@ a {
   width: 100%;
   height: 100%;
 }
-.member-img:hover {
+.member-img:hover,
+.mainImg:hover {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 h1 {
