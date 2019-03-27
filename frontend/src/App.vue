@@ -159,7 +159,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: #36648b;
+  // background: #36648b;
+  // background: lightgray;
 }
 #nav {
   a {

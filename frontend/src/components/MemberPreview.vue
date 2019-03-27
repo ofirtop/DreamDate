@@ -1,7 +1,8 @@
 <template>
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
-      <img :src="member.mainImage">
+       <!-- <img :src="member.mainImage"> -->
+      <div class="imageContainer" :style="{backgroundImage: `url(${member.mainImage})`}"/>
       <span
         class="online-status"
         title="Online Status"
@@ -22,8 +23,7 @@
           :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
         />
       </div>
-      <!-- {{likeStatus}} -->
-      <div class="chat" v-if="isMatch" @click="showMatch">Chat with me</div>
+      <div class="chat" v-if="isMatch" @click="showMatch">Let's Chat</div>
       <font-awesome-icon
         class="notLike"
         icon="times"
@@ -76,11 +76,28 @@ export default {
 // @import url('https://fonts.googleapis.com/css?family=Abel');
 @import url("https://fonts.googleapis.com/css?family=Lora");
 
+.imageContainer{
+  width: 250px;
+  height: 200px;
+  background-size: cover;
+  box-shadow: 0 10px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: 0px 0px;
+  box-shadow: 0 10px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
 .my-heart {
   width: 20px;
   // border:2px solid green;
   &.on {
-    color: red;
+    color: rgb(59, 193, 197);
   }
   &.off {
     color: gray;
@@ -91,7 +108,7 @@ export default {
   margin-left: -7px;
   // border:1px solid black;
   &.on {
-    color: #36648b;
+    color: #8b368b;
   }
   &.off {
     color: gray;
@@ -113,7 +130,7 @@ a {
 .chat {
   font-size: 14px;
   color: black;
-  text-shadow: -1px 0 black, 0 1px yellow, 1px 0 yellow, 0 -1px yellow;
+  // text-shadow: -1px 0 black, 0 1px yellow, 1px 0 yellow, 0 -1px yellow;
   // text-decoration: underline;
   cursor: pointer;
   margin-left:-20px;
@@ -123,7 +140,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: navajowhite;
+  // background: navajowhite;
   // background: rgba(248, 248, 248, 1);
   border-radius: 2px;
   margin: 1rem;
@@ -146,7 +163,7 @@ span {
 .member-preview:hover {
   // box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-  outline: 1px solid gold;
+
 }
 
 .like-panel {
@@ -162,14 +179,6 @@ span {
   padding-left: 35px;
 }
 
-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  object-position: 0 1px;
-  box-shadow: 0 10px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
 .font-awesome-icon {
   font-size: 2em;
   border: 1px solid;
