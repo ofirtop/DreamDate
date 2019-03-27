@@ -22,7 +22,9 @@
           :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
         />
       </div>
-      <div class="chat" v-if="isMatch" @click="showMatch">Let's Chat</div>
+      <el-button v-if="isMatch" @click="openChat()" class="btn-chat">
+        Let's Chat
+      </el-button>
       <font-awesome-icon
         class="notLike"
         icon="times"
@@ -34,7 +36,7 @@
 </template>
 
 <script>
-import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
+import { EVENT_BUS, EV_NEW_MATCH, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
@@ -48,6 +50,9 @@ export default {
     },
     showMatch() {
       EVENT_BUS.$emit(EV_NEW_MATCH, this.member);
+    },
+    openChat(){
+      EVENT_BUS.$emit(EV_START_CHAT, this.member);
     }
   },
   computed: {
@@ -120,12 +125,8 @@ a {
 a {
   color: black;
 }
-.chat {
-  font-size: 14px;
-  color: black;
-  cursor: pointer;
-  margin-left: -20px;
-  cursor: pointer;
+.btn-chat {
+  padding: 6px 8px;
 }
 .member-preview {
   display: flex;
