@@ -5,18 +5,12 @@
 
     <router-view/>
 
-    <incoming-like-notification 
+    <incoming-msg-notification 
       :member="memberForNotification"
       :action="notificationAction"
       v-if="memberForNotification"
-      @chat="openChatFromLikeMeMemberNotification"
-      @viewDetails="viewDetailsFromLikeMeMemberNotification"
-    />
-    <incoming-chat-notification
-      :member="memberToChatNotifiation"
-      v-if="memberToChatNotifiation"
-      @close="memberToChatNotifiation = null"
-      @startChat="startChat($event)"
+      @chat="openChatFromNotification"
+      @viewDetails="viewMemberDetailsFromNotification"
     />
     <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
@@ -26,8 +20,7 @@
 <script>
 import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
-import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
-import incomingChatNotification from "@/components/IncomingChatNotification.vue";
+import incomingMsgNotification from "@/components/IncomingMsgNotification.vue";
 import appHeader from "@/components/Header.vue";
 import match from "@/components/Match.vue";
 import utilService from "@/services/util.service.js";
@@ -76,11 +69,11 @@ export default {
     closeChatNotification() {
       this.memberToChatNotifiation = null;
     },
-    openChatFromLikeMeMemberNotification(member) {
+    openChatFromNotification(member) {
       this.memberForNotification = null;
       this.openChat(member);
     },
-    viewDetailsFromLikeMeMemberNotification(member) {
+    viewMemberDetailsFromNotification(member) {
       this.memberForNotification = null;
       this.$router.push("/member/" + member._id);
     },
@@ -149,9 +142,8 @@ export default {
   components: {
     chat,
     login,
-    incomingLikeNotification,
+    incomingMsgNotification,
     match,
-    incomingChatNotification,
     appHeader
   }
 };
