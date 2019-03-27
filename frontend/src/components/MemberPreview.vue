@@ -78,7 +78,10 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
+  @import '../sass/_variables.scss';
+
 a {
   display: block;
   width: 100%;
@@ -176,15 +179,14 @@ span {
   height: 10px;
   border-radius: 50%;
   &.on {
-    // background-color: green;
-    background-color: #94e185;
-    border-color: #78d965;
-    box-shadow: 0px 0px 4px 1px #94e185;
+    background-color: darken($clr1, 10%);
+    border-color:darken($clr1, 10%);
+    box-shadow: 0px 0px 4px 1px darken($clr1, 10%);
   }
   &.off {
-    background-color: #c9404d;
-    border-color: #c42c3b;
-    box-shadow: 0px 0px 4px 1px #c9404d;
+    background-color: $clr11;
+    border-color: $clr11;
+    box-shadow: 0px 0px 4px 1px $clr11;
   }
 }
 </style>
