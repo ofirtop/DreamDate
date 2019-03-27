@@ -8,7 +8,10 @@
         <div class="main-header">DREAM DATE</div>
       </div>
       <div class="nav-links flex">
-        <router-link :to="'/user/' + loggedInUser._id">My Profile</router-link>
+        <div v-if="loggedInUser">
+          {{loggedInUser.name}}
+        </div>
+        <router-link :to="'/user/' + loggedInUser._id" v-if="loggedInUser">My Profile</router-link>
         <div @click="$emit('logout')">Logout</div>
       </div>
     </nav>
