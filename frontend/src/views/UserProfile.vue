@@ -18,7 +18,7 @@
           <h4>Height: {{user.height}}cm</h4>
           <h4>I'm from {{user.city}}</h4>
           <h4>{{user.maritalStatus}}</h4>
-          <h4>I have {{childrenInfo}}</h4>
+          <h4>{{childrenInfo}}</h4>
           <hr>
           <h2>I want to meet</h2>
           <h4>{{partnerGenderNAge}}</h4>
@@ -101,14 +101,17 @@ export default {
     },
     userAge() {
       let year = +this.user.dateOfBirth.substring(0, 4);
-      return new Date().getFullYear() - year;
+      let age = new Date().getFullYear() - year;
+      if (!age) return 18;
+      else return age;
     },
     childrenInfo() {
-      if (!this.user.numOfChildren) return `no kids`;
-      if (this.user.numOfChildren === 1) return `1 child`;
-      else return `${this.user.numOfChildren} kids`;
+      if (this.user.numOfChildren === 0) return `I don't have kids`;
+      if (this.user.numOfChildren === 1) return `I have 1 child`;
+      else return `I have ${this.user.numOfChildren} kids`;
     },
     partnerGenderNAge() {
+      if(!this.user.interestedIn.gender || !this.user.interestedIn.minAge || !this.interestedIn.maxAge) return '...';
       if (this.user.interestedIn.gender === 'female') {
         return `Woman, ${this.user.interestedIn.minAge} - ${
           this.user.interestedIn.maxAge

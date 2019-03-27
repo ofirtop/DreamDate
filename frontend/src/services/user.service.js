@@ -42,15 +42,15 @@ async function updateUser(user) {
 }
 async function signup(userCredentials) {
     console.log('signing in (ServiceClient)', userCredentials);
-    // try {
-    //     let res = await axios.post(`${BASE_URL}/user/signup`, userCredentials)
-    //     let loggedInUser = res.data;
-    //     SOCKET.emit('login', loggedInUser._id);
-    //     return Promise.resolve(loggedInUser);
-    // } catch{
-    //     console.log('signup failed');
-    //     return Promise.reject();
-    // }
+    try {
+        let res = await axios.post(`${BASE_URL}/user/signup`, userCredentials)
+        let loggedInUser = res.data;
+        SOCKET.emit('login', loggedInUser._id);
+        return Promise.resolve(loggedInUser);
+    } catch{
+        console.log('signup failed');
+        return Promise.reject();
+    }
 }
 //FOR NEW USER - AFTER SIGNUP IS READY TO USE
 // async function addNewUser(user) {
