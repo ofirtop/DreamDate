@@ -1,5 +1,5 @@
 <template>
-  <header class="flex items-center">
+  <header class="app-header flex items-center">
     <nav id="nav" class="flex">
       <div class="logo-name">
       <router-link to="/">
@@ -41,5 +41,12 @@ nav {
   margin: 10px;
 }
 
-
+.app-header{
+    position: fixed;
+    background-color: white;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+    height: 3rem;
+}
 </style>

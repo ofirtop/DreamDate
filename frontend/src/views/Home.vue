@@ -1,6 +1,7 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
     <member-filter @setFilter="setFilter"/>
+      <!-- <main class="flex align-start"> -->
     <main>
       <member-list @notLike="notLikeMember" @like="addLike"/>
     </main>
