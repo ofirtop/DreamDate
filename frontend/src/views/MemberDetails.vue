@@ -93,6 +93,8 @@ a {
   color: black;
 }
 .member-details {
+  position: relative;
+  top: 3rem;
   text-align: left;
   display: flex;
   align-items: center;

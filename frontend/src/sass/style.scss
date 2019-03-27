@@ -2,15 +2,25 @@
 @import 'variables';
 @import 'helpers';
 @import url('https://fonts.googleapis.com/css?family=ABeeZee');
+@import url("https://fonts.googleapis.com/css?family=Lora");
+@import url("https://fonts.googleapis.com/css?family=Playfair+Display");
 
 *{
     box-sizing: border-box;
 }
 
 body{
-    // color: $color_primary;
-    font-family: 'ABeeZee', sans-serif;
+    color: $color_primary;
+    font-family: $fonts-primary;
 }
+button{
+    cursor: pointer;
+}
+body, button, a, select, input, text-area, h1, h2, h3, h4, h5, h6{
+    font-family: $fonts-primary;
+    color: $color_primary;
+}
+
 
 .text-danger{
     color: $color_danger;

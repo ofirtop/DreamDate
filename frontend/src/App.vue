@@ -154,22 +154,22 @@ export default {
 @import "@/sass/_variables.scss";
 
 #app {
-  font-family: 'ABeeZee', sans-serif;
+   //font-family: 'ABeeZee', sans-serif;
   // font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-  // background: #36648b;
+  text-align: center;
+  background: $bg-color;
 }
 #nav {
   a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: $color_primary;
-    }
+    // font-weight: bold;
+    color: black;
+//     &.router-link-exact-active {
+//       color: $color_primary;
   }
 }
+
 .logo {
   width: 40px;
 }

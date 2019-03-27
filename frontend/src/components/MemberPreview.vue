@@ -1,7 +1,7 @@
 <template>
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
-      <img :src="member.mainImage">
+      <div class="imageContainer" :style="{backgroundImage: `url(${member.mainImage})`}"/>
       <span
         class="online-status"
         title="Online Status"
@@ -9,7 +9,7 @@
       />
     </router-link>
     <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
-    <div class="like-panel" >
+    <div class="like-panel">
       <div class @click.stop="like" :title="likeStatus">
         <font-awesome-icon
           class="heart my-heart"
@@ -22,8 +22,7 @@
           :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
         />
       </div>
-      <!-- {{likeStatus}} -->
-      <div class="chat" v-if="isMatch" @click="showMatch">Chat with me</div>
+      <div class="chat" v-if="isMatch" @click="showMatch">Let's Chat</div>
       <font-awesome-icon
         class="notLike"
         icon="times"
@@ -60,8 +59,10 @@ export default {
       //console.log('likes', this.member.likes, this.member._id);
 
       if (this.member.likes) {
-        if (this.member.likes.likeMe && this.member.likes.iLike) return "YA'! You Found a Match";
-        if (!this.member.likes.likeMe && !this.member.likes.iLike) return "Click to like member";
+        if (this.member.likes.likeMe && this.member.likes.iLike)
+          return "YA'! You Found a Match";
+        if (!this.member.likes.likeMe && !this.member.likes.iLike)
+          return "Click to like member";
         if (this.member.likes.likeMe) return "like me";
         if (this.member.likes.iLike) return `i like member`;
       }
@@ -73,14 +74,23 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-// @import url('https://fonts.googleapis.com/css?family=Abel');
-@import url("https://fonts.googleapis.com/css?family=Lora");
+a {
+  display: block;
+  width: 100%;
+}
+.imageContainer {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 
 .my-heart {
   width: 20px;
   // border:2px solid green;
   &.on {
-    color: red;
+    color: rgb(59, 193, 197);
   }
   &.off {
     color: gray;
@@ -91,7 +101,7 @@ export default {
   margin-left: -7px;
   // border:1px solid black;
   &.on {
-    color: #36648b;
+    color: #8b368b;
   }
   &.off {
     color: gray;
@@ -113,22 +123,16 @@ a {
 .chat {
   font-size: 14px;
   color: black;
-  text-shadow: -1px 0 black, 0 1px yellow, 1px 0 yellow, 0 -1px yellow;
-  // text-decoration: underline;
   cursor: pointer;
-  margin-left:-20px;
-  cursor:pointer;
+  margin-left: -20px;
+  cursor: pointer;
 }
 .member-preview {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: navajowhite;
-  // background: rgba(248, 248, 248, 1);
   border-radius: 2px;
-  margin: 1rem;
   position: relative;
-  width: 250px;
   height: 265px;
   font-family: "Lora", serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -146,11 +150,10 @@ span {
 .member-preview:hover {
   // box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-  outline: 1px solid gold;
 }
 
 .like-panel {
-  // border: 1px solid black;
+
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -162,14 +165,6 @@ span {
   padding-left: 35px;
 }
 
-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  object-position: 0 1px;
-  box-shadow: 0 10px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
 .font-awesome-icon {
   font-size: 2em;
   border: 1px solid;

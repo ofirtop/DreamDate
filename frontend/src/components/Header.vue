@@ -1,18 +1,15 @@
 <template>
-  <header class="flex items-center">
-    <nav id="nav" class="flex items-center">
+  <header class="app-header flex items-center">
+    <nav id="nav" class="flex">
+      <div class="logo-name">
       <router-link to="/">
-        <img src="@/assets/img/logo.png" alt="logo" class="logo">
+        <img src="@/assets/img/logo_dd.png" alt="logo" class="logo">
       </router-link>
-      <div v-if="loggedInUser" class="flex items-center">
-        <router-link :to="'/user/' + loggedInUser._id">
-          {{loggedInUser.name}}
-        </router-link>
-        <button @click="$emit('logout')">Logout</button>
-        <button v-if="false" @click="gotoMembersWhoWatchedMe">
-          Watched me:
-          <span>{{newMembersWhoWatchedMeCount}}</span>
-        </button>
+        <div class="main-header">DREAM DATE</div>
+      </div>
+      <div class="nav-links flex">
+        <router-link :to="'/user/' + loggedInUser._id">My Profile</router-link>
+        <div @click="$emit('logout')">Logout</div>
       </div>
     </nav>
   </header>
@@ -25,5 +22,31 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+#nav {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: lightgray;
+  align-items: center
+
+}
+nav {
+  justify-content: space-between;
+  font-family: "Playfair Display", serif;
+}
+.nav-links>* {
+  margin: 10px;
+}
+
+.app-header{
+    position: fixed;
+    background-color: white;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+    height: 3rem;
+}
 </style>

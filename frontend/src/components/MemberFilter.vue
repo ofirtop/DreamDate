@@ -1,28 +1,70 @@
 <template>
-  <section class="user-filter">
+  <section class="member-filter ">
     <form>
-      <div class="gender-filter">
-        <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
-          <el-radio-button label="female"></el-radio-button>
-          <el-radio-button label="male"></el-radio-button>
-        </el-radio-group>
+      <div class="filter-sections flex" >
+        <div class="filter-section" :class="{'active': activeSection === 'sex'}">
+          <button @click="openFilterSection('sex')" class="btn-filter" >Sex</button>
+          <div class="filter-details-wrapper relative" >
+            <div class="filter-details">
+              <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
+                <el-radio-button label="female" />
+                <el-radio-button label="male" />
+              </el-radio-group>
+              <div class="flex content-end">
+                <a href="#" class="btn-apply" @click="openFilterSection('')">Apply</a>       
+              </div>    
+            </div>
+          </div>
+        </div>
+        <div class="filter-section" :class="{'active': activeSection === 'city'}">
+          <button @click="openFilterSection('city')" class="btn-filter" >Location</button>
+          <div class="filter-details-wrapper relative">
+            <div class="filter-details">
+              <el-select size="small" @change="setFilter" v-model="filterBy.city" placeholder="Select location">
+                <el-option v-for="city in cities" :key="city.value" :label="city.label" :value="city.value"></el-option>
+              </el-select>  
+              <div class="flex content-end">
+                <a href="#" class="btn-apply" @click="openFilterSection('')">Apply</a>       
+              </div>                          
+            </div>
+          </div>
+        </div>
+        <div class="filter-section" :class="{'active': activeSection === 'height'}">
+          <button @click="openFilterSection('height')" class="btn-filter" >Height</button>
+          <div class="filter-details-wrapper relative ">
+            <div class="filter-details">
+              <el-input size="small" @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
+              <div class="flex content-end">
+                <a href="#" class="btn-apply" @click="openFilterSection('')">Apply</a>       
+              </div>               
+            </div>
+          </div>
+        </div>
+        <div class="filter-section" :class="{'active': activeSection === 'age'}">
+          <button @click="openFilterSection('age')" class="btn-filter" >Age</button>
+          <div class="filter-details-wrapper relative ">
+            <div class="filter-details">
+              <div class="age-filter">
+                <label>Age</label>
+                <el-slider @change="setFilter" :key="rangeKey" v-model="filterBy.age" range :min="18" :max="100"></el-slider>
+              </div> 
+              <div class="flex content-end">
+                <a href="#" class="btn-apply" @click="openFilterSection('')">Apply</a>       
+              </div>                          
+            </div>
+          </div>
+        </div>
+        <div class="filter-section"> 
+          <button @click="clearFilter" type="info"  class="btn-filter">Clear Filter</button>
+        </div> 
       </div>
-      <div class="city-filter">
-        <el-select size="small" @change="setFilter" v-model="filterBy.city" placeholder="Select location">
-          <el-option v-for="city in cities" :key="city.value" :label="city.label" :value="city.value"></el-option>
-        </el-select>
-      </div>
-      <div class="height-filter">
-        <el-input size="small" @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
-      </div>
-      <div class="age-filter">
-        <label>Age</label>
-        <el-slider @change="setFilter" :key="rangeKey" v-model="filterBy.age" range :min="18" :max="100"></el-slider>
-      </div>
-      <el-button @click="clearFilter" type="info">Clear Filter</el-button>
     </form>
+    <div class="relative">
+      <div class="filter-screen" :class="{show: activeSection !== ''}" @click="openFilterSection('')" />
+    </div>
   </section>
 </template>
+
 <script>
 import memberService from '../services/member.service';
 
@@ -36,7 +78,9 @@ export default {
         city: ''
       },
       rangeKey: 1,
-      cities: []
+      cities: [],
+      isShowFilter: true,
+      activeSection:''
     };
   },
   computed: {
@@ -45,6 +89,9 @@ export default {
     }
   },
   methods: {
+    openFilterSection(section){
+      this.activeSection = section;
+    },
     setFilter() {
       let filter = {
         gender: this.filterBy.gender,
@@ -63,6 +110,7 @@ export default {
         city: ''
       };
       this.setFilter();
+      this.openFilterSection('');
     },
     loggedInUserSet() {
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
@@ -90,24 +138,109 @@ export default {
   }
 };
 </script>
-<style scoped>
-section {
-  height: 100px;
+
+<style scoped lang="scss">
+@import '@/sass/_variables.scss';
+
+.member-filter {
+  border-bottom: 1px solid rgb(235, 235, 235);
   padding: 10px;
-  background-color: rgba(138, 143, 143, 0.493);
-  color: #409eff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: white;
+  position: fixed;
   width: 100%;
+  background-color: white;
+  z-index: 9;
+  margin-top:3rem;
+  margin-bottom:1rem;
+
+.btn-filter{
+    border: 1px solid #ebebeb;
+    background-color: white;
+    font-size: 0.88rem;
+    color: $color_primary;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-right: 20px;
+    font-family: inherit;
+    &:hover{
+      background-color: $color-light;
+    }
+    &:active{
+      background-color:$color_success;
+      color: white;
+    }
+  }
+
+  .btn-apply{
+    color: $color-success;
+    background-color:none;
+    border:none;
+    font-size: 0.75rem;
+    display:inline-block;
+    margin-top:1rem;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+
+.filter-section{
+   &.active{
+    .btn-filter{
+      background-color:$color_success;
+      color: white;
+    }
+    .filter-details-wrapper{
+        display: block;
+      }
+  }  
 }
-form {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  align-items: center;
+.filter-details-wrapper{
+    display: none;
 }
+.filter-details{
+    position: absolute ;
+    top: 10px ;
+    left: 0px ;
+    z-index: 10 !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 14px 36px 2px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    white-space: normal !important;
+    display: inline-block !important;
+    max-height: calc(100vh - 152px) !important;
+    visibility: visible !important;
+    background: rgb(255, 255, 255) !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    border-image: initial !important;
+    border-radius: 4px !important;
+    padding: 24px !important;
+    width:300px;
+}
+
+  .hamburger{
+    position: fixed;
+    left: 3px;
+  }
+}
+
 .age-filter {
   width: 200px;
+}
+
+.filter-screen{
+  height:100vh;
+  width:100vw;
+  background: $bg-color;
+  opacity:0.8;
+  position: absolute;
+  top: 0;  
+  z-index:9;
+  display: none;
+  &.show{
+    display: block;
+  }
 }
 </style>
