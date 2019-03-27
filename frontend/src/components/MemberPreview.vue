@@ -22,7 +22,9 @@
           :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
         />
       </div>
-      <div class="chat" v-if="isMatch" @click="showMatch">Let's Chat</div>
+      <el-button v-if="isMatch" @click="openChat()" class="btn-chat">
+        Let's Chat
+      </el-button>
       <font-awesome-icon
         class="notLike"
         icon="times"
@@ -34,7 +36,7 @@
 </template>
 
 <script>
-import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
+import { EVENT_BUS, EV_NEW_MATCH, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
@@ -48,6 +50,9 @@ export default {
     },
     showMatch() {
       EVENT_BUS.$emit(EV_NEW_MATCH, this.member);
+    },
+    openChat(){
+      EVENT_BUS.$emit(EV_START_CHAT, this.member);
     }
   },
   computed: {
@@ -73,7 +78,10 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
+  @import '../sass/_variables.scss';
+
 a {
   display: block;
   width: 100%;
@@ -120,12 +128,8 @@ a {
 a {
   color: black;
 }
-.chat {
-  font-size: 14px;
-  color: black;
-  cursor: pointer;
-  margin-left: -20px;
-  cursor: pointer;
+.btn-chat {
+  padding: 6px 8px;
 }
 .member-preview {
   display: flex;
@@ -175,15 +179,14 @@ span {
   height: 10px;
   border-radius: 50%;
   &.on {
-    // background-color: green;
-    background-color: #94e185;
-    border-color: #78d965;
-    box-shadow: 0px 0px 4px 1px #94e185;
+    background-color: darken($clr1, 10%);
+    border-color:darken($clr1, 10%);
+    box-shadow: 0px 0px 4px 1px darken($clr1, 10%);
   }
   &.off {
-    background-color: #c9404d;
-    border-color: #c42c3b;
-    box-shadow: 0px 0px 4px 1px #c9404d;
+    background-color: $clr11;
+    border-color: $clr11;
+    box-shadow: 0px 0px 4px 1px $clr11;
   }
 }
 </style>

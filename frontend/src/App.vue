@@ -6,17 +6,12 @@
 
     <router-view/>
 
-    <incoming-like-notification 
-      :member="memberWhoLikeMe"
-      v-if="memberWhoLikeMe"
-      @chat="openChatFromLikeMeMemberNotification"
-      @viewDetails="viewDetailsFromLikeMeMemberNotification"
-    />
-    <incoming-chat-notification
-      :member="memberToChatNotifiation"
-      v-if="memberToChatNotifiation"
-      @close="memberToChatNotifiation = null"
-      @startChat="startChat($event)"
+    <incoming-msg-notification 
+      :member="memberForNotification"
+      :action="notificationAction"
+      v-if="memberForNotification"
+      @chat="openChatFromNotification"
+      @viewDetails="viewMemberDetailsFromNotification"
     />
     <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
@@ -26,8 +21,7 @@
 <script>
 import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
-import incomingLikeNotification from "@/components/IncomingLikeNotification.vue";
-import incomingChatNotification from "@/components/IncomingChatNotification.vue";
+import incomingMsgNotification from "@/components/IncomingMsgNotification.vue";
 import appHeader from "@/components/Header.vue";
 import match from "@/components/Match.vue";
 import utilService from "@/services/util.service.js";
@@ -46,11 +40,12 @@ export default {
     return {
       memberToChat: null,
       memberToChatNotifiation: null,
-      memberWhoLikeMe: null,
+      memberForNotification: null,
       memberForMatch: null,
       loginFailed: false,
       showLogin: false,
-      signupFailed: false
+      signupFailed: false,
+      notificationAction: ''
     };
   },
   computed: {
@@ -63,19 +58,23 @@ export default {
     }
   },
   methods: {
+    openNotification(action, member){
+      this.memberForNotification = member;
+            this.notificationAction = action;
+            setTimeout(() => {
+              this.memberForNotification = null;
+            }, 5 * 1000);
+    },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
       this.memberToChatNotifiation = null;
     },
-    closeChatNotification() {
-      this.memberToChatNotifiation = null;
-    },
-    openChatFromLikeMeMemberNotification(member) {
-      this.memberWhoLikeMe = null;
+    openChatFromNotification(member) {
+      this.memberForNotification = null;
       this.openChat(member);
     },
-    viewDetailsFromLikeMeMemberNotification(member) {
-      this.memberWhoLikeMe = null;
+    viewMemberDetailsFromNotification(member) {
+      this.memberForNotification = null;
       this.$router.push("/member/" + member._id);
     },
     openChat(member) {
@@ -131,21 +130,19 @@ export default {
 
 
     EVENT_BUS.$on(EV_START_CHAT, member => {
+      console.log(EV_START_CHAT, member);
       this.openChat(member);
     });
     EVENT_BUS.$on(EV_NEW_MATCH, member => {
       this.memberForMatch = member;
     });
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
-      //console.log(EV_RECEIVED_LIKE, member);
-      this.memberWhoLikeMe = member;
-      setTimeout(() => {
-        this.memberWhoLikeMe = null;
-      }, 5000);
+      console.log(EV_RECEIVED_LIKE, member);
+      this.openNotification('like', member);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
-      //console.log(EV_CHAT_RECEIVED_MSG, memberId);
+      console.log(EV_CHAT_RECEIVED_MSG, memberId);
 
       if (!this.$store.state.chat.member) {
         //console.log('chat is closed' );
@@ -153,7 +150,7 @@ export default {
         this.$store
           .dispatch({ type: "loadMemberById", memberId })
           .then(member => {
-            this.memberToChatNotifiation = member;
+            this.openNotification('chat', member);
           });
       }
     });
@@ -161,9 +158,8 @@ export default {
   components: {
     chat,
     login,
-    incomingLikeNotification,
+    incomingMsgNotification,
     match,
-    incomingChatNotification,
     appHeader
   }
 };

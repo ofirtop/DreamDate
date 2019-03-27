@@ -167,13 +167,13 @@ export default {
       background-color: $color-light;
     }
     &:active{
-      background-color:$color_success;
+      background-color:$clr1;
       color: white;
     }
   }
 
   .btn-apply{
-    color: $color-success;
+    color: $clr1;
     background-color:none;
     border:none;
     font-size: 0.75rem;
@@ -187,7 +187,7 @@ export default {
 .filter-section{
    &.active{
     .btn-filter{
-      background-color:$color_success;
+      background-color:$clr1;
       color: white;
     }
     .filter-details-wrapper{

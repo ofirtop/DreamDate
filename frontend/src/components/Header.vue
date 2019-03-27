@@ -7,9 +7,16 @@
         </router-link>
         <div class="main-header">DREAM DATE</div>
       </div>
-      <div class="nav-links flex">
+      <div class="nav-links flex items-center">
+        <div class="user-img" v-if="loggedInUser">
+          <img :src="loggedInUser.mainImage" alt="user image">
+        </div>
+        <div v-if="loggedInUser" >
+          {{loggedInUser.name}}
+        </div>       
         <div class="logout" @click="getMatch">Matches</div>
-        <router-link class="my-profile" :to="'/user/' + loggedInUser._id">My Profile</router-link>
+        <router-link class="my-profile" to="/"  >Gallery</router-link>
+        <router-link class="my-profile" :to="'/user/' + loggedInUser._id"  v-if="loggedInUser">My Profile</router-link>
         <div class="logout" @click="$emit('logout')">Logout</div>
       </div>
     </nav>
@@ -74,5 +81,14 @@ nav {
   z-index: 9;
   width: 100%;
   height: 3rem;
+}
+.user-img{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  img{
+    width:100%;
+  }
 }
 </style>

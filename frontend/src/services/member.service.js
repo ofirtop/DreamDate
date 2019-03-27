@@ -84,19 +84,19 @@ function updateNotLikeMember(memberIdToUpdate) {
     })
 }
 
-async function watchMember(from, to) {
-  try {
-    /*
-    TODO ask ofir how to update watch
-    on server - add isRead: false, date: new Date()
-    if exists - only update the date to now
+ async function watchMember(from, to) {
+  // try {
+  //   /*
+  //   TODO ask ofir how to update watch
+  //   on server - add isRead: false, date: new Date()
+  //   if exists - only update the date to now
 
-    { id: memberId, isRead: false, date: new Date() }
-    */
+  //   { id: memberId, isRead: false, date: new Date() }
+  //   */
 
-    let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
-  } catch{
-    //TODO
-  }
-  SOCKET.emit('watch member', { from, to });
-}
+  //   let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
+  // } catch{
+  //   //TODO
+  // }
+  // SOCKET.emit('watch member', { from, to });
+ }

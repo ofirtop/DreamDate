@@ -87,6 +87,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+  @import '../sass/_variables.scss';
 
 a {
   text-decoration: none;
@@ -184,10 +185,14 @@ h1 {
   height: 16px;
   border-radius: 50%;
   &.on {
-    background-color: green;
+    background-color: darken($clr1, 10%);
+    border-color:darken($clr1, 10%);
+    box-shadow: 0px 0px 4px 1px darken($clr1, 10%);
   }
   &.off {
-    background-color: red;
+    background-color: $clr11;
+    border-color: $clr11;
+    box-shadow: 0px 0px 4px 1px $clr11;
   }
 }
  @media (max-width: 800px) {
