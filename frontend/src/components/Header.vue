@@ -15,6 +15,7 @@
           {{loggedInUser.name}}
         </div>       
         <div class="logout" @click="getMatch">Matches</div>
+        <router-link class="my-profile" to="/"  >Gallery</router-link>
         <router-link class="my-profile" :to="'/user/' + loggedInUser._id"  v-if="loggedInUser">My Profile</router-link>
         <div class="logout" @click="$emit('logout')">Logout</div>
       </div>
