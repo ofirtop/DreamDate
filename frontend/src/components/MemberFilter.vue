@@ -150,7 +150,7 @@ export default {
   width: 100%;
   background-color: white;
   z-index: 9;
-  margin-top:3rem;
+  margin-top:100px;
   margin-bottom:1rem;
 
 .btn-filter{
