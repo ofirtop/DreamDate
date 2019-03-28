@@ -1,9 +1,11 @@
 <template>
   <section class="login-demo-wrapper flex items-center content-center">
       <div class="welcome-msg">
-      <h1>Welcome to DreamDate!</h1>
+      <h1>Welcome to DreamDate</h1>
       </div>
     <div class="login-demo">
+      <h1 v-if="!isNewUser">Login</h1>
+      <br>
       <div class="flex space-between"  v-if="!isNewUser">
         <form @submit.prevent="$emit('login', userCredentials)">
           <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
@@ -26,6 +28,7 @@
       <button @click="register" v-if="!isNewUser">Register</button>
       <div class="signup mb-1 flex" v-if="isNewUser">
         <h4 class="mb-1">Back to <button @click="isNewUser=false">Login</button></h4>
+        <h1>Signup</h1><br>
         <h4 class="mb-1">Choose your username and password</h4>
         <form @submit.prevent="signup">
           <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
@@ -35,7 +38,7 @@
       </div>
     </div>
     <div class="welcome-msg">
-      <h2>Dream your love.. And love your dreams</h2>
+      <h2>Dream your love and love your dream</h2>
     </div>
   </section>
 </template>
@@ -110,7 +113,7 @@ export default {
   justify-self: flex-start;
 }
 .welcome-msg>* {
-  color:white;
+  color: white;
   text-shadow: 0px 1px 15px rgba(36,19,19,0.67);
   font-size: 3em;
 }

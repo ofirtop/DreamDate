@@ -104,6 +104,7 @@ export default {
       try {
         let loggedInUser = await this.$store.dispatch({type: "signupUser",userCredentials});
         utilService.saveToStorage("loggedInUser", loggedInUser);
+        this.router.push(`/user/${loggedInUser}`)
       } catch {
         this.signupFailed = true;
       }
