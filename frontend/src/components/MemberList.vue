@@ -35,5 +35,6 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   grid-gap: 30px;
   position: relative;
+  /* top: 9rem; */
 }
 </style>
