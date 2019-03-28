@@ -34,6 +34,6 @@ export default {
   
   
   position: relative;
-  top: 6rem;
+  top: 9rem;
 }
 </style>

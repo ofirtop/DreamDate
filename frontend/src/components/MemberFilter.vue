@@ -161,7 +161,7 @@ export default {
     border-radius: 4px;
     display: inline-block;
     padding: 6px 12px;
-    margin-right: 20px;
+    margin-right: 5px;
     font-family: inherit;
     &:hover{
       background-color: $color-light;
@@ -171,7 +171,9 @@ export default {
       color: white;
     }
   }
-
+@media(min-width: 780px){
+margin-right: 20px;
+}
   .btn-apply{
     color: $clr1;
     background-color:none;
