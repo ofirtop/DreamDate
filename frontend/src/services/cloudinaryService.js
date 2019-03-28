@@ -8,6 +8,8 @@ var UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
 // on submit call to this function
 function uploadImg(elForm, ev) {
+    console.log('Cloudinary service got:', elForm, ev);
+    
     ev.preventDefault();
 
     // A function to be called if request succeeds

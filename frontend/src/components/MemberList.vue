@@ -27,13 +27,14 @@ export default {
 };
 </script>
 <style scoped>
+.member-list {
+  margin-top: 150px;
+}
 .member-list ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   grid-gap: 30px;
-  
-  
   position: relative;
-  top: 6rem;
+  /* top: 9rem; */
 }
 </style>

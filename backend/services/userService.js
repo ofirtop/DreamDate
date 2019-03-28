@@ -140,13 +140,14 @@ function checkLogin(userCredentials) {
 
 function signUp(userCredentials) {
     console.log('userService signup')
+    console.log(userCredentials, 'lengthPass:', userCredentials.pass.length);
+    
     if (userCredentials.pass.length < 3) return Promise.reject('Wrong Credentials: password must be at list 3 characters');
-    var existingUser = _getByName(userCredentials.name);
-    console.log('Problem with Signup - user already exists!');
-    if (existingUser) return Promise.reject('User Allready Exists!');
-
+    _getByName(userCredentials.name)
+        .then(existingUser=>{
+            if(existingUser) return Promise.reject('User Allready Exists!');
+        })
     var user = _getEmptyUser(userCredentials);
-
     return add(user)
         .then(user => {
             user.pass = '';

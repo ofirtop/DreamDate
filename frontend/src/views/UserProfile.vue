@@ -1,16 +1,15 @@
 <template>
   <section v-if="user" class="user-profile">
-    <div class="screen" v-if="isEdit"></div>
+    <div class="screen" v-if="isEdit||uploadImg"></div>
     <div class="title">
-      <h1>My Profile</h1>
-      <el-button type="primary" @click="toAll">Back to All</el-button>
     </div>
     <edit-profile @saveProfile="saveProfile" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
+    <!-- <upload-img v-if="uploadImg"></upload-img> -->
     <div class="container">
       <div class="main-section">
         <div class="info">
         <div class="name-section flex items-center">
-          <h1>{{user.name}}, {{userAge}}</h1>
+          <h2>{{user.name}}, {{userAge}}</h2>
         </div>
         <div class="details-section">
           <h4>{{user.descr}}</h4>
@@ -20,9 +19,10 @@
           <h4>{{user.maritalStatus}}</h4>
           <h4>{{childrenInfo}}</h4>
           <hr>
-          <h2>I want to meet</h2>
+          <h3>I want to meet</h3>
           <h4>{{partnerGenderNAge}}</h4>
           <el-button @click="editProfile" type="primary">Edit Details</el-button>
+          <!-- <el-button @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button> -->
         </div>
         </div>
         <div class="img-section">
@@ -47,7 +47,8 @@
 </template>
 <script>
 import memberService from '../services/member.service';
-import editProfile from '@/components/EditProfile.vue'
+import editProfile from '@/components/EditProfile.vue';
+// import uploadImg from '@/components/uploadImg.vue';
 
 export default {
   data() {
@@ -55,6 +56,7 @@ export default {
       user: null,
       saveImgBtn: false,
       isEdit: false,
+      uploadImg: false
     };
   },
   created() {
@@ -67,8 +69,12 @@ export default {
         .then(res => (this.user = res))
     }
     console.log('LoggedInUser', this.loggedInUser);
+
   },
   methods: {
+    addImg() {
+
+    },
     changeMainImg(imgSrc, idx) {
       let img = this.user.mainImage;
       this.user.mainImage = imgSrc;
@@ -131,7 +137,8 @@ export default {
     }
   },
   components: {
-    editProfile
+    editProfile,
+    // uploadImg
   }
 };
 </script>
@@ -151,7 +158,7 @@ export default {
   width: 100%;
 }
 .container {
-  max-width: 60%;
+  max-width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,7 +190,7 @@ a {
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin: 0 10%;
+  margin: 100px 10%;
 }
 .img-section {
   display: flex;
@@ -220,8 +227,8 @@ a {
 .mainImg:hover {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
-h1 {
-  font-size: 2em;
+h2 {
+  font-size: 1.5em;
   font-weight: bold;
 }
 .img-gallery {

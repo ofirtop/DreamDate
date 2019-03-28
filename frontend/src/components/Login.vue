@@ -75,15 +75,10 @@ export default {
     signup(){
       this.$emit('signup', this.userCredentials);
       this.isNewUser = false;
-      this.userCredentials.name = '';
-      this.userCredentials.pass = '';
-
     }
   },
-  computed: {
-    errMsg() {
-      return (this.isError || this.isSignUpErr);
-    }
+  created() {
+    this.errMsg = (this.isError || this.isSignUpErr);
   }
 };
 </script>

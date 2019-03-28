@@ -70,11 +70,10 @@
 <script>
 import memberService from '../services/member.service';
 export default {
-  props: ['profile', 'loggedInUser'],
+  props: ['profile'],
   data() {
     return {
         user: null,
-        saveImgBtn: false,
         cities: [],
         statuses: [
         { value: 'single', label: 'single' },
@@ -110,7 +109,7 @@ export default {
       this.isEdit = true;
     },
     clearChanges() {
-      this.user = this.loggedInUser;
+      this.user = this.profile;
       this.age = [
         this.user.interestedIn.minAge,
         this.user.interestedIn.maxAge
