@@ -12,39 +12,24 @@
     </router-link>
     <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
     <div class="actions-wrapper">
-      <div class @click.stop="like" title="Like">
+      <div class @click.stop="$emit('like', member)" title="Like">
         <font-awesome-icon icon="heart"  />
       </div>
-      <div v-if="isMatch" @click="openChat()" class="btn-chat">
+      <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
         <font-awesome-icon icon="comment" title="chat"  />
       </div>
       <div>
-        <font-awesome-icon class="notLike" icon="times" @click.stop="notLike" title="Remove" />
+        <font-awesome-icon class="notLike" icon="times" @click.stop="$emit('notLike', member._id)" title="Remove" />
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import { EVENT_BUS, EV_NEW_MATCH, EV_START_CHAT } from "@/event-bus.js";
+import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
-  methods: {
-    like() {
-      this.$emit("like", this.member);
-    },
-    notLike() {
-      console.log("I don't like", this.member.name);
-      this.$emit("notLike", this.member._id);
-    },
-    showMatch() {
-      EVENT_BUS.$emit(EV_NEW_MATCH, this.member);
-    },
-    openChat(){
-      EVENT_BUS.$emit(EV_START_CHAT, this.member);
-    }
-  },
   computed: {
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);

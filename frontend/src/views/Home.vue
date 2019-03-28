@@ -11,12 +11,12 @@
 <script>
 import memberList from "@/components/MemberList.vue";
 import memberFilter from "@/components/MemberFilter.vue";
-import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
+import Swal from 'sweetalert2'; 
+import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   data() {
     return {
-      memberForMatch: null,
       filterBy: {
         gender: "",
         minAge: null,
@@ -32,15 +32,24 @@ export default {
 
       await this.$store.dispatch({ type: "addLikeToMember", member });
 
-      if (member.likes.iLike && member.likes.likeMe) {
-        EVENT_BUS.$emit(EV_NEW_MATCH, member);
+      if (member.likes.iLike && member.likes.likeMe) {//match
+        Swal.fire({
+          title: 'You have a new match !!!',
+          type: 'success',
+          showCancelButton: true,
+          confirmButtonText: 'Send a message',
+          cancelButtonText: 'Later'
+          }).then((result) => {
+            if (result.value){
+            EVENT_BUS.$emit(EV_START_CHAT, member);
+            }
+         });
       }
     },
     notLikeMember(memberId) {
       this.$store.dispatch({ type: "notLikeMember", memberId });
     },
     startChat(member) {
-      this.memberForMatch = null;
       EVENT_BUS.$emit(EV_START_CHAT, member);
     },
     setFilter(filterBy) {
