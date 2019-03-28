@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       hide: false,
-      secondsToClose: 5 * 1000
+      secondsToClose: 10 * 1000
     };
   },
   computed: {
@@ -62,8 +62,8 @@ export default {
     document.querySelector('#audio1').play();
   },
   created(){
-    setTimeout(() => this.hide = true, this.secondsToClose - 500);//hide with animation before remove from dom
-    setTimeout(() => this.$emit('close'), this.secondsToClose);
+    setTimeout(() => this.hide = true, this.secondsToClose);//hide with animation before remove from dom
+    setTimeout(() => this.$emit('close'), this.secondsToClose + 1000);
   }
 };
 </script>
@@ -84,7 +84,7 @@ $height:100px;
     animation: show-indicator 0.5s forwards ease-in-out;
   }
   &.hide{
-    animation: hide-indicator 0.5s forwards ease-in-out;
+    animation: hide-indicator 0.8s forwards ease-in-out;
   }
 }
 @keyframes show-indicator {
