@@ -182,7 +182,7 @@ export default {
 }
 
 .logo {
-  width: 40px;
+  width: 80px;
 }
 .clickable {
   cursor: pointer;

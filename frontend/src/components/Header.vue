@@ -3,7 +3,7 @@
     <nav id="nav" class="flex">
       <div class="logo-name">
         <router-link to="/">
-          <img src="@/assets/img/logo_dd.png" alt="logo" class="logo">
+          <img src="@/assets/img/logo_tt.png" alt="logo" class="logo">
         </router-link>
         <div class="main-header">DREAM DATE</div>
       </div>
