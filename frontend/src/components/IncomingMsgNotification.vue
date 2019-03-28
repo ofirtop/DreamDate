@@ -1,22 +1,5 @@
 <template>
   <section :class="{hide:!member}"  @click="hide = true">
-    <!-- <div class="profile">
-        <div class="photo">
-          <a href="#" @click="$emit('viewDetails', member)"><img :src="member.mainImage"/></a>
-        </div>
-        <div class="content">
-            <div class="text">
-              <h3 v-if="isMatch">New match <br />{{member.name}}</h3>
-              <h6 v-if="!isMatch">Likes you</h6>
-            </div>
-            <div class="btn" @click="$emit('chat', member)" v-if="isMatch"> 
-                <div>Chat</div>
-                <font-awesome-icon icon="comment" size="4x" />
-            </div>            
-        </div>
-        <div class="box">
-        </div>
-    </div> -->
     <div class="test flex space-between" @click="hide = true" :class="showHideClass">
       <div class="relative">
         <div class="photo1" @click="doAction('view-details')" :class="showHideClass">
@@ -49,7 +32,8 @@ export default {
   props: ["member", 'action'],
   data() {
     return {
-      hide: false
+      hide: false,
+      secondsToClose: 5 * 1000
     };
   },
   computed: {
@@ -63,13 +47,23 @@ export default {
   methods:{
     doAction(action){
       setTimeout(()=>{
-        if(action === 'chat') this.$emit('chat', this.member);
-        else if (action === 'view-details') this.$emit('viewDetails', this.member);
+        switch(action){
+          case 'chat':
+            this.$emit('chat', this.member);
+          break;
+          case 'view-details':
+            this.$emit('viewDetails', this.member);
+          break;
+        }
       },500);
     }
   },
   mounted(){
     document.querySelector('#audio1').play();
+  },
+  created(){
+    setTimeout(() => this.hide = true, this.secondsToClose - 500);//hide with animation before remove from dom
+    setTimeout(() => this.$emit('close'), this.secondsToClose);
   }
 };
 </script>

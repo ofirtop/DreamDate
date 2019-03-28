@@ -12,6 +12,7 @@
       v-if="memberForNotification"
       @chat="openChatFromNotification"
       @viewDetails="viewMemberDetailsFromNotification"
+      @close="memberForNotification = null"
     />
     <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
@@ -39,7 +40,6 @@ export default {
   data() {
     return {
       memberToChat: null,
-      memberToChatNotifiation: null,
       memberForNotification: null,
       memberForMatch: null,
       loginFailed: false,
@@ -60,14 +60,10 @@ export default {
   methods: {
     openNotification(action, member){
       this.memberForNotification = member;
-            this.notificationAction = action;
-            // setTimeout(() => {
-            //   this.memberForNotification = null;
-            // }, 5 * 1000);
+      this.notificationAction = action;
     },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
-      this.memberToChatNotifiation = null;
     },
     openChatFromNotification(member) {
       this.memberForNotification = null;
