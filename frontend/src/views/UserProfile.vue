@@ -23,6 +23,7 @@
           <h2>I want to meet</h2>
           <h4>{{partnerGenderNAge}}</h4>
           <el-button @click="editProfile" type="primary">Edit Details</el-button>
+          <el-button @click="addImg" type="primary">Add image</el-button>
         </div>
         </div>
         <div class="img-section">
@@ -183,7 +184,7 @@ a {
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin: 0 10%;
+  margin: 100px 10%;
 }
 .img-section {
   display: flex;
