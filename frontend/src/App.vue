@@ -100,6 +100,7 @@ export default {
       try {
         let loggedInUser = await this.$store.dispatch({type: "signupUser",userCredentials});
         utilService.saveToStorage("loggedInUser", loggedInUser);
+        this.router.push(`/user/${loggedInUser}`)
       } catch {
         this.signupFailed = true;
       }
@@ -174,7 +175,7 @@ export default {
 }
 
 .logo {
-  width: 40px;
+  width: 80px;
 }
 .clickable {
   cursor: pointer;

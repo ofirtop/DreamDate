@@ -3,21 +3,21 @@
     <nav id="nav" class="flex">
       <div class="logo-name">
         <router-link to="/">
-          <img src="@/assets/img/logo_dd.png" alt="logo" class="logo">
+          <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
         </router-link>
-        <div class="main-header">DREAM DATE</div>
+        <!-- <div v-if="loggedInUser">
+          Welcome, {{loggedInUser.name}}
+        </div>     -->
       </div>
       <div class="nav-links flex items-center">
-        <div class="user-img" v-if="loggedInUser">
+        <!-- <div class="user-img" v-if="loggedInUser">
           <img :src="loggedInUser.mainImage" alt="user image">
-        </div>
-        <div v-if="loggedInUser" >
-          {{loggedInUser.name}}
-        </div>       
-        <div class="logout" @click="getMatch">Matches</div>
-        <router-link class="my-profile" to="/"  >Gallery</router-link>
-        <router-link class="my-profile" :to="'/user/' + loggedInUser._id"  v-if="loggedInUser">My Profile</router-link>
-        <div class="logout" @click="$emit('logout')">Logout</div>
+        </div> -->
+           
+        <div class="nav-link" @click="getMatch">Matches</div>
+        <div class="nav-link" @click="toGallery">Gallery</div>
+        <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
+        <div class="nav-link" @click="$emit('logout')">Logout</div>
       </div>
     </nav>
   </header>
@@ -30,33 +30,43 @@ export default {
   methods: {
     getMatch() {
       this.$router.push('/match')
+    },
+    toProfile() {
+      this.$router.push(`/user/${this.loggedInUser._id}`);
+    },
+    toGallery() {
+      this.$router.push(`/`);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.nav-link {
+  cursor: pointer;
+  font-family: "Playfair Display", serif;
+  font-weight: 200;
+}
 .logo-name {
   display: flex;
   // border: 1px solid black;
   align-items: center;
-  margin-left: 10px;
+  margin: 10px;
 }
 .main-header {
   margin-left: 10px;
 }
 .logo {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .logout {
   cursor: pointer;
-  // border:1px solid black;
 }
-.my-profile {
-  // border:1px solid black;
-  font-family: "Playfair Display", serif;
-  font-weight: 200;
-}
+// .my-profile {
+//   // border:1px solid black;
+//   font-family: "Playfair Display", serif;
+//   font-weight: 200;
+// }
 #nav {
   width: 100%;
   position: relative;
@@ -73,6 +83,10 @@ nav {
 .nav-links > * {
   margin: 10px;
 }
+.nav-links {
+  height: 100%;
+
+}
 
 .app-header {
   position: fixed;
@@ -80,7 +94,8 @@ nav {
   top: 0;
   z-index: 9;
   width: 100%;
-  height: 3rem;
+  height: 100px;
+
 }
 .user-img{
   width: 36px;

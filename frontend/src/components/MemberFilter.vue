@@ -3,7 +3,7 @@
     <form>
       <div class="filter-sections flex" >
         <div class="filter-section" :class="{'active': activeSection === 'sex'}">
-          <button @click="openFilterSection('sex')" class="btn-filter" >Sex</button>
+          <button @click="openFilterSection('sex')" class="btn-filter" >Gender</button>
           <div class="filter-details-wrapper relative" >
             <div class="filter-details">
               <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
@@ -150,7 +150,7 @@ export default {
   width: 100%;
   background-color: white;
   z-index: 9;
-  margin-top:3rem;
+  margin-top:100px;
   margin-bottom:1rem;
 
 .btn-filter{
