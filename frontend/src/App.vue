@@ -14,7 +14,6 @@
       @viewDetails="viewMemberDetailsFromNotification"
       @close="memberForNotification = null"
     />
-    <match v-if="memberForMatch" :member="memberForMatch" @close="memberForMatch = null"/>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
 </template>
@@ -24,13 +23,11 @@ import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
 import incomingMsgNotification from "@/components/IncomingMsgNotification.vue";
 import appHeader from "@/components/Header.vue";
-import match from "@/components/Match.vue";
 import utilService from "@/services/util.service.js";
 
 import {
   EVENT_BUS,
   EV_START_CHAT,
-  EV_NEW_MATCH,
   EV_CHAT_RECEIVED_MSG,
   EV_RECEIVED_LIKE
 } from "@/event-bus.js";
@@ -41,7 +38,6 @@ export default {
     return {
       memberToChat: null,
       memberForNotification: null,
-      memberForMatch: null,
       loginFailed: false,
       showLogin: false,
       signupFailed: false,
@@ -104,6 +100,7 @@ export default {
       try {
         let loggedInUser = await this.$store.dispatch({type: "signupUser",userCredentials});
         utilService.saveToStorage("loggedInUser", loggedInUser);
+        this.router.push(`/user/${loggedInUser}`)
       } catch {
         this.signupFailed = true;
       }
@@ -129,9 +126,6 @@ export default {
       console.log(EV_START_CHAT, member);
       this.openChat(member);
     });
-    EVENT_BUS.$on(EV_NEW_MATCH, member => {
-      this.memberForMatch = member;
-    });
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       console.log(EV_RECEIVED_LIKE, member);
       this.openNotification('like', member);
@@ -155,7 +149,6 @@ export default {
     chat,
     login,
     incomingMsgNotification,
-    match,
     appHeader
   }
 };
@@ -182,7 +175,7 @@ export default {
 }
 
 .logo {
-  width: 40px;
+  width: 80px;
 }
 .clickable {
   cursor: pointer;

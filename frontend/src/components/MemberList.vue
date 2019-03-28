@@ -6,7 +6,7 @@
           @notLike="$emit('notLike', $event)"
           :member="member"
           @like="$emit('like', $event)"
-        ></member-preview>
+          @chat="$emit('chat', $event)" />
       </li>
     </ul>
   </section>
