@@ -7,7 +7,8 @@ export default {
     add
 };
 
-const BASE_URL = 'http://localhost:3003'
+const BASE_URL = process.env.NODE_ENV !== 'development'?
+       '' : '//localhost:3003';
 
 var axios = Axios.create({
     withCredentials: true
