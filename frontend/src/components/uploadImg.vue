@@ -1,20 +1,27 @@
 
 <template>
     <section class="upload-img flex">
-        <form class="publish-form" action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
+        <form class="publish-form" action="" method="POST" enctype="multipart/form-data" 
+                onsubmit="uploadImg($this, event)">
             <div><input type="file" name="img" /></div>
             <div><button type="submit" class="btn">Submit</button></div>    
         </form>
     </section>
 </template>
 <script>
-// import cloudinaryService from '../services/cloudinary.service';
+import cloudinaryService from '../services/cloudinaryService';
 export default {
       props: ['profile'],
   data() {
     return {
         user: null,
     }
+  },
+  methods: {
+    //   uploadImg(this, event) {
+    //       console.log(this);
+
+    //   }
   },
   created() {
     this.user = this.profile;

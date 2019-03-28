@@ -4,7 +4,7 @@
     <div class="title">
     </div>
     <edit-profile @saveProfile="saveProfile" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
-    <upload-img v-if="uploadImg"></upload-img>
+    <!-- <upload-img v-if="uploadImg"></upload-img> -->
     <div class="container">
       <div class="main-section">
         <div class="info">
@@ -22,7 +22,7 @@
           <h3>I want to meet</h3>
           <h4>{{partnerGenderNAge}}</h4>
           <el-button @click="editProfile" type="primary">Edit Details</el-button>
-          <el-button @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button>
+          <!-- <el-button @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button> -->
         </div>
         </div>
         <div class="img-section">
@@ -48,7 +48,7 @@
 <script>
 import memberService from '../services/member.service';
 import editProfile from '@/components/EditProfile.vue';
-import uploadImg from '@/components/uploadImg.vue';
+// import uploadImg from '@/components/uploadImg.vue';
 
 export default {
   data() {
@@ -138,7 +138,7 @@ export default {
   },
   components: {
     editProfile,
-    uploadImg
+    // uploadImg
   }
 };
 </script>
