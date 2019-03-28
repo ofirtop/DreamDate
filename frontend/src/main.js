@@ -10,10 +10,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
+import { faShare } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faHeart)
 library.add(faTimes)
 library.add(faComment)
+library.add(faShare)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 //Element-ui

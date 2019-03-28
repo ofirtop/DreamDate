@@ -3,7 +3,7 @@
     <member-filter @setFilter="setFilter"/>
     <!-- <main class="flex align-start"> -->
     <main>
-      <member-list :members="members" @notLike="notLikeMember" @like="addLike"/>
+      <member-list :members="members" @notLike="notLikeMember" @like="addLike" @chat="startChat"/>
     </main>
   </section>
 </template>

@@ -1,17 +1,23 @@
 <template>
-  <section class="flex flex-column">
-    <h1>
-      Chat with {{member.name}}
-      <button @click="closeChat">&times;</button>
-      <span v-if="isMemberTyping">typing...</span>
+  <section class="chat-cmp flex flex-column">
+    <h1 class="flex space-between">
+      <div>
+        Chat with {{member.name}}
+      </div>
+      <span class="typing" v-if="isMemberTyping">typing...</span>
+      <div @click="closeChat">
+        <font-awesome-icon icon="times" title="close" />
+      </div>
     </h1>
     <ul class="flex flex-column">
       <li v-for="(msg, idx) in msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
     </ul>
 
-    <div class="flex">
-      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" />
-      <button @click="sendMsg">Send</button>
+    <div class="input-wrapper flex ">
+      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" placeholder="type your message..."></el-input>
+      <div @click="sendMsg" class="send">
+        <font-awesome-icon icon="share" title="send"  />
+      </div>
     </div>
   </section>
 </template>
@@ -80,18 +86,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
-section {
+@import '../sass/_variables.scss';
+
+.chat-cmp {
   position: fixed;
   bottom: 0;
   right: 0;
   height: 50vh;
-  background: yellow;
+  background: white;
   width: 40vw;
   max-width: 300px;
-  border: 2px solid lightgoldenrodyellow;
+  border: 2px solid white;
   box-shadow: inset 0 0 9px 1px black;
   border-radius: 5px;
-  padding: 5px;
+  h1{
+        padding: 15px 15px 5px 15px;
+        .typing{
+          color:#25ba25;
+          font-size: 0.8em;
+          align-self: flex-end;
+        }
+  }
 }
 ul {
   background-color: beige;
@@ -103,15 +118,31 @@ ul {
 }
 .msg {
   background-color: white;
-  margin: 2px 0;
+  padding: 2px 5px;
+  margin-top:2px;
   max-width: 85%;
   &.in {
-    background-color: chocolate;
+    color: $clr2;
     align-self: flex-start;
   }
   &.out {
-    background-color: bisque;
+    color: $clr1;
+    background-color: white;
     align-self: flex-end;
   }
+}
+.input-wrapper{
+  padding: 5px 10px 10px 10px;
+  input{
+    flex-grow:1;
+    border-radius: 25px;
+    border: 1px solid gray;
+    padding:5px;
+    outline: none;
+  }
+}
+.send{
+  padding:5px;
+  cursor: pointer;
 }
 </style>

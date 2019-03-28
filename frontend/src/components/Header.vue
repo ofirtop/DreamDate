@@ -5,9 +5,9 @@
         <router-link to="/">
           <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
         </router-link>
-        <!-- <div v-if="loggedInUser">
+        <div v-if="loggedInUser" style="margin-left:4rem;">
           Welcome, {{loggedInUser.name}}
-        </div>     -->
+        </div>    
       </div>
       <div class="nav-links flex items-center">
         <!-- <div class="user-img" v-if="loggedInUser">
