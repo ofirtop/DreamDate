@@ -5,7 +5,7 @@
         <router-link to="/">
           <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
         </router-link>
-        <div v-if="loggedInUser" style="margin-left:4rem;">
+        <div class="userName" v-if="loggedInUser" style="margin-left:4rem;">
           Welcome, {{loggedInUser.name}}
         </div>    
       </div>
@@ -84,7 +84,9 @@ nav {
   height: 100%;
 
 }
-
+.userName {
+  font-weight: bold;
+}
 .app-header {
   position: fixed;
   background-color: white;
@@ -102,5 +104,11 @@ nav {
   img{
     width:100%;
   }
+// @media (max-width: 700px){
+//   .userName {
+//     display: none;
+//   }
+// }
 }
+
 </style>

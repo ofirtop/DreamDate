@@ -95,7 +95,7 @@ a {
 }
 .member-details {
   position: relative;
-  top: 3rem;
+  margin-top: 100px;
   text-align: left;
   display: flex;
   align-items: center;
