@@ -32,7 +32,7 @@ export default {
       this.$router.push('/match')
     },
     toProfile() {
-      this.$router.push(`/user/${loggedInUser._id}`);
+      this.$router.push(`/user/${this.loggedInUser._id}`);
     },
     toGallery() {
       this.$router.push(`/`);

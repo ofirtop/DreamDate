@@ -3,7 +3,7 @@
     <form>
       <div class="filter-sections flex" >
         <div class="filter-section" :class="{'active': activeSection === 'sex'}">
-          <button @click="openFilterSection('sex')" class="btn-filter" >Sex</button>
+          <button @click="openFilterSection('sex')" class="btn-filter" >Gender</button>
           <div class="filter-details-wrapper relative" >
             <div class="filter-details">
               <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
