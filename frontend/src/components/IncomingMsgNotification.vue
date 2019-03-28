@@ -1,5 +1,5 @@
 <template>
-  <section :class="{hide:!member}">
+  <section :class="{hide:!member}"  @click="hide = true">
     <!-- <div class="profile">
         <div class="photo">
           <a href="#" @click="$emit('viewDetails', member)"><img :src="member.mainImage"/></a>
@@ -17,9 +17,9 @@
         <div class="box">
         </div>
     </div> -->
-    <div class="test flex space-between" @click="hide = true" :class="{hide:hide}">
+    <div class="test flex space-between" @click="hide = true" :class="showHideClass">
       <div class="relative">
-        <div class="photo1" @click="$emit('viewDetails', member)">
+        <div class="photo1" @click="doAction('view-details')" :class="showHideClass">
           <img :src="member.mainImage"/>
         </div>
       </div>
@@ -28,7 +28,7 @@
               <h3 v-if="action === 'like' && !isMatch">{{member.name}} <br /><br /> likes you!</h3>
               <h3 v-if="action === 'chat'">{{member.name}} <br /><br /> Wants to chat</h3>
       </div>
-      <div class="chat1" @click="$emit('chat', member)" v-if="isMatch">
+      <div class="chat1" @click="doAction('chat')" v-if="isMatch">
         <div class="icon-container flex items-center">
           <font-awesome-icon icon="comment" size="4x" />
         </div>
@@ -55,6 +55,17 @@ export default {
   computed: {
     isMatch() {
       return this.member.likes.likeMe && this.member.likes.iLike;
+    },
+    showHideClass(){
+      return {hide:this.hide, show:!this.hide};
+    }
+  },
+  methods:{
+    doAction(action){
+      setTimeout(()=>{
+        if(action === 'chat') this.$emit('chat', this.member);
+        else if (action === 'view-details') this.$emit('viewDetails', this.member);
+      },500);
     }
   },
   mounted(){
@@ -64,7 +75,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../sass/_variables.scss';
+  @import '../sass/_variables.scss';
 
 $height:100px;
 .test{
@@ -75,10 +86,29 @@ $height:100px;
   height: $height;
   box-shadow: 0 0 2rem #babbbc;
   background-color: white;
-  animation: show-profile 0.5s forwards ease-in-out;
-  &.hide{
-    animation-direction: reverse;
+  &.show{
+    animation: show-indicator 0.5s forwards ease-in-out;
   }
+  &.hide{
+    animation: hide-indicator 0.5s forwards ease-in-out;
+  }
+}
+@keyframes show-indicator {
+  0% {
+    transform: translateX(200%);
+  }
+  100%{
+    transform: translateX(3%);
+  }
+}
+@keyframes hide-indicator {
+  0% {
+    transform: translateX(3%);
+  }
+  100%{
+    transform: translateX(200%);
+  }
+}
   .photo1{
     height: $height;
     width: $height;
@@ -89,32 +119,42 @@ $height:100px;
     overflow: hidden;
     position: relative; 
     left: -50%; 
-    animation: rotate-photo 0.5s forwards ease-in-out;
     cursor: pointer;
+    &.show{
+      animation: rotate-photo1 0.5s forwards ease-in-out;
+    }
+    &.hide{
+      animation: rotate-photo1-hide 0.5s backwards ease-in-out;
+    }    
     img{
     width:100%;
     }
   }
-  .chat1{
-    cursor: pointer;
-    padding-right:5px;
-    animation: pop-btn1 0.3s both ease-in-out 0.5s;
-    span{
-      position: absolute;
-      top: 39px;
-      right: 20px;
-      color: white;
-    }
-    .icon-container{
-      height: 100%;
-      width: 100%;
-    }
+
+
+.chat1{
+  cursor: pointer;
+  padding-right:5px;
+  animation: pop-btn1 0.3s both ease-in-out 0.5s;
+  span{
+    position: absolute;
+    top: 39px;
+    right: 20px;
+    color: white;
   }
-  .content1{
-    flex-grow: 1;
+  .icon-container{
+    height: 100%;
+    width: 100%;
   }
 }
-
+.content1{
+  flex-grow: 1;
+}
+@keyframes hide-profile {
+  100% {
+    width: 0;
+  }
+}
 @keyframes pop-btn1 {
   0% {
     transform: scale(0);
@@ -133,7 +173,16 @@ section {
   right: 10px;
   z-index: 99;
 }
-
+@keyframes rotate-photo1 {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes rotate-photo1-hide {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 
 /*from codepan*/

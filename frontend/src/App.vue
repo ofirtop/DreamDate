@@ -61,9 +61,9 @@ export default {
     openNotification(action, member){
       this.memberForNotification = member;
             this.notificationAction = action;
-            setTimeout(() => {
-              this.memberForNotification = null;
-            }, 5 * 1000);
+            // setTimeout(() => {
+            //   this.memberForNotification = null;
+            // }, 5 * 1000);
     },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
