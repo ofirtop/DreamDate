@@ -56,9 +56,6 @@ export default {
 .main-header {
   margin-left: 10px;
 }
-.logo {
-  margin-top: 10px;
-}
 .logout {
   cursor: pointer;
 }
