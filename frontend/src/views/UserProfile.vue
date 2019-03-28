@@ -254,6 +254,18 @@ input {
   width: 50%;
 }
 @media (max-width: 700px){
+  .user-profile {
+    width:100%;
+    margin: 100px 0 0 0;
+  }
+  .main-section {
+    flex-direction: column;
+  }
+  .container {
+    width: 100%;
+    margin: 0;
+    max-width: 100%;
+  }
   .user-img {
   width: 100%;
   height: 80vh;
