@@ -11,7 +11,7 @@
       </div>
     </router-link>
     <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
-    <div class="like-panel">
+    <div class="actions-wrapper">
       <div class @click.stop="like" title="Like">
         <font-awesome-icon icon="heart"  />
       </div>
@@ -114,6 +114,7 @@ a {
   font-size: 0.95em;
   margin-top: 5px;
   color: black;
+  margin-top: 1rem;
 }
 a {
   color: black;
@@ -143,7 +144,7 @@ a {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
-.like-panel {
+.actions-wrapper {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -155,6 +156,7 @@ a {
   padding-left: 35px;
   > div{
     cursor: pointer;
+    padding: 5px;
   }
 }
 
