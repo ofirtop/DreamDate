@@ -70,6 +70,9 @@ export default {
     console.log('LoggedInUser', this.loggedInUser);
   },
   methods: {
+    addImg() {
+
+    },
     changeMainImg(imgSrc, idx) {
       let img = this.user.mainImage;
       this.user.mainImage = imgSrc;
