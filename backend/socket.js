@@ -6,7 +6,7 @@ module.exports ={
 const sockets = [];
 
 function getSocketByUserId(userId){
-    return sockets.find(socket => socket.userId == userId);
+    return sockets.find(socket => socket.userId === userId);
 }
 
 function init(io) {

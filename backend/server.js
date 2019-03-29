@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const http = require('http');
+const session = require('express-session');
 const socketIo = require('socket.io');
 
 const addUserRoutes = require('./routes/users-route')
@@ -45,4 +45,4 @@ webSocket.init(io);
 
 
 const PORT = process.env.PORT || 3003;
-httpServer.listen(PORT, () => console.log(`Example app listening on port ${PORT}`))
+httpServer.listen(PORT, () => console.log(`App listening on port ${PORT}`))
