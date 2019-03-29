@@ -3,7 +3,7 @@
     <section class="upload-img flex">
         <form class="publish-form" action="" method="POST" enctype="multipart/form-data" 
                 onsubmit="uploadImg($this, event)">
-            <div><input type="file" name="img" /></div>
+            <div><input :newImg="newImg" type="file" name="img" /></div>
             <div><button type="submit" class="btn">Submit</button></div>    
         </form>
     </section>
@@ -15,6 +15,7 @@ export default {
   data() {
     return {
         user: null,
+        newImg: null
     }
   },
   methods: {
