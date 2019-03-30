@@ -92,7 +92,11 @@ export default {
 .wrapper{
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
+  // background-color: rgba(0, 0, 0, 0.75);
+  background-image: url('../assets/img/home-bg.jpg');
+  background-position: center;
+  background-size:cover;
+  
 }
 .screen{
   position: fixed;
@@ -107,7 +111,8 @@ export default {
 .login-wrapper {
   padding: 30px;
   z-index:99;
-  background-color: white;
+  background-color: gray;
+  opacity:0.5;
 }
 .input{
   width: 100%;
