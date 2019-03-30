@@ -158,8 +158,7 @@ export default {
 @import "@/sass/_variables.scss";
 
 #app {
-  //font-family: 'ABeeZee', sans-serif;
-  // font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'ABeeZee', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -168,10 +167,7 @@ export default {
 
 #nav {
   a {
-    // font-weight: bold;
     color: black;
-    //     &.router-link-exact-active {
-    //       color: $color_primary;
   }
 }
 

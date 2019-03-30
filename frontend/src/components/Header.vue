@@ -48,12 +48,11 @@ export default {
 <style lang="scss" scoped>
 .nav-link {
   cursor: pointer;
-  font-family: "Playfair Display", serif;
+  font-family: 'ABeeZee', sans-serif;
   font-weight: 200;
 }
 .logo-name {
   display: flex;
-  // border: 1px solid black;
   align-items: center;
   margin: 10px;
 }
@@ -63,25 +62,11 @@ export default {
 .logout {
   cursor: pointer;
 }
-// .my-profile {
-//   // border:1px solid black;
-//   font-family: "Playfair Display", serif;
-//   font-weight: 200;
-// }
 #nav {
-  // border:1px solid black;
-  width: 100%;
-  // position: relative;
-  display: flex;
-  // flex-direction: row;
-  // justify-content: space-between;
+   width: 100%;
+   display: flex;
   background-color: lightgray;
   justify-content: center;
-  // align-items: center;
-}
-nav {
-  // justify-content: space-between;
-  // font-family: "Playfair Display", serif;
 }
 .nav-links > * {
   margin: 10px;
@@ -124,6 +109,6 @@ nav {
   background-color: lightgray;
   align-items: center;
    justify-content: space-between;
-  font-family: "Playfair Display", serif;
+  font-family: 'ABeeZee', sans-serif;
 }
 </style>
