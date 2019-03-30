@@ -10,10 +10,7 @@
               <input id="uploadPic" type="file" name="img" @change="previewFiles" multiple style="display:none"/>
               Upload Picture
             </label>
-            <label for="takePic" class="input-img">
-              <input id="takePic" type="file" name="img" @change="previewFiles" accept="image/*;capture" style="display:none"/>
-              Take a Picture
-            </label>
+
         </form>
         <div class="preview" :style="{backgroundImage: `url(${newImg})`}"></div>
         <el-button v-if="saveImgBtn" type="success" @click.stop="saveImg" plain>Save</el-button>
