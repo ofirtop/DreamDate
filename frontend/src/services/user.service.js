@@ -38,8 +38,12 @@ async function logout(userCredentials) {
 }
 
 async function updateUser(user) {
+    console.log('service front, updating user:', user);
+    
     return await axios.put(`${BASE_URL}/user/${user._id}`, user)
-            .then(res => res.data)
+            .then(res => {
+                console.log(res.data);
+                return res.data})
 }
 async function signup(userCredentials) {
     console.log('signing in (ServiceClient)', userCredentials);

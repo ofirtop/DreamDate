@@ -5,6 +5,17 @@
     <div class="edit-container">
       <!-- <h2>{{user.name}}</h2> -->
       <div>
+        <label>I'm (gender)</label>
+        <el-select size="mini" class="editInput" v-model="user.gender" placeholder="Select gender">
+          <el-option
+            v-for="(gender, idx) in genders"
+            :key="idx"
+            :label="gender.label"
+            :value="gender.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div>
         <label>Height</label>
         <el-input-number class="editInput" size="mini" v-model="user.height"></el-input-number>
       </div>
@@ -82,8 +93,8 @@ export default {
         { value: 'born to be free!', label: 'born to be free!' }
       ],
       genders: [
-        { value: 'female', label: 'female' },
-        { value: 'male', label: 'male' }
+        { value: 'female', label: 'Woman' },
+        { value: 'male', label: 'Man' }
       ],
       age: []
     };
@@ -102,7 +113,7 @@ export default {
       this.saveImgBtn = false;
       this.user.interestedIn.minAge = this.age[0];
       this.user.interestedIn.maxAge = this.age[1];
-      this.$emit('saveProfile', this.user);
+      this.$emit('addChanges', this.user);
       this.$emit('close');
     },
     editProfile() {
