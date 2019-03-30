@@ -149,6 +149,7 @@ export default {
   background-color: white;
   position: fixed;
   width: 100%;
+  max-width:1200px;
   background-color: white;
   z-index: 9;
   margin-top:100px;
