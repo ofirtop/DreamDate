@@ -1,17 +1,21 @@
 <template>
   <section v-if="loggedInUser" class="home-page">
-    <member-filter @setFilter="setFilter"/>
-    <!-- <main class="flex align-start"> -->
-    <main>
-      <member-list :members="members" @notLike="notLikeMember" @like="addLike" @chat="startChat"/>
-    </main>
+    <div class="home-content-container">
+      <div class="member-filter-container">
+        <member-filter @setFilter="setFilter"/>
+      </div>
+      <!-- <main class="flex align-start"> -->
+      <main>
+        <member-list :members="members" @notLike="notLikeMember" @like="addLike" @chat="startChat"/>
+      </main>
+    </div>
   </section>
 </template>
 
 <script>
 import memberList from "@/components/MemberList.vue";
 import memberFilter from "@/components/MemberFilter.vue";
-import Swal from 'sweetalert2'; 
+import Swal from "sweetalert2";
 import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
@@ -32,18 +36,19 @@ export default {
 
       await this.$store.dispatch({ type: "addLikeToMember", member });
 
-      if (member.likes.iLike && member.likes.likeMe) {//match
+      if (member.likes.iLike && member.likes.likeMe) {
+        //match
         Swal.fire({
-          title: 'You have a new match !!!',
-          type: 'success',
+          title: "You have a new match !!!",
+          type: "success",
           showCancelButton: true,
-          confirmButtonText: 'Send a message',
-          cancelButtonText: 'Later'
-          }).then((result) => {
-            if (result.value){
+          confirmButtonText: "Send a message",
+          cancelButtonText: "Later"
+        }).then(result => {
+          if (result.value) {
             EVENT_BUS.$emit(EV_START_CHAT, member);
-            }
-         });
+          }
+        });
       }
     },
     notLikeMember(memberId) {
@@ -90,5 +95,18 @@ export default {
 main {
   width: 100%;
   padding: 20px 20px;
+}
+.member-filter-container {
+  width: 100%;
+  max-width: 1200px;
+}
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-content-container {
+  max-width: 1200px;
+  width: 100%;
 }
 </style>
