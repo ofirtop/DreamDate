@@ -144,7 +144,7 @@ export default {
 @import '@/sass/_btns.scss';
 
 .member-filter {
-  border-bottom: 1px solid rgb(235, 235, 235);
+  // border-bottom: 1px solid rgb(235, 235, 235);
   padding: 10px;
   background-color: white;
   position: fixed;
@@ -159,6 +159,16 @@ export default {
     font-size: 0.88rem;
     margin-right: 5px;
   }
+@media(max-width: 780px){
+  .member-filter {
+    max-width: 100vw;
+    padding: 1px;
+    flex-wrap: wrap;
+  }
+  .btn-filter {
+    padding: 5px 1px;
+  }
+}
 @media(min-width: 780px){
 margin-right: 20px;
 }

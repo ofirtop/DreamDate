@@ -51,7 +51,7 @@ export default {
 <style scoped>
 main {
   width: 100%;
-  padding: 20px 20px;
+  padding: 0 10px;
   max-width: 1200px;
   width: 100%;
   margin-top:-50px;

@@ -9,7 +9,6 @@
           <div
             class="userName"
             v-if="loggedInUser"
-            style="margin-left:4rem;"
           >Welcome, {{loggedInUser.name}}</div>
         </div>
         <div class="nav-links flex items-center">
@@ -17,9 +16,9 @@
           <img :src="loggedInUser.mainImage" alt="user image">
           </div>-->
 
+          <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
           <div class="nav-link" @click="getMatch">Matches</div>
           <div class="nav-link" @click="toGallery">Gallery</div>
-          <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
           <div class="nav-link" @click="$emit('logout')">Logout</div>
         </div>
       </div>
@@ -76,6 +75,7 @@ export default {
 }
 .userName {
   font-weight: bold;
+  margin-left:4rem;
 }
 .app-header {
   position: fixed;
@@ -110,5 +110,10 @@ export default {
   align-items: center;
    justify-content: space-between;
   font-family: 'ABeeZee', sans-serif;
+}
+@media(max-width: 780px){
+  .userName {
+  margin: 0;
+}
 }
 </style>
