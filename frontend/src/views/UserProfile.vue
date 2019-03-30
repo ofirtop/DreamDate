@@ -11,9 +11,9 @@
         <div class="name-section flex items-center">
           <h2>{{user.name}}, {{userAge}}</h2>
         </div>
-        <div class="img-btns flex">
-        <el-button  @click="saveProfile" v-if="saveBtn" type="success">Save changes</el-button>
-        <el-button  @click="clearChanges" v-if="saveBtn" type="danger">Cancel changes</el-button>
+        <div class="save-btns flex" v-if="saveBtn">
+        <el-button  @click="saveProfile" type="success">Save changes</el-button>
+        <el-button  @click="clearChanges" type="danger">Cancel changes</el-button>
         </div>
         <hr>
         <div class="details-section">
@@ -105,6 +105,7 @@ export default {
         this.user.interestedIn.minAge,
         this.user.interestedIn.maxAge
       ];
+      this.saveBtn = false;
     },
     toAll() {
       this.$router.push('/');
@@ -300,6 +301,9 @@ input {
   width: 100%;
   max-height: 400px;
   object-fit: contain
+}
+.save-btns {
+  justify-content: center;
 }
 }
 </style>

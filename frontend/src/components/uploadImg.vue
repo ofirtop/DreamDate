@@ -2,21 +2,21 @@
 <template>
     <section class="upload-img flex">
       <div class="top">
-        <!-- <h1>Add new picture</h1> -->
+        <h1>Add new picture</h1>
         <i class="el-icon-close close" @click.stop="$emit('close')"></i>
       </div>
         <form class="publish-form" action="" enctype="multipart/form-data" @submit.prevent="previewFiles(event)">
-            <label for="uploadPic" class="input-img">
+            <label for="uploadPic" class="input-img" title="upload from your device">
               <input id="uploadPic" type="file" name="img" @change="previewFiles" multiple style="display:none"/>
               <i class="el-icon-upload"></i>
             </label>
-            <label for="takePic" class="input-img">
+            <label for="takePic" class="input-img" title="take a picture">
               <input id="takePic" type="file" name="img" @change="previewFiles" accept="image/*;capture" style="display:none"/>
               <i class="el-icon-mobile-phone"></i>
             </label>
         </form>
         <div class="preview" :style="{backgroundImage: `url(${newImg})`}"></div>
-        <div class="rotate flex">
+        <div class="rotate flex" v-if="saveImgBtn">
           <img class="left" src="../assets/img/rotate-left.png" @click.stop="rotateLeft">
           <img class="right" src="../assets/img/rotate-right.png" @click.stop="rotateRight">
         </div>
@@ -58,7 +58,7 @@ export default {
       this.newImg = url;
       this.saveImgBtn = true;
     },
-    async rotateLeft(){
+    rotateLeft(){
       let strToAdd= '/a_-90'
       let url = this.newImg;
       let idx = url.indexOf('upload');
@@ -86,9 +86,9 @@ export default {
     background-color: rgba(248, 248, 248, 1);
 }
 .preview {
-  width: 250px;
-  height: 250px;
-  background-size: contain;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
   margin: 10px;
@@ -109,12 +109,16 @@ form {
   top: 30px;
   
 }
+form >* {
+  margin: 10px;
+}
 .top {
   width: 100%;
   font-size: 2em;
   padding: 10px;
   display: flex;
   justify-content: flex-end;
+  margin: 10px 5px;
 }
 .el-button {
   margin: 10px;
