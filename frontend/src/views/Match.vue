@@ -26,7 +26,7 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    matches(){
+    matches() {
       return this.$store.getters.matches;
     }
   },
@@ -52,5 +52,12 @@ export default {
 main {
   width: 100%;
   padding: 20px 20px;
+  max-width: 1200px;
+  width: 100%;
+}
+.match-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
