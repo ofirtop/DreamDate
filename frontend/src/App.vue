@@ -9,7 +9,7 @@
       @signup="signup"
       @register="register"
     />
-
+    
     <router-view/>
 
     <notif
