@@ -137,6 +137,7 @@ export default new Vuex.Store({
     async updateUser({ commit }, { user }) {
       await userService.updateUser(user);
       commit({ type: 'setLoggedInUser', user });
+      
     },
     async addNewUser({ commit }, { user }) {
       let newUser = await userService.addNewUser(user);

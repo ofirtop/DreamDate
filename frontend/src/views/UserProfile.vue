@@ -3,15 +3,17 @@
     <div class="screen" v-if="isEdit||uploadImg"></div>
     <div class="title">
     </div>
-    <edit-profile @saveProfile="saveProfile" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
-    <!-- <upload-img v-if="uploadImg"></upload-img> -->
+    <edit-profile @addChanges="addChanges" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
+    <upload-img v-if="uploadImg" @addChanges="addChanges" @close="uploadImg = false" :profile="user"></upload-img>
     <div class="container">
       <div class="main-section">
         <div class="info">
         <div class="name-section flex items-center">
           <h2>{{user.name}}, {{userAge}}</h2>
         </div>
+        <hr>
         <div class="details-section">
+          <div class="gender">{{userGender}}</div>
           <h4>{{user.descr}}</h4>
           <hr>
           <h4>Height: {{user.height}}cm</h4>
@@ -21,8 +23,10 @@
           <hr>
           <h3>I want to meet</h3>
           <h4>{{partnerGenderNAge}}</h4>
-          <el-button @click="editProfile" type="primary">Edit Details</el-button>
-          <!-- <el-button @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button> -->
+          <div class="btns flex">
+            <el-button size="mini" @click="editProfile" type="primary">Edit Details</el-button>
+            <el-button size="mini" @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button>
+          </div>
         </div>
         </div>
         <div class="img-section">
@@ -38,23 +42,23 @@
           @click="changeMainImg(img, idx)"
         ></div>
       </div>
-      </div>
       <div class="img-btns flex">
-      <el-button  @click="saveProfile" v-if="saveImgBtn" type="primary">Save main image</el-button>
-      <el-button  @click="clearChanges" v-if="saveImgBtn" type="primary">Cancel changes</el-button>
+      <el-button  @click="saveProfile" v-if="saveBtn" type="success">Save changes</el-button>
+      <el-button  @click="clearChanges" v-if="saveBtn" type="danger">Cancel changes</el-button>
+      </div>
       </div>
   </section>
 </template>
 <script>
 import memberService from '../services/member.service';
 import editProfile from '@/components/EditProfile.vue';
-// import uploadImg from '@/components/uploadImg.vue';
+import uploadImg from '@/components/uploadImg.vue';
 
 export default {
   data() {
     return {
       user: null,
-      saveImgBtn: false,
+      saveBtn: false,
       isEdit: false,
       uploadImg: false
     };
@@ -72,20 +76,24 @@ export default {
 
   },
   methods: {
-    addImg() {
-
+    addChanges(user) {
+      this.user = user;
+      this.isEdit = false;
+      this.uploadImg = false;
+      this.saveBtn = true;
     },
     changeMainImg(imgSrc, idx) {
       let img = this.user.mainImage;
       this.user.mainImage = imgSrc;
       this.user.images.splice(idx, 1, img);
-      this.saveImgBtn = true;
+      this.saveBtn = true;
     },
-    saveProfile(user) {
+    saveProfile() {
       this.isEdit = false;
-      this.user = user;
+      this.uploadImg = false;
       console.log('Save updated PROFILE: ', this.user);
       this.$store.dispatch({ type: 'updateUser', user: this.user });
+      this.saveBtn = false;
     },
     editProfile() {
       this.isEdit = true;
@@ -126,6 +134,11 @@ export default {
         return `Man, ${this.user.interestedIn.minAge} - ${
           this.user.interestedIn.maxAge
         } years old`;
+    },
+    userGender(){
+      if (this.user.gender === 'female') return 'Woman'
+      else if (this.user.gender === 'male') return 'Woman'
+      else return 'Gender is not defined'
     }
 
   },
@@ -138,7 +151,7 @@ export default {
   },
   components: {
     editProfile,
-    // uploadImg
+    uploadImg
   }
 };
 </script>
@@ -149,7 +162,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(248, 244, 244, 0.932);
+  background-color: rgba(206, 201, 201, 0.932);
   z-index: 3;
 }
 .title {
@@ -233,7 +246,8 @@ h2 {
 }
 .img-gallery {
   display: flex;
-  width: 300px;
+  flex-wrap: wrap;
+  width: 500px;
   cursor: pointer;
 }
 .details-section {
@@ -248,7 +262,7 @@ h2 {
 }
 
 button {
-  margin: 10px;
+  margin: 10px 10px 10px 0;
 }
 input {
   width: 50%;
