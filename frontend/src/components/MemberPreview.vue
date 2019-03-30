@@ -2,19 +2,7 @@
   <section class="member-preview">
     <router-link :to="'/member/'+member._id">
       <div class="imageContainer" :style="{backgroundImage: `url(${member.mainImage})`}"/>
-      <div class="status-wrapper flex space-between items-center">
-        <span class="like-status" :title="likeStatus">
-          <font-awesome-icon
-            class="heart my-heart"
-            icon="heart"
-            :class="{on: this.member.likes.iLike, off: !this.member.likes.iLike}"
-          />
-          <font-awesome-icon
-            class="heart member-heart"
-            icon="heart"
-            :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
-          />
-        </span>
+      <div v-if="this.member.online" class="status-wrapper flex space-between items-center">
         <span
           class="online-status"
           title="Online"
@@ -24,18 +12,30 @@
     </router-link>
     <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
     <div class="actions-wrapper">
-      <div class @click.stop="$emit('like', member)" title="Like">
+      <span class="like-status" :title="likeStatus" @click.stop="$emit('like', member)">
+        <font-awesome-icon
+          class="heart my-heart"
+          icon="heart"
+          :class="{on: this.member.likes.iLike, off: !this.member.likes.iLike}"
+        />
+        <font-awesome-icon
+          class="heart member-heart"
+          icon="heart"
+          :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
+        />
+      </span>
+      <!-- <div class @click.stop="$emit('like', member)" title="Like">
         <font-awesome-icon icon="heart"/>
-      </div>
+      </div>-->
       <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
-        <font-awesome-icon icon="comment" title="chat"/>
+        <font-awesome-icon icon="comment" title="Click to start chat"/>
       </div>
       <div>
         <font-awesome-icon
           class="notLike"
           icon="times"
           @click.stop="$emit('notLike', member._id)"
-          title="Remove"
+          title="Click to remove member"
         />
       </div>
     </div>
@@ -79,6 +79,12 @@ export default {
 
 <style scoped lang="scss">
 @import "../sass/_variables.scss";
+.btn-chat{
+  color:#8b368b
+}
+.notLike {
+  color: lightgray;
+}
 .status-wrapper {
   width: 100%;
   position: absolute;
@@ -103,7 +109,7 @@ a {
     color: rgb(59, 193, 197);
   }
   &.off {
-    color: gray;
+    color: lightgray;
   }
 }
 .member-heart {
@@ -113,7 +119,7 @@ a {
     color: #8b368b;
   }
   &.off {
-    color: gray;
+    color: lightgray;
   }
 }
 .member-name {
