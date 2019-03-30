@@ -144,7 +144,7 @@ export default {
 @import '@/sass/_btns.scss';
 
 .member-filter {
-  border-bottom: 1px solid rgb(235, 235, 235);
+  // border-bottom: 1px solid rgb(235, 235, 235);
   padding: 10px;
   background-color: white;
   position: fixed;

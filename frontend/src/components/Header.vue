@@ -9,7 +9,6 @@
           <div
             class="userName"
             v-if="loggedInUser"
-            style="margin-left:4rem;"
           >Welcome, {{loggedInUser.name}}</div>
         </div>
         <div class="nav-links flex items-center">
@@ -76,6 +75,7 @@ export default {
 }
 .userName {
   font-weight: bold;
+  margin-left:4rem;
 }
 .app-header {
   position: fixed;
@@ -112,6 +112,8 @@ export default {
   font-family: 'ABeeZee', sans-serif;
 }
 @media(max-width: 780px){
-
+  .userName {
+  margin: 0;
+}
 }
 </style>
