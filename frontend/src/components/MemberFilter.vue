@@ -3,7 +3,7 @@
     <form>
       <div class="filter-sections flex" >
         <div class="filter-section" :class="{'active': activeSection === 'sex'}">
-          <button @click="openFilterSection('sex')" class="btn-filter" >Gender</button>
+          <button @click="openFilterSection('sex')" class="btn btn-filter" >Gender</button>
           <div class="filter-details-wrapper relative" >
             <div class="filter-details">
               <el-radio-group size="small" @change="setFilter" v-model="filterBy.gender">
@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="filter-section" :class="{'active': activeSection === 'city'}">
-          <button @click="openFilterSection('city')" class="btn-filter" >Location</button>
+          <button @click="openFilterSection('city')" class="btn btn-filter" >Location</button>
           <div class="filter-details-wrapper relative">
             <div class="filter-details">
               <el-select size="small" @change="setFilter" v-model="filterBy.city" placeholder="Select location">
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="filter-section" :class="{'active': activeSection === 'height'}">
-          <button @click="openFilterSection('height')" class="btn-filter" >Height</button>
+          <button @click="openFilterSection('height')" class="btn btn-filter" >Height</button>
           <div class="filter-details-wrapper relative ">
             <div class="filter-details">
               <el-input size="small" @input="setFilter" type="number" placeholder="Enter min-height" v-model="filterBy.minHeight"></el-input>
@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="filter-section" :class="{'active': activeSection === 'age'}">
-          <button @click="openFilterSection('age')" class="btn-filter" >Age</button>
+          <button @click="openFilterSection('age')" class="btn btn-filter" >Age</button>
           <div class="filter-details-wrapper relative ">
             <div class="filter-details">
               <div class="age-filter">
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="filter-section"> 
-          <button @click="clearFilter" type="info"  class="btn-filter">Clear Filter</button>
+          <button @click="clearFilter" type="info"  class="btn btn-filter">Clear Filter</button>
         </div> 
       </div>
     </form>
@@ -141,6 +141,7 @@ export default {
 
 <style scoped lang="scss">
 @import '@/sass/_variables.scss';
+@import '@/sass/_btns.scss';
 
 .member-filter {
   border-bottom: 1px solid rgb(235, 235, 235);
@@ -154,22 +155,8 @@ export default {
   margin-bottom:1rem;
 
 .btn-filter{
-    border: 1px solid #ebebeb;
-    background-color: white;
     font-size: 0.88rem;
-    color: $color_primary;
-    border-radius: 4px;
-    display: inline-block;
-    padding: 6px 12px;
     margin-right: 5px;
-    font-family: inherit;
-    &:hover{
-      background-color: $color-light;
-    }
-    &:active{
-      background-color:$clr1;
-      color: white;
-    }
   }
 @media(min-width: 780px){
 margin-right: 20px;
