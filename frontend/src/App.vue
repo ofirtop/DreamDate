@@ -6,13 +6,13 @@
 
     <router-view/>
 
-    <incoming-msg-notification 
-      :member="memberForNotification"
-      :action="notificationAction"
-      v-if="memberForNotification"
-      @chat="openChatFromNotification"
-      @viewDetails="viewMemberDetailsFromNotification"
-      @close="memberForNotification = null"
+    <notif 
+      :member="memberForNotif"
+      :action="notifAction"
+      v-if="memberForNotif"
+      @chat="openChatFromNotif"
+      @viewDetails="viewMemberDetailsFromNotif"
+      @close="memberForNotif = null"
     />
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
@@ -21,7 +21,7 @@
 <script>
 import chat from "@/components/Chat.vue";
 import login from "@/components/Login.vue";
-import incomingMsgNotification from "@/components/IncomingMsgNotification.vue";
+import Notif from "@/components/Notif.vue";
 import appHeader from "@/components/Header.vue";
 import utilService from "@/services/util.service.js";
 
@@ -37,11 +37,11 @@ export default {
   data() {
     return {
       memberToChat: null,
-      memberForNotification: null,
+      memberForNotif: null,
       loginFailed: false,
       showLogin: false,
       signupFailed: false,
-      notificationAction: ''
+      notifAction: ''
     };
   },
   computed: {
@@ -54,19 +54,19 @@ export default {
     }
   },
   methods: {
-    openNotification(action, member){
-      this.memberForNotification = member;
-      this.notificationAction = action;
+    openNotif(action, member){
+      this.memberForNotif = member;
+      this.notifAction = action;
     },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
     },
-    openChatFromNotification(member) {
-      this.memberForNotification = null;
+    openChatFromNotif(member) {
+      this.memberForNotif = null;
       this.openChat(member);
     },
-    viewMemberDetailsFromNotification(member) {
-      this.memberForNotification = null;
+    viewMemberDetailsFromNotif(member) {
+      this.memberForNotif = null;
       this.$router.push("/member/" + member._id);
     },
     openChat(member) {
@@ -128,7 +128,7 @@ export default {
     });
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       console.log(EV_RECEIVED_LIKE, member);
-      this.openNotification('like', member);
+      this.openNotif('like', member);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
@@ -140,7 +140,7 @@ export default {
         this.$store
           .dispatch({ type: "loadMemberById", memberId })
           .then(member => {
-            this.openNotification('chat', member);
+            this.openNotif('chat', member);
           });
       }
     });
@@ -148,7 +148,7 @@ export default {
   components: {
     chat,
     login,
-    incomingMsgNotification,
+    Notif,
     appHeader
   }
 };
