@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
-    <login v-if="!loggedInUser" :isError="loginFailed" :isSignUpErr="signupFailed" 
-          @login="login" @signup="signup" @register="register"/>
+    <login
+      v-if="!loggedInUser"
+      :isError="loginFailed"
+      :isSignUpErr="signupFailed"
+      @login="login"
+      @signup="signup"
+      @register="register"
+    />
 
     <router-view/>
 
-    <notif 
+    <notif
       :member="memberForNotif"
       :action="notifAction"
       v-if="memberForNotif"
@@ -41,12 +47,15 @@ export default {
       loginFailed: false,
       showLogin: false,
       signupFailed: false,
-      notifAction: ''
+      notifAction: ""
     };
   },
   computed: {
     loggedInUser() {
-      console.log('this.$store.getters.loggedInUser: ',this.$store.getters.loggedInUser)
+      console.log(
+        "this.$store.getters.loggedInUser: ",
+        this.$store.getters.loggedInUser
+      );
       return this.$store.getters.loggedInUser;
     },
     newMembersWhoWatchedMeCount() {
@@ -54,7 +63,7 @@ export default {
     }
   },
   methods: {
-    openNotif(action, member){
+    openNotif(action, member) {
       this.memberForNotif = member;
       this.notifAction = action;
     },
@@ -87,27 +96,32 @@ export default {
 
       this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({type: "loginUser",userCredentials});
+        let loggedInUser = await this.$store.dispatch({
+          type: "loginUser",
+          userCredentials
+        });
         utilService.saveToStorage("loggedInUser", loggedInUser);
       } catch {
         this.loginFailed = true;
       }
     },
     async signup(userCredentials) {
-      console.log('Signing up (HOME):', userCredentials);
+      console.log("Signing up (HOME):", userCredentials);
       this.signupFailed = false;
       this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({type: "signupUser",userCredentials});
+        let loggedInUser = await this.$store.dispatch({
+          type: "signupUser",
+          userCredentials
+        });
         utilService.saveToStorage("loggedInUser", loggedInUser);
-        this.router.push(`/user/${loggedInUser}`)
+        this.router.push(`/user/${loggedInUser}`);
       } catch {
         this.signupFailed = true;
       }
-      
     },
     logout() {
-      localStorage.removeItem('loggedInUser');
+      localStorage.removeItem("loggedInUser");
       this.$store.dispatch({ type: "logoutUser" });
     },
     register() {
@@ -118,9 +132,8 @@ export default {
   async created() {
     //login
     let user = utilService.getFromStorage("loggedInUser");
-    if (user) await this.login({ name: user.name, pass: '123' });
+    if (user) await this.login({ name: user.name, pass: "123" });
     else this.showLogin = true;
-
 
     EVENT_BUS.$on(EV_START_CHAT, member => {
       console.log(EV_START_CHAT, member);
@@ -128,7 +141,7 @@ export default {
     });
     EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
       console.log(EV_RECEIVED_LIKE, member);
-      this.openNotif('like', member);
+      this.openNotif("like", member);
     });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
@@ -140,7 +153,7 @@ export default {
         this.$store
           .dispatch({ type: "loadMemberById", memberId })
           .then(member => {
-            this.openNotif('chat', member);
+            this.openNotif("chat", member);
           });
       }
     });
@@ -158,19 +171,20 @@ export default {
 @import "@/sass/_variables.scss";
 
 #app {
-   //font-family: 'ABeeZee', sans-serif;
+  //font-family: 'ABeeZee', sans-serif;
   // font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background: $bg-color;
 }
+
 #nav {
   a {
     // font-weight: bold;
     color: black;
-//     &.router-link-exact-active {
-//       color: $color_primary;
+    //     &.router-link-exact-active {
+    //       color: $color_primary;
   }
 }
 

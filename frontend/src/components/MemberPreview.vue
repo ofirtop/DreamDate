@@ -35,7 +35,7 @@
           class="notLike"
           icon="times"
           @click.stop="$emit('notLike', member._id)"
-          title="Click to remove member"
+          title="Click to remove"
         />
       </div>
     </div>
@@ -58,9 +58,10 @@ export default {
       if (this.member.likes) {
         if (this.member.likes.likeMe && this.member.likes.iLike)
           return "YA'! You Found a Match";
-        if (!this.member.likes.likeMe && !this.member.likes.iLike) return "";
-        if (this.member.likes.likeMe) return "likes you";
-        if (this.member.likes.iLike) return `You like`;
+        if (!this.member.likes.likeMe && !this.member.likes.iLike)
+          return `Click to like ${this.member.name}`;
+        if (this.member.likes.likeMe) return `${this.member.name} likes you`;
+        if (this.member.likes.iLike) return `You like  ${this.member.name}`;
       }
     },
     familyDesc() {
@@ -79,8 +80,8 @@ export default {
 
 <style scoped lang="scss">
 @import "../sass/_variables.scss";
-.btn-chat{
-  color:#8b368b
+.btn-chat {
+  color: #8b368b;
 }
 .notLike {
   color: lightgray;
@@ -104,7 +105,6 @@ a {
 }
 
 .my-heart {
-  width: 20px;
   &.on {
     color: rgb(59, 193, 197);
   }
@@ -113,7 +113,6 @@ a {
   }
 }
 .member-heart {
-  width: 20px;
   margin-left: -7px;
   &.on {
     color: #8b368b;
@@ -145,7 +144,7 @@ a {
   align-items: center;
   border-radius: 2px;
   position: relative;
-  height: 300px;
+  height: 320px;
   font-family: "Lora", serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -166,28 +165,32 @@ a {
 
 .actions-wrapper {
   width: 100%;
+  font-size: 24px;
   display: flex;
   justify-content: space-between;
-  // margin-top: -20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   color: $clr10;
   align-items: center;
   height: 25px;
-  padding: 0 15px;
+  padding: 0 20px;
   > div {
     cursor: pointer;
     padding: 5px;
   }
 }
 
-.font-awesome-icon {
-  font-size: 2em;
-  border: 1px solid;
-}
+// .font-awesome-icon {
+//   font-size: 2em;
+//   border: 1px solid;
+// }
 .online-status {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
+
+  border: 2px solid white;
   &.on {
     background-color: $clr3;
     box-shadow: 0px 0px 2px 2px white;
