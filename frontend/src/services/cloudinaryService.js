@@ -1,5 +1,6 @@
 export default {
-    uploadImg
+    uploadImg,
+
 }
 const CLOUD_UPLOAD_PRESET = 'dgdlcsa7'
 const CLOUD_NAME = "dgo4v1hnv"
@@ -16,8 +17,8 @@ function uploadImg(elForm, ev) {
     return doUploadImg(elForm)
         .then(url => url)
 }
-
 function doUploadImg(elForm) {
+
     var formData = new FormData();
     formData.append('file', elForm)
     formData.append('upload_preset', CLOUD_UPLOAD_PRESET);

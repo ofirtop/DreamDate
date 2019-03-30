@@ -11,6 +11,10 @@
         <div class="name-section flex items-center">
           <h2>{{user.name}}, {{userAge}}</h2>
         </div>
+        <div class="img-btns flex">
+        <el-button  @click="saveProfile" v-if="saveBtn" type="success">Save changes</el-button>
+        <el-button  @click="clearChanges" v-if="saveBtn" type="danger">Cancel changes</el-button>
+        </div>
         <hr>
         <div class="details-section">
           <div class="gender">{{userGender}}</div>
@@ -42,10 +46,7 @@
           @click="changeMainImg(img, idx)"
         ></div>
       </div>
-      <div class="img-btns flex">
-      <el-button  @click="saveProfile" v-if="saveBtn" type="success">Save changes</el-button>
-      <el-button  @click="clearChanges" v-if="saveBtn" type="danger">Cancel changes</el-button>
-      </div>
+      
       </div>
   </section>
 </template>
@@ -274,6 +275,7 @@ input {
   }
   .main-section {
     flex-direction: column;
+    width: 100%;
   }
   .container {
     width: 100%;

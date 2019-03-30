@@ -8,11 +8,18 @@
         <form class="publish-form" action="" enctype="multipart/form-data" @submit.prevent="previewFiles(event)">
             <label for="uploadPic" class="input-img">
               <input id="uploadPic" type="file" name="img" @change="previewFiles" multiple style="display:none"/>
-              Upload Picture
+              <i class="el-icon-upload"></i>
             </label>
-
+            <label for="takePic" class="input-img">
+              <input id="takePic" type="file" name="img" @change="previewFiles" accept="image/*;capture" style="display:none"/>
+              <i class="el-icon-mobile-phone"></i>
+            </label>
         </form>
         <div class="preview" :style="{backgroundImage: `url(${newImg})`}"></div>
+        <div class="rotate flex">
+          <img class="left" src="../assets/img/rotate-left.png" @click.stop="rotateLeft">
+          <img class="right" src="../assets/img/rotate-right.png" @click.stop="rotateRight">
+        </div>
         <el-button v-if="saveImgBtn" type="success" @click.stop="saveImg" plain>Save</el-button>
         
     </section>
@@ -24,16 +31,16 @@ export default {
   data() {
     return {
         user: null,
+        file: null,
         newImg: null,
-        saveImgBtn: false
+        saveImgBtn: false,
     }
   },
-// <form class="publish-form" action="" method="POST" enctype="multipart/form-data" 
   methods: {
     async previewFiles(event) {
-        let file =event.target.files[0];
-        console.log('file:', file, 'event', event);
-        let img = await cloudinaryService.uploadImg(file, event);
+        this.file = event.target.files[0];
+        console.log('file:', this.file, 'event', event);
+        let img = await cloudinaryService.uploadImg(this.file, event);
         this.newImg = img;
         this.saveImgBtn = true;
     },
@@ -42,6 +49,22 @@ export default {
       else this.user.images.push(this.newImg);
       this.$emit('addChanges', this.user);
       this.saveImgBtn = false;
+    },
+    rotateRight(){
+      let strToAdd= '/a_90'
+      let url = this.newImg;
+      let idx = url.indexOf('upload');
+      url = url.slice(0, idx+6) + strToAdd + url.slice(idx+6);
+      this.newImg = url;
+      this.saveImgBtn = true;
+    },
+    async rotateLeft(){
+      let strToAdd= '/a_-90'
+      let url = this.newImg;
+      let idx = url.indexOf('upload');
+      url = url.slice(0, idx+6) + strToAdd + url.slice(idx+6);
+      this.newImg = url;
+      this.saveImgBtn = true;
     }
   },
   created() {
@@ -94,6 +117,12 @@ form {
   justify-content: flex-end;
 }
 .el-button {
+  margin: 10px;
+}
+.rotate>* {
+  width:30px;
+  height:30px;
+  cursor:pointer;
   margin: 10px;
 }
 </style>
