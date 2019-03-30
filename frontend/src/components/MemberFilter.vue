@@ -159,6 +159,16 @@ export default {
     font-size: 0.88rem;
     margin-right: 5px;
   }
+@media(max-width: 780px){
+  .member-filter {
+    max-width: 100vw;
+    padding: 1px;
+    flex-wrap: wrap;
+  }
+  .btn-filter {
+    padding: 5px 1px;
+  }
+}
 @media(min-width: 780px){
 margin-right: 20px;
 }
