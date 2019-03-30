@@ -1,0 +1,19 @@
+@import 'variables';
+
+.btn{
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  background-color: white;
+  color: $clr12;
+  font-size: 1rem;
+  display: inline-block;
+  padding: 6px 12px;
+  font-family: inherit;
+    &:hover{
+      background-color: $clr13;
+    }
+    &:active{
+      background-color:$clr1;
+      color: white;
+    }
+  }

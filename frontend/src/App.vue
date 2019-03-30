@@ -1,15 +1,8 @@
 <template>
   <div id="app">
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
-    <login
-      v-if="!loggedInUser"
-      :isError="loginFailed"
-      :isSignUpErr="signupFailed"
-      @login="login"
-      @signup="signup"
-      @register="register"
-    />
-    
+    <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
+
     <router-view/>
 
     <notif
@@ -46,8 +39,7 @@ export default {
       memberForNotif: null,
       loginFailed: false,
       showLogin: false,
-      signupFailed: false,
-      notifAction: ""
+      notifAction: ''
     };
   },
   computed: {
@@ -106,27 +98,22 @@ export default {
       }
     },
     async signup(userCredentials) {
-      console.log("Signing up (HOME):", userCredentials);
-      this.signupFailed = false;
-      this.loginFailed = false;
+      console.log('Signing up (HOME):', userCredentials);
+        this.loginFailed = false;
       try {
         let loggedInUser = await this.$store.dispatch({
           type: "signupUser",
           userCredentials
         });
         utilService.saveToStorage("loggedInUser", loggedInUser);
-        this.router.push(`/user/${loggedInUser}`);
+        this.$router.push(`/user/${loggedInUser._id}`)
       } catch {
-        this.signupFailed = true;
+        this.loginFailed = true;
       }
     },
     logout() {
       localStorage.removeItem("loggedInUser");
       this.$store.dispatch({ type: "logoutUser" });
-    },
-    register() {
-      this.signupFailed = false;
-      this.loginFailed = false;
     }
   },
   async created() {

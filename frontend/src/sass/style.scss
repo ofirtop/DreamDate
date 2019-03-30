@@ -1,16 +1,15 @@
 @import 'reset';
 @import 'variables';
 @import 'helpers';
-@import url('https://fonts.googleapis.com/css?family=ABeeZee');
-@import url("https://fonts.googleapis.com/css?family=Lora");
-@import url("https://fonts.googleapis.com/css?family=Playfair+Display");
+@import 'btns';
+@import 'forms';
 
 *{
     box-sizing: border-box;
 }
 
 body{
-    color: $color_primary;
+    color: $clr12;
     font-family: $fonts-primary;
 }
 button{
@@ -18,8 +17,12 @@ button{
 }
 body, button, a, select, input, text-area, h1, h2, h3, h4, h5, h6{
     font-family: $fonts-primary;
-    color: $color_primary;
+    color: $clr12;
 }
+
+h1{font-size: 2 * 1rem;}
+h2{font-size: 1.5 * 1rem;}
+h3{font-size: 1.25 * 1rem;}
 
 
 .text-danger{

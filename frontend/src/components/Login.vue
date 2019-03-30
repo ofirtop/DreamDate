@@ -1,59 +1,57 @@
 <template>
-  <section class="login-demo-wrapper flex items-center content-center">
-      <div class="welcome-msg">
-      <h1>Welcome to DreamDate</h1>
-      </div>
-    <div class="login-demo">
-      <h1 v-if="!isNewUser">Login</h1>
-      <br>
-      <div class="flex space-between"  v-if="!isNewUser">
-        <form @submit.prevent="$emit('login', userCredentials)">
-          <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
-          <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
-          <button>Login</button>
-        </form>
-      </div>
+  <section>
+    <div class="wrapper flex content-center items-center">
 
-      <div class="mt-1"  v-if="!isNewUser">
-        Or choose a demo user:
-        <button @click="loginDemoMale('male')" class="mr-1">Man</button>
-        <button @click="loginDemoFemale('female')" class="mr-1">Woman</button>
-        <br>
-        <br>
-      </div>
+      <div class="login-wrapper flex content-center">
+        <div class="content">
 
-      <div v-if="errMsg" class="text-danger mt-1">Wrong username or password</div>
-
-      <h3 class="mb-1"  v-if="!isNewUser">First time here? Register and meet your dream</h3>
-      <button @click="register" v-if="!isNewUser">Register</button>
-      <div class="signup mb-1 flex" v-if="isNewUser">
-        <h4 class="mb-1">Back to <button @click="isNewUser=false">Login</button></h4>
-        <h1>Signup</h1><br>
-        <h4 class="mb-1">Choose your username and password</h4>
-        <form @submit.prevent="signup">
-          <input v-model="userCredentials.name" placeholder="Username" class="mr-1" autofocus>
-          <input v-model="userCredentials.pass" placeholder="Password" class="mr-1">
-          <button>Signup</button>
-        </form>
+          <h1 class="flex space-between items-center mb-5">
+            {{isNewUser ? 'Sign up' : 'Login'}}  
+            <button @click="flip" class="btn">
+              {{isNewUser ? 'Login' : 'Sign up'}} 
+            </button>
+          </h1>
+          <form @submit.prevent="submit" class="flex flex-column space-between align-start"  >
+            <div class="flex space-between mb-5 demo-login" :class="{invisible: isNewUser}">
+              <button @click="loginDemoMale('male')" class="btn btn-demo-man mr-2" type="button">Demo user <br /> Man</button>
+              <button @click="loginDemoFemale('female')" class="btn btn-demo-woman" type="button">Demo user <br /> Woman</button>
+            </div>
+            <input v-model="userCredentials.name" placeholder="Username" autofocus  class="input">
+            <br>
+            <input v-model="userCredentials.pass" placeholder="Password" class="input" type="password">
+            <br>
+            <div>
+              <button class="btn btn-login" type="submit">
+                {{isNewUser? 'Sign up' : 'Login'}}
+              </button>
+            </div>
+          </form>
+          <div class="text-danger mt-1" :class="{invisible: !isShowErr}">Wrong username or password</div>
+        </div>
       </div>
     </div>
-    <div class="welcome-msg">
+
+    <!-- <h3 class="mb-1"  v-if="!isNewUser">First time here? Register and meet your dream</h3> -->
+    <!-- <div class="welcome-msg">
       <h2>Dream your love and love your dream</h2>
-    </div>
+    </div> -->
+
+    <div class="screen"></div>
   </section>
 </template>
 
 <script>
 export default {
   name: 'login',
-  props:['isError','isSignUpErr'],
+  props:['hasError'],
   data() {
     return {
       userCredentials: {
         name: "",
         pass: ""
       },
-      isNewUser: false
+      isNewUser: false,
+      isShowErr: false
     };
   },
   methods: {
@@ -67,54 +65,57 @@ export default {
       this.userCredentials.pass = "123";
       this.$emit('login', this.userCredentials);
     },
-    register() {
-      this.isNewUser = true;
-      this.errMsg = false;
-      this.$emit('register')
+    submit(){
+      let evName = this.isNewUser ? 'signup' : 'login';
+      this.$emit(evName, this.userCredentials);
     },
-    signup(){
-      this.$emit('signup', this.userCredentials);
-      this.isNewUser = false;
+    flip() {
+      this.isNewUser = !this.isNewUser; 
+      this.isShowErr = false;
+      this.userCredentials = {
+        name: "",
+        pass: ""
+      };
     }
   },
-  created() {
-    this.errMsg = (this.isError || this.isSignUpErr);
+  watch:{
+    hasError(){
+      this.isShowErr = this.hasError;
+    }
   }
 };
 </script>
 
-<style scoped >
-.login-demo {
-  background-color: white;
-  opacity: 0.8;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 7px 4px #00000052;
-}
-.login-demo-wrapper {
-  position: fixed;
+<style scoped lang="scss">
+@import '@/sass/_variables.scss';
+
+.wrapper{
   width: 100vw;
   height: 100vh;
-  background: url("../assets/img/home-bg.jpg") no-repeat;
-
-  background-size: cover;
-  background-position: center;
-  z-index: 3000;
-  flex-direction: column;
-  justify-content: space-around
+  background-color: rgba(0, 0, 0, 0.75);
 }
-.welcome-msg {
-  z-index: 3001;
-  justify-self: flex-start;
+.screen{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  opacity:0.5;
+  z-index: 98;
 }
-.welcome-msg>* {
-  color: white;
-  text-shadow: 0px 1px 15px rgba(36,19,19,0.67);
-  font-size: 3em;
+.login-wrapper {
+  padding: 30px;
+  z-index:99;
+  background-color: white;
 }
-.signup {
-  flex-direction: column;
-  height: 100%;
+.input{
+  width: 100%;
 }
+.btn-login{
+  color: $clr1;
+}
+.btn-demo-man{ color: $clr1; }
+.btn-demo-woman{ color: $clr2; }
 
 </style>
