@@ -14,7 +14,7 @@
     </ul>
 
     <div class="input-wrapper flex ">
-      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" placeholder="type your message..."></el-input>
+      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" placeholder="type your message...">
       <div @click="sendMsg" class="send">
         <font-awesome-icon icon="share" title="send"  />
       </div>

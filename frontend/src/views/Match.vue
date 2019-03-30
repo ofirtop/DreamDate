@@ -1,15 +1,14 @@
 <template>
   <section v-if="loggedInUser" class="match-page">
     <main>
-      <member-list :members="matches"/>
+      <member-list :members="matches" @chat="startChat"/>
     </main>
   </section>
 </template>
 
 <script>
 import memberList from "@/components/MemberList.vue";
-import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
-
+import { EVENT_BUS, EV_NEW_MATCH, EV_START_CHAT } from "@/event-bus.js";
 export default {
   data() {
     return {
