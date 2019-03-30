@@ -48,7 +48,6 @@ export default {
 <style lang="scss" scoped>
 .nav-link {
   cursor: pointer;
-  font-family: "Playfair Display", serif;
   font-weight: 200;
 }
 .logo-name {
@@ -65,7 +64,6 @@ export default {
 }
 // .my-profile {
 //   // border:1px solid black;
-//   font-family: "Playfair Display", serif;
 //   font-weight: 200;
 // }
 #nav {
@@ -81,7 +79,6 @@ export default {
 }
 nav {
   // justify-content: space-between;
-  // font-family: "Playfair Display", serif;
 }
 .nav-links > * {
   margin: 10px;
@@ -124,6 +121,5 @@ nav {
   background-color: lightgray;
   align-items: center;
    justify-content: space-between;
-  font-family: "Playfair Display", serif;
 }
 </style>
