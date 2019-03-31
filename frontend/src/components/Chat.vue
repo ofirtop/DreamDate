@@ -149,4 +149,11 @@ ul {
   padding:5px;
   cursor: pointer;
 }
+@media (max-width: 760px) {
+  .chat-cmp{
+    height: 77vh;
+    width: 100vw;
+    max-width: 100vw;
+  }
+}
 </style>
