@@ -11,13 +11,28 @@ module.exports = {
 
 let msgs = [];
 
-function getHistoryMsgs(userId1, userId2) {
+async function getHistoryMsgs(userId1, userId2) {
     //TODO get from DB
-    let filteredMsgs = msgs.filter(msg => (msg.from === userId1 && msg.to === userId2)
-        || (msg.from === userId2 && msg.to === userId1)
-    );
+    userId1 = new ObjectId(userId1);
+    userId2 = new ObjectId(userId2);
 
-    return Promise.resolve(filteredMsgs);
+    return mongoService.connect()
+        .then(db => {
+            return db.collection('msg').find(
+                {
+                    //$or: [ { "from": userId1 },{ "to": userId2 }]
+                    $or: [
+                        {
+                            "from": userId1,
+                            "to": userId2
+                        },
+                        {
+                            "from": userId2,
+                            "to": userId1
+                        }
+                    ]
+                }).toArray()
+        });
 }
 
 function add(msg) {
@@ -39,7 +54,7 @@ function add(msg) {
 }
 
 async function getTopMsgs(userId) {
-    console.log('msgSvc', 'getTopMsgs', userId);
+    //console.log('msgSvc', 'getTopMsgs', userId);
     userId = new ObjectId(userId)
     let msgs = await mongoService.connect()
         .then(db => {
@@ -110,6 +125,6 @@ async function getTopMsgs(userId) {
 
                 ]).toArray()
         });
-    console.log('msgs', msgs);
+    //console.log('msgs', msgs);
     return Promise.resolve(msgs);
 }
