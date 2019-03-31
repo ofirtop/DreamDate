@@ -105,14 +105,14 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: white;
-  opacity:0.5;
+    opacity:0.1;
   z-index: 98;
 }
 .login-wrapper {
   padding: 30px;
   z-index:99;
   background-color: gray;
-  opacity:0.5;
+  opacity:0.9;
 }
 .input{
   width: 100%;

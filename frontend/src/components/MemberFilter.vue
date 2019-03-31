@@ -151,7 +151,7 @@ export default {
   width: 100%;
   max-width:1200px;
   background-color: white;
-  z-index: 9;
+  z-index: 5;
   margin-top:90px;
   margin-bottom:1rem;
 
@@ -159,18 +159,23 @@ export default {
     font-size: 0.88rem;
     margin-right: 5px;
   }
-@media(max-width: 780px){
+@media (max-width: 780px){
   .member-filter {
     max-width: 100vw;
     padding: 1px;
     flex-wrap: wrap;
+    z-index: 0 !important;
+    position: relative;
   }
   .btn-filter {
     padding: 5px 1px;
   }
 }
-@media(min-width: 780px){
+@media (min-width: 780px){
 margin-right: 20px;
+  // .member-filter {
+  // z-index: 9;
+  // }
 }
   .btn-apply{
     color: $clr1;
