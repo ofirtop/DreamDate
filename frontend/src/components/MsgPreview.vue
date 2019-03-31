@@ -6,7 +6,10 @@
             </div>
             
             <div class="txt-wrapper">
-                <h3>{{msg.from.name}}</h3>
+                <h3 class="flex space-between items-center">
+                    <span>{{msg.from.name}}</span>
+                    <span class="time">{{msg.timestamp | date}}</span>
+                </h3>
                 {{msg.txt}}
             </div>
         </li>
@@ -33,6 +36,9 @@ export default {
         h3{
             color: $clr11;
             margin-bottom: 5px;
+            .time{
+                font-size: 0.7em;
+            }
         }
     }
     .img-wrapper{
