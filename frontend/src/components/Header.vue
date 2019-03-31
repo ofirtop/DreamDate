@@ -14,7 +14,7 @@
 
         <li class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</li>
         <li class="nav-link" @click="getMatch">Matches</li>
-        <li class="nav-link" @click="toMsgs">Messages ({{msgs.length}})</li>        
+        <li class="nav-link" @click="toMsgs">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
         <li class="nav-link" @click="toGallery">Gallery</li>
         <li class="nav-link" @click="$emit('logout')">Logout</li>
       </ul>
@@ -36,6 +36,9 @@ export default {
   computed:{
     msgs(){
       return this.$store.getters.msgs;
+    },
+    newMsgCount(){
+      return this.$store.getters.unreadMsgCount;
     }
   },
   watch:{

@@ -6,7 +6,7 @@ function addMsgRoutes(app) {
     //Msg REST API
 
       //GET MSGS by MemberId
-      app.get('/msg/:memberId', async (req, res) => {
+      app.get('/user-msg/:memberId', async (req, res) => {
         if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
 
         let userId = req.session.loggedInUser._id;
@@ -15,11 +15,21 @@ function addMsgRoutes(app) {
         res.json(msgs);
     });
 
-    app.get('/msg', async (req, res) => {
+      //GET top msgs of user
+    app.get('/user-msg', async (req, res) => {
         if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
 
         let userId = req.session.loggedInUser._id;
         let msgs = await msgService.getTopMsgs(userId);
         res.json(msgs);
     });
+
+    app.put('/msg/:msgId', async (req, res)=>{
+        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
+
+        let {msgId} = req.params;
+        await msgService.markMsgAsRead(msgId);
+        res.end();
+    });
+
 }
