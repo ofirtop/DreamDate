@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "cloudinary-core": "^2.6.2",
     "element-ui": "^2.6.3",
+    "moment": "^2.24.0",
     "register-service-worker": "^1.6.2",
     "socket.io": "^2.0.3",
     "sweetalert2": "^8.7.0",
