@@ -6,13 +6,13 @@
         <i class="el-icon-close close" @click.stop="$emit('close')"></i>
       </div>
         <form class="publish-form" action="" enctype="multipart/form-data" @submit.prevent="previewFiles(event)">
-            <label for="uploadPic" class="input-img" title="upload from your device">
+            <!-- <label for="uploadPic" class="input-img" title="upload from your device">
               <input id="uploadPic" type="file" name="img" @change="previewFiles" multiple style="display:none"/>
               <i class="el-icon-upload"></i>
-            </label>
+            </label> -->
             <label for="takePic" class="input-img" title="take a picture">
               <input id="takePic" type="file" name="img" @change="previewFiles" accept="image/*;capture" style="display:none"/>
-              <i class="el-icon-mobile-phone"></i>
+              <i class="el-icon-upload"></i>
             </label>
         </form>
         <div class="preview" :style="{backgroundImage: `url(${newImg})`}"></div>

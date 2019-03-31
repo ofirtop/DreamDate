@@ -105,6 +105,7 @@ export default {
   border-radius: 5px;
   .header{
         padding: 15px 15px 5px 15px;
+        color: $clr2;
         .typing{
           color:#25ba25;
           font-size: 0.8em;
@@ -113,7 +114,7 @@ export default {
   }
 }
 ul {
-  background-color: beige;
+  background-color: rgb(247, 244, 244);
   flex-grow: 1;
   margin: 5px;
   padding: 5px;
@@ -148,5 +149,12 @@ ul {
 .send{
   padding:5px;
   cursor: pointer;
+}
+@media (max-width: 760px) {
+  .chat-cmp{
+    height: 77vh;
+    width: 97vw;
+    max-width: 100vw;
+  }
 }
 </style>

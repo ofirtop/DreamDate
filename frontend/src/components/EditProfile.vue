@@ -155,7 +155,7 @@ export default {
 
 .edit-profile {
   position: fixed;
-  top: 10%;
+  top: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;

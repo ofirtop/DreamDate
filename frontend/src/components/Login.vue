@@ -1,10 +1,9 @@
 <template>
   <section>
-    <div class="wrapper flex content-center items-center">
-
+    <div class="wrapper flex items-center">
+      <!-- <div class="logo"></div> -->
       <div class="login-wrapper flex content-center">
         <div class="content">
-
           <h1 class="flex space-between items-center mb-5">
             {{isNewUser ? 'Sign up' : 'Login'}}  
             <button @click="flip" class="btn">
@@ -98,6 +97,9 @@ export default {
   background-size:cover;
   
 }
+h1 {
+  color: white
+}
 .screen{
   position: fixed;
   top:0;
@@ -105,16 +107,17 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: white;
-  opacity:0.5;
+  opacity:0.1;
   z-index: 98;
 }
 .login-wrapper {
+  margin-left: 200px;
   padding: 30px;
   z-index:99;
-  background-color: gray;
-  opacity:0.5;
+  background-color: rgba(128, 128, 128, 0.822);
+  opacity:0.9;
 }
-.input{
+.input {
   width: 100%;
 }
 .btn-login{
@@ -122,5 +125,15 @@ export default {
 }
 .btn-demo-man{ color: $clr1; }
 .btn-demo-woman{ color: $clr2; }
-
+.logo {
+  z-index:99;
+  top:10px;
+  left:200px;
+  position: fixed;
+  background-image: url('../assets/img/logo_hh.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px;
+}
 </style>
