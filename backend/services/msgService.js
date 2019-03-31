@@ -22,14 +22,14 @@ function add(msg) {
     //TODO add to DB
 
     msgs.push(msg);
-    console.log('msgs', msgs);
+    //console.log('msgs', msgs);
 
     return Promise.resolve();
 }
 
 function getTopMsgs(userId) {
     //TODO get from Msg table in DB
-    console.log('msgs', msgs);
+    //console.log('msgs', msgs);
     let userMsgs = msgs.filter(msg => (msg.to === userId));
     userMsgs.reverse();
     let topMsgsMap = userMsgs.reduce((acc, msg) => {
@@ -39,27 +39,30 @@ function getTopMsgs(userId) {
         return acc;
     }, {});
 
-    console.log('topMsgsMap', topMsgsMap);
+    //console.log('topMsgsMap', topMsgsMap);
 
     let topMsgs = Array.from(Object.values(topMsgsMap));
-    console.log('topMsgs arr', topMsgs);
-    topMsgs = topMsgs.sort((msgA, msgB) => msgA.timestamp > msgB.timestamp);
-    console.log('topMsgs arr sorted', topMsgs);
+    //console.log('topMsgs arr', topMsgs);
+    topMsgs = topMsgs.sort((msgA, msgB) => msgA.timestamp < msgB.timestamp);
+    //console.log('topMsgs arr sorted', topMsgs);
 
     //get member details
-    memberDetailsPrms = [];
+    let memberDetailsPrms = [];
     topMsgs.forEach(async msg => {
+        console.log('msg from',msg.from );
+        
         memberDetailsPrms.push(userService.getMemberById(msg.from, userId)
             .then(member => {
-                msg.from = { _id: member._id, name: member.name, mainImage: member.mainImage };
-                return msg;
+                let msgCopy = JSON.parse(JSON.stringify(msg));
+                msgCopy.from = { _id: member._id, name: member.name, mainImage: member.mainImage };
+                return msgCopy;
             }));
 
     });
-    console.log('topMsgs final', topMsgs);
+    //console.log('topMsgs final', topMsgs);
 
-    return Promise.all(memberDetailsPrms, values => {
-        console.log('topMsgsWithDetails', topMsgs);
-        return topMsgs;
+    return Promise.all(memberDetailsPrms, msgsForClient => {
+       // console.log('topMsgsWithDetails', topMsgs);
+        return msgsForClient;
     });
 }
