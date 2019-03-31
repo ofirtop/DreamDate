@@ -1,4 +1,6 @@
 const userService = require('../services/userService');
+const msgService = require('../services/msgService');
+
 module.exports = addUserRoutes;
 
 function addUserRoutes(app) {
@@ -28,7 +30,7 @@ function addUserRoutes(app) {
     app.post('/user/signup', (req, res) => {
 
         const userCredentials = req.body;
-        
+
         return userService.signUp(userCredentials)
             .then(user => {
                 req.session.loggedInUser = user;
@@ -39,9 +41,9 @@ function addUserRoutes(app) {
             })
             .catch(err => {
                 console.log('user-route: SIGNUP catch:', err);
-                res.status(500).send('Problem Signup',err);
+                res.status(500).send('Problem Signup', err);
             })
-    })    
+    })
 
     //LOGOUT
     app.get('/user/logout', (req, res) => {
@@ -73,7 +75,7 @@ function addUserRoutes(app) {
                 return res.json(users)
             });
     })
-    
+
     //GET list of Matches
     app.get('/match', (req, res) => {
         if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
@@ -148,7 +150,7 @@ function addUserRoutes(app) {
     //UPDATE NOT LIKE
     app.put('/notlike', (req, res) => {
         if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
-        
+
         let userId = req.session.loggedInUser._id;
         let memberId = req.body._id;
         console.log(`New Update <NOT LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)

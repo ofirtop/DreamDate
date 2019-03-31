@@ -18,6 +18,7 @@
           </div>-->
 
           <div class="nav-link" @click="getMatch">Matches</div>
+          <div class="nav-link" @click="toMsgs">Messages {{msgs.length}}</div>
           <div class="nav-link" @click="toGallery">Gallery</div>
           <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
           <div class="nav-link" @click="$emit('logout')">Logout</div>
@@ -31,6 +32,16 @@
 export default {
   name: "app-header",
   props: ["loggedInUser"],
+  computed:{
+    msgs(){
+      return this.$store.getters.msgs;
+    }
+  },
+  watch:{
+    loggedInUser(){
+      if(this.loggedInUser) this.$store.dispatch({type: 'getTopMsgs'});
+    }
+  },
   methods: {
     getMatch() {
       this.$router.push("/match");
@@ -40,6 +51,9 @@ export default {
     },
     toGallery() {
       this.$router.push(`/`);
+    },
+    toMsgs(){
+      this.$router.push('/msg');
     }
   }
 };

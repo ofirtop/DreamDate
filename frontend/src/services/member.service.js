@@ -1,6 +1,6 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
-import Axios from 'axios';
+import axios from './axios.wrapper.js';
 import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 export default {
@@ -14,10 +14,6 @@ export default {
 
 const BASE_URL = process.env.NODE_ENV !== 'development'?
        '' : '//localhost:3003';
-
-var axios = Axios.create({
-  withCredentials: true
-});
 
 //temporary - until we have collection cities in DB 
 var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];

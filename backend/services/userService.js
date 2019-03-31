@@ -1,7 +1,7 @@
 const mongoService = require('./mongo-service')
 const ObjectId = require('mongodb').ObjectId;
 const imgService = require('./imgService')
-const socket = require('../socket')
+const socketService = require('./socketService');
 
 module.exports = {
     query,
@@ -117,7 +117,7 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
     } else { memberToModify.likes.iLike = false; }
 
     //online status
-    memberToModify.online = (socket.getSocketByUserId(memberToModify._id)) ? true : false;
+    memberToModify.online =  socketService.getByUserId(memberToModify._id);
 
     return memberToModify;
 }
@@ -237,7 +237,7 @@ function getMemberById(userId, loggedInUser) {
         .then(db => db.collection('user').findOne({ _id: id }))
         .then(memberToModify => {
             var userToSend = _modifyUserBeforeSend(memberToModify, loggedInUser);
-            console.log(userToSend);
+            //console.log(userToSend);
             return userToSend;
         })
 }

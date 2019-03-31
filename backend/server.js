@@ -9,6 +9,8 @@ const socketIo = require('socket.io');
 const addUserRoutes = require('./routes/users-route')
 const addLikesRoutes = require('./routes/likes-route')
 const addUtilRoutes = require('./routes/util-route')
+const addMsgRoutes = require('./routes/msgs-route')
+
 const webSocket = require('./socket.js');
 
 
@@ -41,6 +43,8 @@ app.get('/', (req, res) => {
 addUserRoutes(app)
 addLikesRoutes(app)
 addUtilRoutes(app)
+addMsgRoutes(app)
+
 webSocket.init(io);
 
 

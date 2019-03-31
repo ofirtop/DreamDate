@@ -12,6 +12,7 @@ export default new Vuex.Store({
   state: {
     members: [],
     matches: [],
+    msgs: [],
     loggedInUser: null,
     chat: {
       msgs: [],
@@ -78,6 +79,9 @@ export default new Vuex.Store({
       state.chat.msgs.push(msg);
       state.chat.isMemberTyping = false;
     },
+    addChatHistoryMsgs(state, { msgs }) {
+      state.chat.msgs = msgs;
+    },
     startChat(state, { member }) {
       state.chat.member = member;
     },
@@ -88,6 +92,9 @@ export default new Vuex.Store({
       state.chat.member = null;
       state.chat.msgs = [];
     },
+    addMsgs(state, {msgs}){
+      state.msgs = msgs;
+    }
   },
   getters: {
     members(state) {
@@ -114,6 +121,9 @@ export default new Vuex.Store({
       if (state.loggedInUser) {
         return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
       }
+    },
+    msgs(state){
+      return state.msgs;
     }
   },
   actions: {
@@ -137,7 +147,7 @@ export default new Vuex.Store({
     async updateUser({ commit }, { user }) {
       await userService.updateUser(user);
       commit({ type: 'setLoggedInUser', user });
-      
+
     },
     async addNewUser({ commit }, { user }) {
       let newUser = await userService.addNewUser(user);
@@ -199,6 +209,14 @@ export default new Vuex.Store({
     markWatchedMeMembersAsRead({ commit, state }) {
       commit({ type: 'markWatchedMeMembersAsRead' });
       return userService.update(state.loggedInUser);
+    },
+    async getMsgHistory({ commit }, { memberId }) {
+      let msgs = await chatService.getMsgHistory(memberId);
+      commit({ type: 'addChatHistoryMsgs', msgs });
+    },
+    async getTopMsgs({commit, state}){
+      let msgs = await chatService.getTopMsgs(state.loggedInUser._id);
+      commit({type: 'addMsgs', msgs});
     }
   }
 });

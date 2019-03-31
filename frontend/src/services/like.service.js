@@ -1,6 +1,6 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
-import Axios from 'axios';
+import axios from './axios.wrapper.js';
 
 export default {
     query,
@@ -9,12 +9,6 @@ export default {
 
 const BASE_URL = process.env.NODE_ENV !== 'development'?
        '' : '//localhost:3003';
-
-var axios = Axios.create({
-    withCredentials: true
-});
-
-
 
 _init();
 

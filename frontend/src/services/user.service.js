@@ -1,6 +1,5 @@
 import { SOCKET } from '@/socket.js';
-import store from '@/store.js';
-import Axios from 'axios';
+import axios from './axios.wrapper.js';
 
 export default {
     login,
@@ -13,9 +12,7 @@ export default {
 const BASE_URL = process.env.NODE_ENV !== 'development'?
        '' : '//localhost:3003';
 
-var axios = Axios.create({
-	withCredentials: true
-});
+
 
 async function login(userCredentials) {
     console.log('logging in', userCredentials);
@@ -24,8 +21,8 @@ async function login(userCredentials) {
         let loggedInUser = res.data;
         SOCKET.emit('login', loggedInUser._id);
         return Promise.resolve(loggedInUser);
-    } catch{
-        console.log('login failed');
+    } catch(err){
+        console.log('login failed', err);
         return Promise.reject();
     }
 }

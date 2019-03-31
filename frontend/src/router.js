@@ -6,6 +6,7 @@ import match from './views/Match.vue';
 import userProfile from './views/UserProfile.vue';
 import memberDetails from './views/MemberDetails.vue';
 import userProfileEdit from './views/UserProfileEdit.vue';
+import msgList from './views/MsgList.vue';
 
 Vue.use(Router)
 
@@ -15,7 +16,8 @@ export default new Router({
     { path: '/match', component: match },
     { path: '/user/edit/:userId?', component: userProfileEdit },
     { path: '/user/:userId', component: userProfile },
-    { path: '/member/:userId', component: memberDetails }
+    { path: '/member/:userId', component: memberDetails },
+    { path: '/msg', component: msgList }
     //,
     // {
     //   path: '/about',

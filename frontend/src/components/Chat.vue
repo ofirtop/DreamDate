@@ -1,6 +1,6 @@
 <template>
   <section class="chat-cmp flex flex-column">
-    <h1 class="flex space-between">
+    <div class="header flex space-between">
       <div>
         Chat with {{member.name}}
       </div>
@@ -8,7 +8,7 @@
       <div @click="closeChat">
         <font-awesome-icon icon="times" title="close" />
       </div>
-    </h1>
+    </div>
     <ul class="flex flex-column">
       <li v-for="(msg, idx) in msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
     </ul>
@@ -81,6 +81,10 @@ export default {
       this.$store.commit({ type: "endChat" });
       this.$emit("close");
     }
+  },
+  async created(){
+    console.log('chat cmp created');
+    await this.$store.dispatch({type: 'getMsgHistory', memberId: this.member._id});
   }
 };
 </script>
@@ -99,7 +103,7 @@ export default {
   border: 2px solid white;
   box-shadow: inset 0 0 9px 1px black;
   border-radius: 5px;
-  h1{
+  .header{
         padding: 15px 15px 5px 15px;
         .typing{
           color:#25ba25;
