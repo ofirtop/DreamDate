@@ -101,7 +101,7 @@ a {
 .imageContainer {
   height: 200px;
   background-size: cover;
-  background-position: top;
+  background-position: center;
 }
 
 .my-heart {

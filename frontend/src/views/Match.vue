@@ -1,15 +1,14 @@
 <template>
   <section v-if="loggedInUser" class="match-page">
     <main>
-      <member-list :members="matches"/>
+      <member-list :members="matches" @chat="startChat"/>
     </main>
   </section>
 </template>
 
 <script>
 import memberList from "@/components/MemberList.vue";
-import { EVENT_BUS, EV_NEW_MATCH } from "@/event-bus.js";
-
+import { EVENT_BUS, EV_NEW_MATCH, EV_START_CHAT } from "@/event-bus.js";
 export default {
   data() {
     return {
@@ -26,7 +25,7 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    matches(){
+    matches() {
       return this.$store.getters.matches;
     }
   },
@@ -51,6 +50,14 @@ export default {
 <style scoped>
 main {
   width: 100%;
-  padding: 20px 20px;
+  padding: 0 10px;
+  max-width: 1200px;
+  width: 100%;
+  margin-top:-50px;
+}
+.match-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

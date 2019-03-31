@@ -9,7 +9,6 @@
           <div
             class="userName"
             v-if="loggedInUser"
-            style="margin-left:4rem;"
           >Welcome, {{loggedInUser.name}}</div>
         </div>
         <div class="nav-links flex items-center">
@@ -17,10 +16,10 @@
           <img :src="loggedInUser.mainImage" alt="user image">
           </div>-->
 
+          <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
           <div class="nav-link" @click="getMatch">Matches</div>
           <div class="nav-link" @click="toMsgs">Messages {{msgs.length}}</div>
           <div class="nav-link" @click="toGallery">Gallery</div>
-          <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
           <div class="nav-link" @click="$emit('logout')">Logout</div>
         </div>
       </div>
@@ -66,7 +65,6 @@ export default {
 }
 .logo-name {
   display: flex;
-  // border: 1px solid black;
   align-items: center;
   margin: 10px;
 }
@@ -76,23 +74,11 @@ export default {
 .logout {
   cursor: pointer;
 }
-// .my-profile {
-//   // border:1px solid black;
-//   font-weight: 200;
-// }
 #nav {
-  // border:1px solid black;
-  width: 100%;
-  // position: relative;
-  display: flex;
-  // flex-direction: row;
-  // justify-content: space-between;
+   width: 100%;
+   display: flex;
   background-color: lightgray;
   justify-content: center;
-  // align-items: center;
-}
-nav {
-  // justify-content: space-between;
 }
 .nav-links > * {
   margin: 10px;
@@ -102,6 +88,7 @@ nav {
 }
 .userName {
   font-weight: bold;
+  margin-left:4rem;
 }
 .app-header {
   position: fixed;
@@ -134,6 +121,11 @@ nav {
   justify-content: space-between;
   background-color: lightgray;
   align-items: center;
-   justify-content: space-between;
+  justify-content: space-between;
+}
+@media(max-width: 780px){
+    .userName {
+    margin: 0;
+  }
 }
 </style>

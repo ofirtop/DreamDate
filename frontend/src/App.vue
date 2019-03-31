@@ -166,10 +166,7 @@ export default {
 
 #nav {
   a {
-    // font-weight: bold;
     color: black;
-    //     &.router-link-exact-active {
-    //       color: $color_primary;
   }
 }
 
