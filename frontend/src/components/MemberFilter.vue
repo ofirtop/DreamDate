@@ -151,8 +151,8 @@ export default {
   width: 100%;
   max-width:1200px;
   background-color: white;
-  z-index: 9;
-  margin-top:100px;
+  // z-index: 9;
+  margin-top:90px;
   margin-bottom:1rem;
 
 .btn-filter{

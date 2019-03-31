@@ -1,27 +1,24 @@
 <template>
-  <header v-if="loggedInUser" class="app-header flex items-center">
-    <nav id="nav" class="flex">
-      <div class="nav-content-container flex">
-        <div class="logo-name">
-          <router-link to="/">
-            <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
-          </router-link>
-          <div
-            class="userName"
-            v-if="loggedInUser"
-          >Welcome, {{loggedInUser.name}}</div>
-        </div>
-        <div class="nav-links flex items-center">
-          <!-- <div class="user-img" v-if="loggedInUser">
-          <img :src="loggedInUser.mainImage" alt="user image">
-          </div>-->
-
-          <div class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</div>
-          <div class="nav-link" @click="getMatch">Matches</div>
-          <div class="nav-link" @click="toGallery">Gallery</div>
-          <div class="nav-link" @click="$emit('logout')">Logout</div>
-        </div>
+  <header v-if="loggedInUser" class="app-header flex">
+    <nav id="nav" class="nav-content-container flex items-center">
+      <div class="logo-name flex items-center">
+        <router-link to="/">
+          <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
+        </router-link>
+        <div class="userName" v-if="loggedInUser">Welcome, {{loggedInUser.name}}</div>
       </div>
+      <ul id="nav-links" :class="{open:isOpen}" class="nav-links flex items-center">
+        <!-- <div class="user-img" v-if="loggedInUser">
+          <img :src="loggedInUser.mainImage" alt="user image">
+        </div>-->
+
+        <li class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</li>
+        <li class="nav-link" @click="getMatch">Matches</li>
+        <li class="nav-link" @click="toGallery">Gallery</li>
+        <li class="nav-link" @click="$emit('logout')">Logout</li>
+      </ul>
+      <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
+      <div :class="{open:isOpen}" class="toggle-menu-screen screen" @click="toggleMenu" alt="toggle main menu"></div>
     </nav>
   </header>
 </template>
@@ -30,6 +27,11 @@
 export default {
   name: "app-header",
   props: ["loggedInUser"],
+  data(){
+    return {
+      isOpen:false
+    }
+  },
   methods: {
     getMatch() {
       this.$router.push("/match");
@@ -39,33 +41,20 @@ export default {
     },
     toGallery() {
       this.$router.push(`/`);
+    },
+    toggleMenu() {
+      this.isOpen = !this.isOpen;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@/sass/_fonts.scss";
+@import '@/sass/_variables.scss';
+
 .nav-link {
   cursor: pointer;
-  font-family: 'ABeeZee', sans-serif;
-  font-weight: 200;
-}
-.logo-name {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-}
-.main-header {
-  margin-left: 10px;
-}
-.logout {
-  cursor: pointer;
-}
-#nav {
-   width: 100%;
-   display: flex;
-  background-color: lightgray;
-  justify-content: center;
 }
 .nav-links > * {
   margin: 10px;
@@ -73,17 +62,24 @@ export default {
 .nav-links {
   height: 100%;
 }
+
+.logo-name {
+  margin: 10px;
+  flex-grow: 1;
+  // border: 5px solid purple;
+}
+
 .userName {
-  font-weight: bold;
-  margin-left:4rem;
+  margin-left: 1rem;
 }
 .app-header {
   position: fixed;
-  background-color: white;
+  background-color: lightgray;
   top: 0;
   z-index: 9;
-  width: 100%;
-  height: 100px;
+  width: 100vw;
+  height: 85px;
+  // border: 5px solid black;
 }
 .user-img {
   width: 36px;
@@ -93,27 +89,83 @@ export default {
   img {
     width: 100%;
   }
-  // @media (max-width: 700px){
-  //   .userName {
-  //     display: none;
-  //   }
-  // }
 }
-.nav-content-container{
+.nav-content-container {
   max-width: 1200px;
-  width: 100%;
+  width: 100vw;
+  margin: 0 auto;
+  // border: 1px solid red;
   position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: lightgray;
-  align-items: center;
-   justify-content: space-between;
-  font-family: 'ABeeZee', sans-serif;
 }
-@media(max-width: 780px){
-  .userName {
-  margin: 0;
+.toggle-menu-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.75rem;
+  margin-right: 20px;
+  display: none;
+  font-family: fontawesome;
+  font-size: inherit;
 }
+
+@media (max-width: 740px) {
+  .toggle-menu-btn {
+    display: block;
+  }
+}
+
+
+@media (max-width: 740px) {
+  .nav-links {
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 300;
+    background-color: $clr2;
+    color:white;
+    height: 100vh;
+    transition: transform 0.3s;
+    transform: translate(100%, 0);
+    opacity: .9;
+  }
+  .open.nav-links {
+    transform: translate(0, 0);
+  }
+  .nav-links li {
+    height: auto;
+    line-height: .7;
+    padding: 20px 0;
+    width: 40vw;
+    border: none;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .nav-links li.active {
+    border-width: 1px;
+  }
+}
+
+.toggle-menu-screen {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  background: rgba(42, 42, 42, 0.6);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  cursor: pointer;
+  transition: opacity .5s;
+}
+@media (max-width: 740px) {
+  .toggle-menu-screen {
+    display: block;
+  }
+}
+.open.toggle-menu-screen {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
