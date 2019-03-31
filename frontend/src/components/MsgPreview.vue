@@ -2,12 +2,12 @@
     <section class="msg-prev-cmp">
         <li class="flex space-between">
             <div class="img-wrapper">
-                <img :src="msg.from.mainImage" alt="user image">
+                <img :src="msg.fromUser.mainImage" alt="user image">
             </div>
             
             <div class="txt-wrapper">
                 <h3 class="flex space-between items-center">
-                    <span>{{msg.from.name}}</span>
+                    <span>{{msg.fromUser.name}}</span>
                     <span class="time">{{msg.timestamp | date}}</span>
                 </h3>
                 {{msg.txt}}
