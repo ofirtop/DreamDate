@@ -1,6 +1,5 @@
 <template>
-    <section class="msg-prev-cmp">
-        <li class="flex space-between">
+        <li class="msg-prev-cmp flex space-between" @click="$emit('openChat', msg)" :class="{unread: !msg.isRead}">
             <div class="img-wrapper">
                 <img :src="msg.fromUser.mainImage" alt="user image">
             </div>
@@ -26,19 +25,20 @@ export default {
 <style scoped lang="scss">
 @import '@/sass/_variables.scss';
 
-.msg-prev-cmp{
-    li{
-        border: 1px solid $clr14;
-        border-radius: 5px;
-        height: 130px;
-        width: 400px;
-        margin-top: 20px;
-        h3{
-            color: $clr11;
-            margin-bottom: 5px;
-            .time{
-                font-size: 0.7em;
-            }
+li.msg-prev-cmp{
+    border: 1px solid $clr14;
+    border-radius: 5px;
+    height: 130px;
+    width: 400px;
+    margin-top: 20px;
+    &.unread{
+        background-color: $clr14;
+    }
+    h3{
+        color: $clr11;
+        margin-bottom: 5px;
+        .time{
+            font-size: 0.7em;
         }
     }
     .img-wrapper{
@@ -56,6 +56,7 @@ export default {
     .txt-wrapper{
         text-align: left;
         padding: 5px 8px;
+        flex-grow: 1;
     }
 }
 </style>

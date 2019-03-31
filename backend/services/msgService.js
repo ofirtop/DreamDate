@@ -6,10 +6,16 @@ const userService = require('./userService');
 module.exports = {
     getHistoryMsgs,
     add,
-    getTopMsgs
+    getTopMsgs,
+    markMsgAsRead
 };
 
-let msgs = [];
+async function markMsgAsRead(msgId){
+    msgId = new ObjectId(msgId);
+
+    let db = await mongoService.connect();
+    return db.collection('msg').updateOne({ _id: msgId }, { $set: {isRead: true} });
+}
 
 async function getHistoryMsgs(userId1, userId2) {
     //TODO get from DB

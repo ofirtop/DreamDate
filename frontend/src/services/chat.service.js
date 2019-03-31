@@ -8,7 +8,8 @@ export default {
     getEmptyMsg,
     finishTyping,
     getMsgHistory,
-    getTopMsgs
+    getTopMsgs,
+    markMsgAsRead
 };
 
 const BASE_URL = process.env.NODE_ENV !== 'development'? '' : '//localhost:3003';
@@ -52,7 +53,7 @@ function getEmptyMsg(from, to) {
 }
 
 function getMsgHistory(memberId) {
-    return axios.get(`${BASE_URL}/msg/${memberId}`)
+    return axios.get(`${BASE_URL}/user-msg/${memberId}`)
         .then(res => {
             console.log('msg history', res.data);
            return res.data;
@@ -60,9 +61,13 @@ function getMsgHistory(memberId) {
 }
 
 function getTopMsgs(){
-    return axios.get(`${BASE_URL}/msg`)
+    return axios.get(`${BASE_URL}/user-msg`)
         .then(res => {
             console.log('msg get all', res.data);
            return res.data;
         });
+}
+
+function markMsgAsRead(msgId){
+    return axios.put(`${BASE_URL}/msg/${msgId}`);
 }
