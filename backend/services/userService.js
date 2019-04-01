@@ -40,6 +40,10 @@ function query(query, loggedUser) {
                             return _modifyUserBeforeSend(member, loggedUser)
                         })
                         // console.log(modifiedMembers)
+
+                        //remove match members
+                        modifiedMembers = modifiedMembers.filter(member => !(member.likes.likeMe && member.likes.iLike));
+
                         return modifiedMembers;
                     } else {
                         return Promise.reject("No Clients")
