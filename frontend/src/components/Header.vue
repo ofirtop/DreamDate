@@ -100,6 +100,7 @@ export default {
 .app-header {
   position: fixed;
   background-color: white;
+  border-bottom: 1px solid #ccc;
   top: 0;
   z-index: 99;
   width: 100vw;

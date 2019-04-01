@@ -32,8 +32,8 @@ export default {
 }
 .member-list ul {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  grid-gap: 70px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-gap: 50px;
   position: relative;
   /* top: 9rem; */
 }
