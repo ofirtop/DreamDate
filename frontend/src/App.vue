@@ -182,16 +182,4 @@ export default {
   background: $bg-color;
 }
 
-#nav {
-  a {
-    color: black;
-  }
-}
-
-.logo {
-  width: 80px;
-}
-.clickable {
-  cursor: pointer;
-}
 </style>

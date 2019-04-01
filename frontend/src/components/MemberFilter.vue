@@ -156,7 +156,6 @@ export default {
   margin-bottom:1rem;
 
 .btn-filter{
-    font-size: 0.88rem;
     margin-right: 5px;
   }
 @media (max-width: 780px){

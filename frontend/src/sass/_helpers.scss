@@ -2,12 +2,12 @@
 .flex{ display: flex; }
 .items-center{ align-items: center; }
 .align-start{ align-items: start; }
+.align-end{ align-items: flex-end; }
 .content-center{ justify-content: center; }
 .content-end{ justify-content: flex-end; }
 .space-between{ justify-content: space-between; }
 .space-around { justify-content: space-around; }
 .flex-column{ flex-direction: column; }
-.full-width { width: 100% }
 
 /*UTILS*/
 .mr-1{ margin-right: 0.8rem; }
@@ -29,3 +29,7 @@
 
 /*POSITION*/
 .relative{ position: relative; }
+
+/*MISC*/
+.full-width { width: 100% }
+.clickable { cursor: pointer;}

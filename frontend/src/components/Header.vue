@@ -1,13 +1,13 @@
 <template>
   <header v-if="loggedInUser" class="app-header flex">
-    <nav id="nav" class="nav-content-container flex items-center">
-      <div class="logo-name flex items-center">
-        <router-link to="/">
-          <img src="@/assets/img/logo_hh.png" alt="logo" class="logo">
+    <nav id="nav" class="nav-content-container flex align-end">
+      <div class="logo-name flex align-end">
+        <router-link to="/" class="logo-wrapper">
+          <img src="@/assets/img/logo_hh.png" alt="logo" >
         </router-link>
         <div class="userName" v-if="loggedInUser">Welcome, {{loggedInUser.name}}</div>
       </div>
-      <ul id="nav-links" :class="{open:isOpen}" class="nav-links flex items-center">
+      <ul id="nav-links" :class="{open:isOpen}" class="nav-links flex align-end">
         <!-- <div class="user-img" v-if="loggedInUser">
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>-->
@@ -15,7 +15,7 @@
         <li class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</li>
         <li class="nav-link" @click="getMatch">Matches</li>
         <li class="nav-link" @click="toMsgs">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
-        <li class="nav-link" @click="toGallery">Gallery</li>
+        <li class="nav-link" @click="toGallery">Home</li>
         <li class="nav-link" @click="$emit('logout')">Logout</li>
       </ul>
       <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
@@ -75,6 +75,7 @@ export default {
 }
 .nav-links > * {
   margin: 10px;
+  
 }
 .nav-links {
   height: 100%;
@@ -85,13 +86,20 @@ export default {
   flex-grow: 1;
   // border: 5px solid purple;
 }
-
+.logo-wrapper{
+  display: inline-block;
+    width: 80px;
+    img{
+      width: 100%;
+      transform: translateY(6px);
+    }
+}
 .userName {
   margin-left: 1rem;
 }
 .app-header {
   position: fixed;
-  background-color: lightgray;
+  background-color: white;
   top: 0;
   z-index: 99;
   width: 100vw;
@@ -113,6 +121,7 @@ export default {
   margin: 0 auto;
   // border: 1px solid red;
   position: relative;
+  font-size: 1.3rem;
 }
 .toggle-menu-btn {
   background: none;
