@@ -1,6 +1,7 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
 import axios from './axios.wrapper.js';
+import config from '@/config.js';
 
 export default {
     sendMsg,
@@ -11,8 +12,6 @@ export default {
     getTopMsgs,
     markMsgAsRead
 };
-
-const BASE_URL = process.env.NODE_ENV !== 'development'? '' : '//localhost:3003';
 
 _init();
 
@@ -53,7 +52,7 @@ function getEmptyMsg(from, to) {
 }
 
 function getMsgHistory(memberId) {
-    return axios.get(`${BASE_URL}/user-msg/${memberId}`)
+    return axios.get(`${config.BASE_URL}/user-msg/${memberId}`)
         .then(res => {
             console.log('msg history', res.data);
            return res.data;
@@ -61,7 +60,7 @@ function getMsgHistory(memberId) {
 }
 
 function getTopMsgs(){
-    return axios.get(`${BASE_URL}/user-msg`)
+    return axios.get(`${config.BASE_URL}/user-msg`)
         .then(res => {
             console.log('msg get all', res.data);
            return res.data;
@@ -69,5 +68,5 @@ function getTopMsgs(){
 }
 
 function markMsgAsRead(msgId){
-    return axios.put(`${BASE_URL}/msg/${msgId}`);
+    return axios.put(`${config.BASE_URL}/msg/${msgId}`);
 }

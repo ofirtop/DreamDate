@@ -1,14 +1,12 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
 import axios from './axios.wrapper.js';
+import config from '@/config.js';
 
 export default {
     query,
     add
 };
-
-const BASE_URL = process.env.NODE_ENV !== 'development'?
-       '' : '//localhost:3003';
 
 _init();
 
@@ -47,7 +45,7 @@ function query(userId) {
 
 function add(from, to) {
     console.log('like.service:add() memberId:',to)
-    return axios.put(`${BASE_URL}/like`, {_id: to})
+    return axios.put(`${config.BASE_URL}/like`, {_id: to})
         .then(res => {
             //console.log('FRONT: like.service:add() - res received from server: ',res.data);
             let obj = { from, to };
@@ -58,7 +56,7 @@ function add(from, to) {
 
 // async function addLike(from, to) {
 //   try {
-//     await axios.post(`${BASE_URL}/user/likes`, { from, to });
+//     await axios.post(`${config.BASE_URL}/user/likes`, { from, to });
 //   }
 //   catch{
 //     //TODO
