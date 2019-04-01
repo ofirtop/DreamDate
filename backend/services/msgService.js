@@ -7,14 +7,15 @@ module.exports = {
     getHistoryMsgs,
     add,
     getTopMsgs,
-    markMsgAsRead
+    markMsgAsRead,
+    getById
 };
 
-async function markMsgAsRead(msgId){
+async function markMsgAsRead(msgId) {
     msgId = new ObjectId(msgId);
 
     let db = await mongoService.connect();
-    return db.collection('msg').updateOne({ _id: msgId }, { $set: {isRead: true} });
+    return db.collection('msg').updateOne({ _id: msgId }, { $set: { isRead: true } });
 }
 
 async function getHistoryMsgs(userId1, userId2) {
@@ -58,6 +59,44 @@ function add(msg) {
             //console.error('msgSvc', 'insert msg', err);
             throw err;
         });
+}
+
+async function getById(msgId) {
+    msgId = new ObjectId(msgId);
+
+    let msgArray = await mongoService
+        .connect()
+        .then((db) => {
+            return db.collection('msg').aggregate([
+                {
+                    $match: { "_id": msgId }
+                },
+                {
+                    $lookup: {
+                        from: 'user',
+                        localField: 'from',
+                        foreignField: '_id',
+                        as: 'fromUser'
+                    }
+                },
+                {
+                    $unwind: "$fromUser"
+                },
+                {
+                    $project: {
+                        "_id": 1,
+                        "txt": 1,
+                        "isRead": 1,
+                        "timestamp": 1,
+                        "fromUser._id": 1,
+                        "fromUser.name": 1,
+                        "fromUser.mainImage": 1,
+                    }
+                },
+            ]).toArray();
+        });
+
+        return msgArray[0];
 }
 
 async function getTopMsgs(userId) {
@@ -124,6 +163,7 @@ async function getTopMsgs(userId) {
                             "_id": "$msg._id",
                             "txt": "$msg.txt",
                             "isRead": "$msg.isRead",
+                            "timestamp": "$maxTimestamp",
                             "fromUser._id": 1,
                             "fromUser.name": 1,
                             "fromUser.mainImage": 1,
