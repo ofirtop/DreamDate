@@ -43,6 +43,7 @@ async function getHistoryMsgs(userId1, userId2) {
 
 function add(msg) {
     msg.isRead = false;
+    msg.timestamp = Date.now();
     msg.from = new ObjectId(msg.from);
     msg.to = new ObjectId(msg.to);
 
