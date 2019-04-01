@@ -1,7 +1,9 @@
 <template>
   <section class="edit-profile flex">
+    <div class="top-line flex items-center space-between full-width">
+    <h1>Edit details</h1>
     <i class="el-icon-close" @click="$emit('close')"></i>
-    <h1>Edit Profile</h1>
+    </div>
     <div class="edit-container">
       <!-- <h2>{{user.name}}</h2> -->
       <div>
@@ -14,6 +16,15 @@
             :value="gender.value"
           ></el-option>
         </el-select>
+      </div>
+      <div>
+        <label>About me</label>
+        <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="Tell about yourself"
+            v-model="user.descr">
+          </el-input>
       </div>
       <div>
         <label>Height</label>
@@ -155,11 +166,11 @@ export default {
 
 .edit-profile {
   position: fixed;
-  top: 15%;
+  top: 13%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
+  z-index: 11;
   background-color: rgba(248, 248, 248, 1);
 
 }
@@ -178,11 +189,14 @@ export default {
     margin: 5px;
     align-content: center
 }
+.top-line {
+  padding: 5px 10px;
+}
 label {
     color: black;
 }
 h1 {
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 .el-icon-close {
@@ -193,7 +207,7 @@ h1 {
 }
 .editInput,
 .el-date-editor.el-input {
-  width: 150px;
+  width: 200px;
 }
 .el-slider__bar {
     background-color: $clr1;
@@ -204,5 +218,13 @@ button {
   width: 100px;
   align-self: center;
   background-color: $clr1;
+}
+@media (max-width: 760px) {
+  .edit-profile {
+  position: absolute;
+  top: 17%;
+  width: 100vw;
+  height: 100%;
+}
 }
 </style>

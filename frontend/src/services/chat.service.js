@@ -1,17 +1,13 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
-import axios from './axios.wrapper.js';
+
 
 export default {
     sendMsg,
     startTyping,
     getEmptyMsg,
-    finishTyping,
-    getMsgHistory,
-    getTopMsgs
+    finishTyping
 };
-
-const BASE_URL = process.env.NODE_ENV !== 'development'? '' : '//localhost:3003';
 
 _init();
 
@@ -49,20 +45,4 @@ function finishTyping(msg) {
 
 function getEmptyMsg(from, to) {
     return { from, to, txt: '' };
-}
-
-function getMsgHistory(memberId) {
-    return axios.get(`${BASE_URL}/msg/${memberId}`)
-        .then(res => {
-            console.log('msg history', res.data);
-           return res.data;
-        });
-}
-
-function getTopMsgs(){
-    return axios.get(`${BASE_URL}/msg`)
-        .then(res => {
-            console.log('msg get all', res.data);
-           return res.data;
-        });
 }

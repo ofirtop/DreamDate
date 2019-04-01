@@ -26,10 +26,35 @@
       </div>
       <div class="main-img">
         <div class="mainImg" :style="{backgroundImage: `url(${member.mainImage})`}"></div>
-        <div class="likes-panel clickable">
+        <div class="actions-wrapper">
+          <span class="like-status" :title="likeStatus" @click.stop="$emit('like', member)">
+          <font-awesome-icon
+            class="heart my-heart"
+            icon="heart"
+            :class="{on: this.member.likes.iLike, off: !this.member.likes.iLike}"
+          />
+          <font-awesome-icon
+            class="heart member-heart"
+            icon="heart"
+            :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
+          />
+          </span>
+          <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
+            <font-awesome-icon icon="comment" title="Click to start chat"/>
+          </div>
+          <div>
+          <font-awesome-icon
+            class="notLike"
+            icon="times"
+            @click.stop="notLike"
+            title="Click to remove"
+            />
+          </div>
+        </div>
+        <!-- <div class="likes-panel clickable">
             <font-awesome-icon class="like" icon="heart" @click.stop="like"/>
             <font-awesome-icon class="notLike" icon="times" @click.stop="notLike"/>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="img-gallery mt-1 mb-1">
@@ -43,7 +68,10 @@
   </section>
 </template>
 <script>
+import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
+
 export default {
+  name: "member-details",
   data() {
     return {
       member: null
@@ -55,6 +83,14 @@ export default {
       this.member.mainImage = imgSrc;
       this.member.images.splice(idx, 1, img);
     },
+    // like() {
+    //   this.$emit('like', this.member);
+    //   this.$router.push('/')
+    // },
+    notLike() {
+      this.$emit('notLike', this.member._id);
+      this.$router.push('/')
+    }
   },
   computed: {
     memberAge() {
@@ -75,6 +111,19 @@ export default {
         return `Man, ${this.member.interestedIn.minAge} - ${
           this.member.interestedIn.maxAge
         } years old`;
+    },
+    likeStatus() {
+      if (this.member.likes) {
+        if (this.member.likes.likeMe && this.member.likes.iLike)
+          return "YA'! You Found a Match";
+        if (!this.member.likes.likeMe && !this.member.likes.iLike)
+          return `Click to like ${this.member.name}`;
+        if (this.member.likes.likeMe) return `${this.member.name} likes you`;
+        if (this.member.likes.iLike) return `You like  ${this.member.name}`;
+      }
+    },
+    isMatch() {
+      return this.member.likes.likeMe && this.member.likes.iLike;
     }
   },
   created() {
@@ -160,28 +209,44 @@ h1 {
   font-size: 2em;
   font-weight: bold;
 }
-.likes-panel {
-  font-size: 1.5em;
+.actions-wrapper {
+  width: 100%;
+  font-size: 24px;
   display: flex;
-  justify-content: space-around;
-  margin: 10px;
+  justify-content: space-between;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  color: $clr10;
   align-items: center;
-  height: 40px;
-}
-.likes-panel>*{
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.likes-panel>*:hover {
-  font-size: 1.5em;
-}
-.likes-panel {
-  .like{
-    color: $clr1;
-  }
-  .notLike{
-    color: $clr2;
+  height: 25px;
+  padding: 0 20px;
+  > div {
+    cursor: pointer;
+    padding: 5px;
   }
 }
+// .likes-panel {
+//   font-size: 1.5em;
+//   display: flex;
+//   justify-content: space-around;
+//   margin: 10px;
+//   align-items: center;
+//   height: 40px;
+// }
+// .likes-panel>*{
+//   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+// }
+// .likes-panel>*:hover {
+//   font-size: 1.5em;
+// }
+// .likes-panel {
+//   .like{
+//     color: $clr1;
+//   }
+//   .notLike{
+//     color: $clr2;
+//   }
+// }
 // .backToAll {
 //   padding: 5px;
 //   border: gray;
@@ -202,6 +267,29 @@ h1 {
     border-color: $clr11;
     box-shadow: 0px 0px 4px 1px $clr11;
   }
+}
+.my-heart {
+  &.on {
+    color: rgb(59, 193, 197);
+  }
+  &.off {
+    color: lightgray;
+  }
+}
+.member-heart {
+  margin-left: -7px;
+  &.on {
+    color: #8b368b;
+  }
+  &.off {
+    color: lightgray;
+  }
+}
+.btn-chat {
+  color: #8b368b;
+}
+.notLike {
+  color: lightgray;
 }
  @media (max-width: 800px) {
     .container {

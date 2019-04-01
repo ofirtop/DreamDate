@@ -1,6 +1,7 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store.js';
 import axios from './axios.wrapper.js';
+import config from '@/config.js';
 import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 export default {
@@ -11,9 +12,6 @@ export default {
   getCities,
   watchMember
 }
-
-const BASE_URL = process.env.NODE_ENV !== 'development'?
-       '' : '//localhost:3003';
 
 //temporary - until we have collection cities in DB 
 var cities = ['Tel Aviv', 'Beer Sheva', 'Bat Yam', 'Ramat Gan', 'Herzlia', 'Petah Tikva', 'Haifa'];
@@ -50,7 +48,7 @@ function getCities() {
 }
 
 function query(filter) {
-  let strUrl = `${BASE_URL}/user/?`
+  let strUrl = `${config.BASE_URL}/user/?`
   if (filter.gender) strUrl += `gender=${filter.gender}`
   if (filter.minAge) strUrl += `&&minAge=${filter.minAge}`
   if (filter.maxAge) strUrl += `&&maxAge=${filter.maxAge}`
@@ -61,20 +59,20 @@ function query(filter) {
 }
 
 function queryMatch() {
-  let strUrl = `${BASE_URL}/match`
+  let strUrl = `${config.BASE_URL}/match`
   return axios.get(strUrl)
     .then(res => res.data);
 }
 
 function getMemberById(userId) {
-  return axios.get(`${BASE_URL}/user/${userId}`)
+  return axios.get(`${config.BASE_URL}/user/${userId}`)
     .then(res => res.data)
     .catch(err => console.log('Error:', err));
 }
 
 function updateNotLikeMember(memberIdToUpdate) {
   console.log(memberIdToUpdate);
-  return axios.put(`${BASE_URL}/notlike`, { _id: memberIdToUpdate })
+  return axios.put(`${config.BASE_URL}/notlike`, { _id: memberIdToUpdate })
     .then(res => {
       console.log('member.service: updateNotLikeMember() res.data._id: ', res.data._id)
       return res.data._id
@@ -91,7 +89,7 @@ function updateNotLikeMember(memberIdToUpdate) {
   //   { id: memberId, isRead: false, date: new Date() }
   //   */
 
-  //   let res = axios.post(`${BASE_URL}/user/watch`, { from, to });
+  //   let res = axios.post(`${config.BASE_URL}/user/watch`, { from, to });
   // } catch{
   //   //TODO
   // }

@@ -3,8 +3,7 @@
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
     <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
 
-    <router-view/>
-
+    <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
     <notif
       :member="memberForNotif"
       :action="notifAction"
@@ -76,6 +75,25 @@ export default {
     },
     closeChat() {
       this.memberToChat = null;
+    },
+    async addLike(member) {
+      await this.$store.dispatch({ type: "addLikeToMember", member });
+      if (member.likes.iLike && member.likes.likeMe) {
+        Swal.fire({
+          title: "You have a new match !!!",
+          type: "success",
+          showCancelButton: true,
+          confirmButtonText: "Send a message",
+          cancelButtonText: "Later"
+        }).then(result => {
+          if (result.value) {
+            EVENT_BUS.$emit(EV_START_CHAT, member);
+          }
+        });
+      }
+    },
+    notLikeMember(memberId) {
+      this.$store.dispatch({ type: "notLikeMember", memberId });
     },
     gotoMembersWhoWatchedMe() {
       //update watchedMe list

@@ -4,6 +4,7 @@ import memberService from '@/services/member.service.js'
 import likeService from '@/services/like.service.js';
 import userService from '@/services/user.service.js';
 import chatService from '@/services/chat.service.js';
+import msgService from '@/services/msg.service.js';
 import { EVENT_BUS, EV_CHAT_RECEIVED_MSG } from '@/event-bus.js';
 
 Vue.use(Vuex)
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     msgs: [],
     loggedInUser: null,
     chat: {
+      isOpen: false,
       msgs: [],
       member: null,
       isMemberTyping: false
@@ -84,6 +86,7 @@ export default new Vuex.Store({
     },
     startChat(state, { member }) {
       state.chat.member = member;
+      state.chat.isOpen = true;
     },
     setIsMemberTyping(state, { isTyping }) {
       state.chat.isMemberTyping = isTyping;
@@ -91,9 +94,21 @@ export default new Vuex.Store({
     endChat(state) {
       state.chat.member = null;
       state.chat.msgs = [];
+      state.chat.isOpen = false;
     },
-    addMsgs(state, {msgs}){
+    addMsgs(state, { msgs }) {
       state.msgs = msgs;
+    },
+    insertMsg(state, { msg }) {
+      state.msgs.unshift(msg);
+    },
+    removeMsgByMemberId(state, { memberId }) {
+      let idx = state.msgs.findIndex(msg => msg.fromUser._id === memberId);
+      if (idx > -1) state.msgs.splice(idx, 1);
+    },
+    markMsgAsRead(state, { msgId }) {
+      let msg = state.msgs.find(currMsg => currMsg._id === msgId);
+      msg.isRead = true;
     }
   },
   getters: {
@@ -122,8 +137,11 @@ export default new Vuex.Store({
         return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
       }
     },
-    msgs(state){
+    msgs(state) {
       return state.msgs;
+    },
+    unreadMsgCount(state) {
+      return state.msgs.filter(msg => !msg.isRead).length;
     }
   },
   actions: {
@@ -134,6 +152,7 @@ export default new Vuex.Store({
         })
     },
     loadMemberById({ commit }, { memberId }) {
+      console.log('loadMemberById', memberId);
       return memberService.getMemberById(memberId)
         .then(member => {
           commit({ type: 'loadMemberById', member });
@@ -199,9 +218,17 @@ export default new Vuex.Store({
     finishTyping({ }, { msg }) {
       chatService.finishTyping(msg);
     },
-    receiveChatMsgFromMember({ commit }, { msg }) {
+    async receiveChatMsgFromMember({ commit, state, dispatch }, { msg }) {
       commit({ type: 'addChatMsg', msg });
       EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
+
+      let msgWithUser = await msgService.getMsgById(msg._id);
+      commit({ type: 'removeMsgByMemberId', memberId: msgWithUser.fromUser._id });
+      commit({ type: 'insertMsg', msg: msgWithUser });
+
+      if (state.chat.isOpen && state.chat.member._id === msgWithUser.fromUser._id) {
+        dispatch({ type: 'markMsgAsRead', msgId: msgWithUser._id });
+      }
     },
     watchMember({ state }, { memberId }) {
       memberService.watchMember(state.loggedInUser._id, memberId);
@@ -211,12 +238,16 @@ export default new Vuex.Store({
       return userService.update(state.loggedInUser);
     },
     async getMsgHistory({ commit }, { memberId }) {
-      let msgs = await chatService.getMsgHistory(memberId);
+      let msgs = await msgService.getMsgHistory(memberId);
       commit({ type: 'addChatHistoryMsgs', msgs });
     },
-    async getTopMsgs({commit, state}){
-      let msgs = await chatService.getTopMsgs(state.loggedInUser._id);
-      commit({type: 'addMsgs', msgs});
+    async getTopMsgs({ commit, state }) {
+      let msgs = await msgService.getTopMsgs(state.loggedInUser._id);
+      commit({ type: 'addMsgs', msgs });
+    },
+    async markMsgAsRead({ commit }, { msgId }) {
+      await msgService.markMsgAsRead(msgId);
+      commit({ type: 'markMsgAsRead', msgId });
     }
   }
 });
