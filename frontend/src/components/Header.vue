@@ -12,11 +12,11 @@
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>-->
 
-        <li class="nav-link" @click="toProfile" v-if="loggedInUser">My Profile</li>
-        <li class="nav-link" @click="getMatch">Matches</li>
-        <li class="nav-link" @click="toMsgs">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
-        <li class="nav-link" @click="toGallery">Home</li>
-        <li class="nav-link" @click="$emit('logout')">Logout</li>
+        <li class="nav-link" @click="toProfile" v-if="loggedInUser" :class="{active: activeLink === 0}">My Profile</li>
+        <li class="nav-link" @click="getMatch" :class="{active: activeLink === 1}">Matches</li>
+        <li class="nav-link" @click="toMsgs" :class="{active: activeLink === 2}">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
+        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
+        <li class="nav-link" @click="logout">Logout</li>
       </ul>
       <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
       <div :class="{open:isOpen}" class="toggle-menu-screen screen" @click="toggleMenu" alt="toggle main menu"></div>
@@ -30,7 +30,8 @@ export default {
   props: ["loggedInUser"],
   data(){
     return {
-      isOpen:false
+      isOpen:false,
+      activeLink: 3
     }
   },  
   computed:{
@@ -48,19 +49,27 @@ export default {
   },
   methods: {
     getMatch() {
+      this.activeLink = 1;
       this.$router.push("/match");
     },
     toProfile() {
+      this.activeLink = 0;
       this.$router.push(`/user/${this.loggedInUser._id}`);
     },
     toGallery() {
+      this.activeLink = 3;
       this.$router.push(`/`);
     },
     toMsgs(){
+      this.activeLink = 2;
       this.$router.push('/msg');
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;
+    },
+    logout(){
+      this.activeLink = 3;
+      this.$emit('logout');
     }
   }
 };
@@ -74,8 +83,14 @@ export default {
   cursor: pointer;
 }
 .nav-links > * {
-  margin: 10px;
-  
+  padding: 1rem 1rem 0.3rem 1rem;
+  transition: 0.3s;
+  border-bottom: 3px solid white;
+ &.active{
+    border-top-left-radius: 7px;   
+    border-top-right-radius: 7px;   
+    border-bottom: 3px solid $clr1;
+ } 
 }
 .nav-links {
   height: 100%;

@@ -58,6 +58,7 @@ export default {
 .member-preview {
   border: 1px solid $clr15;
   border-radius: 5px;
+  cursor: pointer;
   .member-name {
     margin: 20px 0;
     font-weight: bold;
@@ -69,7 +70,7 @@ export default {
   .actions-wrapper{
     margin: 20px 0;
     & > div{
-      background: linear-gradient(to bottom right, #6452E9, #639FF9);
+      background: linear-gradient(to bottom right,  #2c8789, $clr1);
       color: #fff;
       width: 45px;
       height: 45px;
