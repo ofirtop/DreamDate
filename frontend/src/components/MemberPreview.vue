@@ -16,8 +16,8 @@
       <div v-if="!isMatch" @click.stop="$emit('like', member)">
         <font-awesome-icon icon="heart" class="heart" />
       </div>
-      <div v-if="isMatch" @click.stop="$emit('chat', member)" class="btn-chat">
-          <font-awesome-icon icon="comment" title="Click to start chat"/>
+      <div v-if="isMatch" @click.stop="$emit('chat', member)" >
+          <font-awesome-icon icon="comment" title="Start chat" class="chat"/>
       </div>
       <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)">
         <font-awesome-icon icon="times" class="not-like" />
@@ -98,6 +98,9 @@ export default {
     transform: translateY(-5px);
   }
   .not-like{
+    transform: translateY(-6px);
+  }
+  .chat{
     transform: translateY(-6px);
   }
   .image-container {
