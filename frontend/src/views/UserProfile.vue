@@ -173,7 +173,7 @@ export default {
   width: 100%;
 }
 .container {
-  max-width: 80%;
+  max-width: 60%;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
@@ -248,7 +248,7 @@ h2 {
 .img-gallery {
   display: flex;
   flex-wrap: wrap;
-  width: 500px;
+  width: 100%;
   cursor: pointer;
 }
 .details-section {
@@ -256,12 +256,10 @@ h2 {
   flex-direction: column;
   align-items: flex-start;
   margin: 1em;
-
 }
 .name-section {
   margin-left: 2em;
 }
-
 button {
   margin: 10px 10px 10px 0;
 }
