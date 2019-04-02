@@ -1,7 +1,7 @@
 /*FLEX*/
 .flex{ display: flex; }
 .items-center{ align-items: center; }
-.align-start{ align-items: start; }
+.align-start{ align-items: flex-start; }
 .align-end{ align-items: flex-end; }
 .content-center{ justify-content: center; }
 .content-end{ justify-content: flex-end; }

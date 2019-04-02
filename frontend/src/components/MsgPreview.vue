@@ -26,25 +26,41 @@ export default {
 
 $img-size: 100px;
 
-li.msg-prev-cmp{
+.msg-prev-cmp{
     border: 1px solid $clr14;
     border-radius: 5px;
     height: $img-size;
-    width: calc(3 * #{$img-size});
-    margin-top: 20px;
+    width: calc(4 * #{$img-size});
     transition: 0.4s ease-out;
-    &.unread{
-        background-color: $clr14;
+    background-color: $clr14;
+    cursor: pointer;
+    &:not(:last-child){
+        margin-bottom: 20px;
     }
+    &.unread{
+        font-weight: bold;
+        background-color: white;
+        .time{
+            font-weight: normal;
+        }
+        &:after{
+            background-color: white;
+        }        
+    }
+    &:after{
+        content: '';
+        width: 5px;
+        background-color: $clr14;
+        transition: 0.5s ease;
+    }    
     &.active{
-        background-color: $clr1;
-        color: white;
-        h3{
-            color: white;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        &:after{
+            background-color: $clr1;
         }
     }
     h3{
-        color: $clr11;
         margin-bottom: 5px;
         .time{
             font-size: 0.7em;
@@ -64,7 +80,7 @@ li.msg-prev-cmp{
     }
     .txt-wrapper{
         text-align: left;
-        padding: 5px 8px;
+        padding: 5px 15px;
         flex-grow: 1;
     }
 }
