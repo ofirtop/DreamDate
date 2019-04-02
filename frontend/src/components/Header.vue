@@ -1,5 +1,5 @@
 <template>
-  <header v-if="loggedInUser" class="app-header flex">
+  <header v-if="loggedInUser" class="app-header flex content-center">
     <nav id="nav" class="nav-content-container flex align-end">
       <div class="logo-name flex align-end">
         <router-link to="/" class="logo-wrapper">
@@ -12,11 +12,11 @@
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>-->
 
+        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
         <li class="nav-link" @click="toProfile" v-if="loggedInUser" :class="{active: activeLink === 0}">My Profile</li>
         <li class="nav-link" @click="getMatch" :class="{active: activeLink === 1}">Matches</li>
         <li class="nav-link" @click="toMsgs" :class="{active: activeLink === 2}">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
-        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
-        <li class="nav-link" @click="logout">Logout</li>
+        <li class="nav-link" @click="logout" style="padding-right:5px">Logout</li>
       </ul>
       <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
       <div :class="{open:isOpen}" class="toggle-menu-screen screen" @click="toggleMenu" alt="toggle main menu"></div>
@@ -97,7 +97,7 @@ export default {
 }
 
 .logo-name {
-  margin: 10px;
+  margin-bottom: 8px;
   flex-grow: 1;
   // border: 5px solid purple;
 }
@@ -118,8 +118,8 @@ export default {
   border-bottom: 1px solid #ccc;
   top: 0;
   z-index: 99;
-  width: 100vw;
-  height: 85px;
+  width: 100%;
+  height: 75px;
   // border: 5px solid black;
 }
 .user-img {
@@ -133,11 +133,12 @@ export default {
 }
 .nav-content-container {
   max-width: 1200px;
-  width: 100vw;
-  margin: 0 auto;
+  width: 100%;
+  // margin: 0 auto;
   // border: 1px solid red;
   position: relative;
   font-size: 1.3rem;
+  padding: 0 10px;
 }
 .toggle-menu-btn {
   background: none;

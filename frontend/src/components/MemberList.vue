@@ -28,7 +28,7 @@ export default {
 </script>
 <style scoped>
 .member-list {
-  margin-top: 165px;
+  margin-top: 135px;
 }
 .member-list ul {
   display: grid;
