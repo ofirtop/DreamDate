@@ -99,7 +99,7 @@ function query(query, loggedUser) {
                         })
                         // console.log(modifiedMembers)
 
-                        //remove match members
+                        //remove liked members
                         modifiedMembers = modifiedMembers.filter(member => !(member.likes.iLike));
 
                         return modifiedMembers;
@@ -107,7 +107,6 @@ function query(query, loggedUser) {
                         return Promise.reject("No Clients")
                     }
                 })
-
         })
 }
 
