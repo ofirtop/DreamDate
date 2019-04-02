@@ -132,32 +132,4 @@ function addUserRoutes(app) {
                 return res.json(updatedUser)
             })
     })
-
-    //UPDATE LIKE
-    app.put('/like', (req, res) => {
-        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
-
-        let userId = req.session.loggedInUser._id;
-        let memberId = req.body._id;
-        console.log(`New Update <LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
-        userService.updateLike(userId, memberId)
-            .then(() => {
-                console.log('<LIKE> Request Confirmed');
-                res.json({ message: 'Updated' })
-            })
-    })
-
-    //UPDATE NOT LIKE
-    app.put('/notlike', (req, res) => {
-        if (req.session.loggedInUser === undefined) return res.status(500).send('Wrong Credentials');
-
-        let userId = req.session.loggedInUser._id;
-        let memberId = req.body._id;
-        console.log(`New Update <NOT LIKE> Requested by ${req.session.loggedInUser} on ${memberId}`)
-        userService.updateDoNotLike(userId, memberId)
-            .then(() => {
-                console.log('<NOT LIKE> Request Confirmed');
-                res.json({ "_id": memberId })
-            })
-    })
 }

@@ -28,12 +28,12 @@ export default {
 </script>
 <style scoped>
 .member-list {
-  margin-top: 150px;
+  margin-top: 165px;
 }
 .member-list ul {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-gap: 50px;
   position: relative;
   /* top: 9rem; */
 }

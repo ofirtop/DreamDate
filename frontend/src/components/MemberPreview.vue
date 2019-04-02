@@ -1,46 +1,26 @@
 <template>
-  <section class="member-preview">
-    <router-link :to="'/member/'+member._id">
-      <div class="imageContainer" :style="{backgroundImage: `url(${member.mainImage})`}"/>
-      <div v-if="this.member.online" class="status-wrapper flex space-between items-center">
-        <span
-          class="online-status"
-          title="Online"
-          :class="{on: this.member.online, off: !this.member.online}"
-        />
-      </div>
-    </router-link>
-    <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
-    <div class="actions-wrapper">
-      <span class="like-status" :title="likeStatus" @click.stop="$emit('like', member)">
-        <font-awesome-icon
-          class="heart my-heart"
-          icon="heart"
-          :class="{on: this.member.likes.iLike, off: !this.member.likes.iLike}"
-        />
-        <font-awesome-icon
-          class="heart member-heart"
-          icon="heart"
-          :class="{on: this.member.likes.likeMe, off: !this.member.likes.likeMe}"
-        />
-      </span>
-      <!-- <div class @click.stop="$emit('like', member)" title="Like">
-        <font-awesome-icon icon="heart"/>
-      </div>-->
-      <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
-        <font-awesome-icon icon="comment" title="Click to start chat"/>
-      </div>
-      <div>
-        <font-awesome-icon
-          class="notLike"
-          icon="times"
-          @click.stop="$emit('notLike', member._id)"
-          title="Click to remove"
-        />
-      </div>
+  <section class="member-preview animated" @click="gotoMember" :class="{  fadeOutLeft: animate}">
+    <div class="image-container" :style="{backgroundImage: `url(${member.mainImage})`}"/>
+    <div v-if="this.member.online" class="status-wrapper flex space-between items-center">
+      <span
+        class="online-status"
+        title="Online"
+        :class="{on: this.member.online, off: !this.member.online}"
+      />
     </div>
+    <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
     <div class="member-prop">{{member.city}}, Israel</div>
     <div class="member-prop">{{familyDesc}}</div>
+
+    <div class="actions-wrapper flex space-around">
+      <div @click.stop="$emit('like', member)">
+        <font-awesome-icon icon="heart" class="heart" />
+      </div>
+      <div @click.stop="$emit('notLike', member._id)">
+        <font-awesome-icon icon="times" class="not-like" />
+      </div>
+    </div>
+    <!-- <button @click.stop="animate = !animate">test</button> -->
   </section>
 </template>
 
@@ -49,20 +29,15 @@ import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
+  data(){
+    return {
+      animate:false
+    };
+  },
   computed: {
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
-    },
-    likeStatus() {
-      if (this.member.likes) {
-        if (this.member.likes.likeMe && this.member.likes.iLike)
-          return "YA'! You Found a Match";
-        if (!this.member.likes.likeMe && !this.member.likes.iLike)
-          return `Click to like ${this.member.name}`;
-        if (this.member.likes.likeMe) return `${this.member.name} likes you`;
-        if (this.member.likes.iLike) return `You like  ${this.member.name}`;
-      }
     },
     familyDesc() {
       let children =
@@ -74,18 +49,65 @@ export default {
     isMatch() {
       return this.member.likes.likeMe && this.member.likes.iLike;
     }
+  },
+  methods:{
+    gotoMember(){
+      this.$router.push('/member/'+ this.member._id);
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
 @import "../sass/_variables.scss";
-.btn-chat {
-  color: #8b368b;
+
+.member-preview {
+  border: 1px solid $clr15;
+  border-radius: 5px;
+  cursor: pointer;
+  .member-name {
+    margin: 20px 0;
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+  .member-prop {
+    margin-bottom: 8px;
+  }  
+  .actions-wrapper{
+    margin: 20px 0;
+    & > div{
+      background: linear-gradient(to bottom right,  #2c8789, $clr1);
+      color: #fff;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      line-height: 60px;
+      text-align: center;
+      border-radius: 30px;
+      box-shadow: 0 13px 26px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2); 
+      cursor: pointer;
+    }
+  }
+  .heart{
+    transform: translateY(-5px);
+  }
+  .not-like{
+    transform: translateY(-6px);
+  }
+  .image-container {
+    // height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    &:after{
+      content:"";
+      display:block;
+      padding-bottom: 100%;
+    }
+  }  
 }
-.notLike {
-  color: lightgray;
-}
+
 .status-wrapper {
   width: 100%;
   position: absolute;
@@ -98,91 +120,7 @@ a {
   display: block;
   width: 100%;
 }
-.imageContainer {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-}
 
-.my-heart {
-  &.on {
-    color: rgb(59, 193, 197);
-  }
-  &.off {
-    color: lightgray;
-  }
-}
-.member-heart {
-  margin-left: -7px;
-  &.on {
-    color: #8b368b;
-  }
-  &.off {
-    color: lightgray;
-  }
-}
-.member-name {
-  font-size: 0.95em;
-  color: black;
-  margin-top: 0.3rem;
-  margin-bottom: 0rem;
-}
-.member-prop {
-  width: 90%;
-  font-size: 0.7em;
-  margin-top: 0.3rem;
-
-  color: black;
-  text-align: left;
-}
-a {
-  color: black;
-}
-.member-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 2px;
-  position: relative;
-  height: 320px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-// span {
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   // border:2px solid black;
-//   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-//   // transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-// }
-// .member-preview:hover {
-//   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-//   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-// }
-
-.actions-wrapper {
-  width: 100%;
-  font-size: 24px;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  color: $clr10;
-  align-items: center;
-  height: 25px;
-  padding: 0 20px;
-  > div {
-    cursor: pointer;
-    padding: 5px;
-  }
-}
-
-// .font-awesome-icon {
-//   font-size: 2em;
-//   border: 1px solid;
-// }
 .online-status {
   display: inline-block;
   width: 15px;

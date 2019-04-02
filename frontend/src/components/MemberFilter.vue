@@ -153,10 +153,9 @@ export default {
   background-color: white;
   z-index: 5;
   margin-top:90px;
-  margin-bottom:1rem;
+  padding-bottom: 25px;  
 
 .btn-filter{
-    font-size: 0.88rem;
     margin-right: 5px;
   }
 @media (max-width: 780px){
