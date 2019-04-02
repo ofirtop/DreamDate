@@ -1,8 +1,8 @@
 <template>
   <section v-if="user" class="user-profile">
     <div class="screen" v-if="isEdit||uploadImg"></div>
-    <div class="title">
-    </div>
+    <!-- <div class="title">
+    </div> -->
     <edit-profile @addChanges="addChanges" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
     <upload-img v-if="uploadImg" @addChanges="addChanges" @close="uploadImg = false" :profile="user"></upload-img>
     <div class="container">
@@ -176,7 +176,7 @@ export default {
   max-width: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   background-color: rgba(248, 248, 248, 1);
   border-radius: 2px;
   margin: 10px;
@@ -201,11 +201,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: 100px 10%;
+  margin: 75px auto 0 auto;
+  width: 1200px;
 }
 .img-section {
   display: flex;
@@ -290,6 +289,7 @@ input {
 }
 .details {
   width: 95%;
+  padding: 0 10px;
   max-width: unset;
   margin: 0;
 } 

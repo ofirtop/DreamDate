@@ -1,5 +1,5 @@
 <template>
-  <header v-if="loggedInUser" class="app-header flex">
+  <header v-if="loggedInUser" class="app-header flex content-center">
     <nav id="nav" class="nav-content-container flex align-end">
       <div class="logo-name flex align-end">
         <router-link to="/" class="logo-wrapper">
@@ -12,11 +12,11 @@
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>-->
 
+        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
         <li class="nav-link" @click="toProfile" v-if="loggedInUser" :class="{active: activeLink === 0}">My Profile</li>
         <li class="nav-link" @click="getMatch" :class="{active: activeLink === 1}">Matches</li>
         <li class="nav-link" @click="toMsgs" :class="{active: activeLink === 2}">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
-        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
-        <li class="nav-link" @click="logout">Logout</li>
+        <li class="nav-link" @click="logout" style="padding-right:5px">Logout</li>
       </ul>
       <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
       <div :class="{open:isOpen}" class="toggle-menu-screen screen" @click="toggleMenu" alt="toggle main menu"></div>
@@ -51,18 +51,22 @@ export default {
     getMatch() {
       this.activeLink = 1;
       this.$router.push("/match");
+      this.isOpen = false;
     },
     toProfile() {
       this.activeLink = 0;
       this.$router.push(`/user/${this.loggedInUser._id}`);
+      this.isOpen = false;
     },
     toGallery() {
       this.activeLink = 3;
       this.$router.push(`/`);
+      this.isOpen = false;
     },
     toMsgs(){
       this.activeLink = 2;
       this.$router.push('/msg');
+      this.isOpen = false;
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;
@@ -70,6 +74,7 @@ export default {
     logout(){
       this.activeLink = 3;
       this.$emit('logout');
+      this.isOpen = false;
     }
   }
 };
@@ -97,7 +102,7 @@ export default {
 }
 
 .logo-name {
-  margin: 10px;
+  margin-bottom: 8px;
   flex-grow: 1;
   // border: 5px solid purple;
 }
@@ -118,8 +123,8 @@ export default {
   border-bottom: 1px solid #ccc;
   top: 0;
   z-index: 99;
-  width: 100vw;
-  height: 85px;
+  width: 100%;
+  height: 75px;
   // border: 5px solid black;
 }
 .user-img {
@@ -133,18 +138,21 @@ export default {
 }
 .nav-content-container {
   max-width: 1200px;
-  width: 100vw;
-  margin: 0 auto;
+  width: 100%;
+  // margin: 0 auto;
   // border: 1px solid red;
   position: relative;
   font-size: 1.3rem;
+  padding: 0 10px;
 }
 .toggle-menu-btn {
   background: none;
   border: none;
-  color: #fff;
+  color: black;
+  margin: auto 20px;
+  font-size: 1em;
+  width: 30px;
   font-size: 1.75rem;
-  margin-right: 20px;
   display: none;
   font-family: fontawesome;
   font-size: inherit;
@@ -154,10 +162,9 @@ export default {
   .toggle-menu-btn {
     display: block;
   }
-}
-
-
-@media (max-width: 740px) {
+  .toggle-menu-screen {
+    display: block;
+  }
   .nav-links {
     flex-direction: column;
     position: fixed;
@@ -201,11 +208,11 @@ export default {
   cursor: pointer;
   transition: opacity .5s;
 }
-@media (max-width: 740px) {
+// @media (max-width: 740px) {
   .toggle-menu-screen {
     display: block;
   }
-}
+// }
 .open.toggle-menu-screen {
   visibility: visible;
   opacity: 1;

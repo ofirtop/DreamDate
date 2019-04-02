@@ -145,15 +145,14 @@ export default {
 
 .member-filter {
   // border-bottom: 1px solid rgb(235, 235, 235);
-  padding: 10px;
   background-color: white;
   position: fixed;
   width: 100%;
   max-width:1200px;
   background-color: white;
   z-index: 5;
-  margin-top:90px;
-  padding-bottom: 25px;  
+  margin-top: 70px;
+  padding: 15px 10px;  
 
 .btn-filter{
     margin-right: 5px;
