@@ -51,18 +51,22 @@ export default {
     getMatch() {
       this.activeLink = 1;
       this.$router.push("/match");
+      this.isOpen = false;
     },
     toProfile() {
       this.activeLink = 0;
       this.$router.push(`/user/${this.loggedInUser._id}`);
+      this.isOpen = false;
     },
     toGallery() {
       this.activeLink = 3;
       this.$router.push(`/`);
+      this.isOpen = false;
     },
     toMsgs(){
       this.activeLink = 2;
       this.$router.push('/msg');
+      this.isOpen = false;
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;
@@ -70,6 +74,7 @@ export default {
     logout(){
       this.activeLink = 3;
       this.$emit('logout');
+      this.isOpen = false;
     }
   }
 };
@@ -143,9 +148,11 @@ export default {
 .toggle-menu-btn {
   background: none;
   border: none;
-  color: #fff;
+  color: black;
+  margin: auto 20px;
+  font-size: 1em;
+  width: 30px;
   font-size: 1.75rem;
-  margin-right: 20px;
   display: none;
   font-family: fontawesome;
   font-size: inherit;
@@ -155,10 +162,9 @@ export default {
   .toggle-menu-btn {
     display: block;
   }
-}
-
-
-@media (max-width: 740px) {
+  .toggle-menu-screen {
+    display: block;
+  }
   .nav-links {
     flex-direction: column;
     position: fixed;
@@ -202,11 +208,11 @@ export default {
   cursor: pointer;
   transition: opacity .5s;
 }
-@media (max-width: 740px) {
+// @media (max-width: 740px) {
   .toggle-menu-screen {
     display: block;
   }
-}
+// }
 .open.toggle-menu-screen {
   visibility: visible;
   opacity: 1;

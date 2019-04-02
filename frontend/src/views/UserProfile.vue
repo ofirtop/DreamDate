@@ -289,6 +289,7 @@ input {
 }
 .details {
   width: 95%;
+  padding: 0 10px;
   max-width: unset;
   margin: 0;
 } 
