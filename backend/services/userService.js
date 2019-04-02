@@ -16,15 +16,73 @@ module.exports = {
     getMemberById,
     queryMatch
 }
+// #region mongoDb aggregation query function - NOT FINISHED
+// async function query(query, loggedUser) {
+//     var userId = new ObjectId(loggedUser._id);
+//     console.log(`Query Details:`)
+
+//     //HOW TO PUT THE FILTER INTO THE AGGREGATION ???
+
+//     var queryToMongo = createQueryToMongo(query);
+
+//     let users  = await mongoService.connect()
+//         .then(db => {    
+//             return db.collection("user")
+//                 .aggregate(
+//                 [
+//                     { 
+//                         $match : {
+//                             "_id" : {
+//                                 "$ne" : userId
+//                             }, 
+//                             "MemberWhoDidNotLikeMe._id" : {
+//                                 "$ne" : userId
+//                             }
+//                         }
+//                     }, 
+//                     { 
+//                         $addFields : {
+//                             "likes.iLike" : {
+//                                 "$in" : [
+//                                     userId, 
+//                                     "$membersILike._id"
+//                                 ]
+//                             }, 
+//                             "likes.likeMe" : {
+//                                 "$in" : [
+//                                     userId, 
+//                                     "$membersWhoLikeMe._id"
+//                                 ]
+//                             }, 
+//                             "likes.isRead" : {
+//                                 "$toBool" : false
+//                             }
+//                         }
+//                     }, 
+//                     { 
+//                         $project : {
+//                             "membersILike" : 0.0, 
+//                             "membersWhoLikeMe" : 0.0, 
+//                             "membersIWatched" : 0.0, 
+//                             "membersWhoWatchedMe" : 0.0, 
+//                             "MemberWhoDidNotLikeMe" : 0.0
+//                         }
+//                     }
+//                 ]
+//             ).toArray();
+//         });
+//             return Promise.resolve(users);
+// }
+// #endregion
 
 function query(query, loggedUser) {
+    var userId = new ObjectId(loggedUser._id);
     console.log(`Query Details:`)
     var queryToMongo = createQueryToMongo(query);
 
     return mongoService.connect()
-        .then(db => {
+        .then(db => {    
             return db.collection('user').find(queryToMongo).toArray()
-                // return db.collection('user').find({}).toArray()
                 .then(members => {
                     if (members) {
                         members = members.filter(currMember => {
