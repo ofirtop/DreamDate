@@ -136,4 +136,12 @@ h1 {
   width: 100px;
   height: 100px;
 }
+@media (max-width: 740px) {
+  .login-wrapper {
+    margin: 0;
+    padding-top: 20%;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>
