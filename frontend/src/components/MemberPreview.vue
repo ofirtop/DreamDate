@@ -1,5 +1,5 @@
 <template>
-  <section class="member-preview " @click="gotoMember">
+  <section class="member-preview animated" @click="gotoMember" :class="{  fadeOutLeft: animate}">
     <div class="image-container" :style="{backgroundImage: `url(${member.mainImage})`}"/>
     <div v-if="this.member.online" class="status-wrapper flex space-between items-center">
       <span
@@ -20,6 +20,7 @@
         <font-awesome-icon icon="times" class="not-like" />
       </div>
     </div>
+    <!-- <button @click.stop="animate = !animate">test</button> -->
   </section>
 </template>
 
@@ -28,6 +29,11 @@ import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 
 export default {
   props: ["member"],
+  data(){
+    return {
+      animate:false
+    };
+  },
   computed: {
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
