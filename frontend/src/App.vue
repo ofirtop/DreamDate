@@ -2,8 +2,14 @@
   <div id="app">
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
     <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
-
-    <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
+    <main class="App__main">
+      <transition
+        name="fade"
+        mode="out-in"
+      >
+        <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
+      </transition>
+    </main>
     <notif
       :member="memberForNotif"
       :action="notifAction"
@@ -181,5 +187,15 @@ export default {
   text-align: center;
   background: $bg-color;
 }
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
 
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
+}
 </style>
