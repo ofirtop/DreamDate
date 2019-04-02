@@ -100,7 +100,7 @@ function query(query, loggedUser) {
                         // console.log(modifiedMembers)
 
                         //remove match members
-                        //modifiedMembers = modifiedMembers.filter(member => !(member.likes.iLike));
+                        modifiedMembers = modifiedMembers.filter(member => !(member.likes.iLike));
 
                         return modifiedMembers;
                     } else {
