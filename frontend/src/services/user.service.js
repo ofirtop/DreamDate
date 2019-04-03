@@ -38,6 +38,7 @@ async function updateUser(user) {
                 console.log(res.data);
                 return res.data})
 }
+
 async function signup(userCredentials) {
     console.log('signing in (ServiceClient)', userCredentials);
     try {

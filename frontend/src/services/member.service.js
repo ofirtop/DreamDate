@@ -2,7 +2,7 @@ import { SOCKET } from '@/socket.js';
 import store from '@/store/store';
 import axios from './axios.wrapper.js';
 import config from '@/config.js';
-import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
+// import { EVENT_BUS, EV_RECEIVED_LIKE } from '@/event-bus.js';
 
 export default {
   query,
@@ -22,24 +22,17 @@ function _init() {
 
   SOCKET.on('member login', memberId => {
     console.log('member login', memberId);
-    store.commit({ type: 'loginMember', memberId });
+    store.dispatch({ type: 'updateMemberOnlineStatus', memberId, isOnline: true });
   });
 
   SOCKET.on('member logout', memberId => {
     console.log('member logout', memberId);
-    store.commit({ type: 'logoutMember', memberId });
+    store.dispatch({ type: 'updateMemberOnlineStatus', memberId, isOnline: false });
   });
 
-  SOCKET.on('member is watching', ({ from }) => {
-    console.log('ws in', 'member is watching', from);
-    store.commit({ type: 'addWatchFromMember', memberId: from });
-  });
-
-  SOCKET.on('add like', async ({ from }) => {
-    console.log('ws in', 'add like', from);
-    let member = await getMemberById(from);
-    store.commit({ type: 'addLikeFromMember', member });
-    EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
+  SOCKET.on('member is watching user', ({ from }) => {
+    console.log('ws in', 'member is watching user', from);
+    store.dispatch({ type: 'addWatchFromMember', memberId: from });
   });
 }
 
@@ -93,5 +86,5 @@ function updateNotLikeMember(memberIdToUpdate) {
   // } catch{
   //   //TODO
   // }
-  // SOCKET.emit('watch member', { from, to });
+   SOCKET.emit('user is watching member', { from, to });
  }

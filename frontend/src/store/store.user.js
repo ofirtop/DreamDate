@@ -1,9 +1,20 @@
 import userService from '@/services/user.service.js';
 import utilService from "@/services/util.service.js";
+import memberService from '@/services/member.service.js'
 
 export default {
     state: {
         loggedInUser: null,
+    },
+    getters: {
+        loggedInUser(state) {
+            return state.loggedInUser;
+        },
+        newMembersWhoWatchedCount(state) {
+            if (state.loggedInUser) {
+                return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
+            }
+        },
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -19,16 +30,6 @@ export default {
             if (member) member.date = new Date();
             else {
                 state.loggedInUser.membersWhoWatchedMe.push({ id: memberId, isRead: false, date: new Date() });
-            }
-        },
-    },
-    getters: {
-        loggedInUser(state) {
-            return state.loggedInUser;
-        },
-        newMembersWhoWatchedCount(state) {
-            if (state.loggedInUser) {
-                return state.loggedInUser.membersWhoWatchedMe.filter(member => !member.isRead).length;
             }
         },
     },
@@ -76,5 +77,17 @@ export default {
             commit({ type: 'markWatchedMeMembersAsRead' });
             return userService.update(state.loggedInUser);
         },
+        async addWatchFromMember({commit, getters, dispatch}, {memberId}){
+            console.log('addWatchFromMember', memberId);
+            let member = getters.memberById(memberId);
+            console.log('addWatchFromMember', 'found member in store:', member);
+            if (!member) {
+                console.log('addWatchFromMember', 'getting member from server:', member);
+                member = await memberService.getMemberById(memberId);
+            }
+            commit({ type: 'addWatchFromMember', memberId });
+            dispatch({ type: 'addNotif', member, actionType: 'watch' });
+            //EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
+        }
     }
 };

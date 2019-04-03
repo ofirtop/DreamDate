@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import chatStore from './chat.store';
-import userStore from './user.store';
-import msgStore from './msg.store';
-// import matchStore from './match.store';
-import memberStore from './member.store';
+import chatStore from './store.chat';
+import userStore from './store.user';
+import msgStore from './store.msg';
+import notifStore from './store.notif';
+import memberStore from './store.member';
 
 // import likeService from '@/services/like.service.js';
 // import userService from '@/services/user.service.js';
@@ -26,7 +26,7 @@ export default new Vuex.Store({
     chatStore,
     userStore,
     msgStore,
-   // matchStore,
+    notifStore,
     memberStore
   }
 });

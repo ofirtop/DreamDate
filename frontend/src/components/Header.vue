@@ -143,7 +143,7 @@ export default {
   // border: 1px solid red;
   position: relative;
   font-size: 1.3rem;
-  padding: 0 10px;
+  padding: 0 10px 1px 10px;
 }
 .toggle-menu-btn {
   background: none;
@@ -177,7 +177,6 @@ export default {
     transition: transform 0.3s;
     transform: translate(100%, 0);
     opacity: .9;
-    margin-bottom: 8px;
   }
   .open.nav-links {
     transform: translate(0, 0);
