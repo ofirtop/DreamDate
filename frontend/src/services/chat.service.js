@@ -1,5 +1,5 @@
 import { SOCKET } from '@/socket.js';
-import store from '@/store.js';
+import store from '@/store/store';
 
 
 export default {
@@ -14,7 +14,7 @@ _init();
 function _init() {
     SOCKET.on('chat msg', msg => {
         console.log('ws in:', 'chat msg', msg);
-        store.dispatch({ type: 'receiveChatMsgFromMember', msg });
+        store.dispatch({ type: 'receiveChatMsg', msg });
     });
 
     SOCKET.on('chat start typing', msg => {
@@ -43,6 +43,6 @@ function finishTyping(msg) {
     SOCKET.emit('chat finish typing', msg);
 }
 
-function getEmptyMsg(from, to) {
-    return { from, to, txt: '' };
+function getEmptyMsg(to) {
+    return { from: store.getters.loggedInUser._id, to, txt: '' };
 }

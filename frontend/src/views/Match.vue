@@ -1,7 +1,7 @@
 <template>
   <section v-if="loggedInUser" class="match-page">
     <main>
-      <member-list :members="matches" @chat="startChat"/>
+      <member-list :members="members" @chat="startChat"/>
     </main>
   </section>
 </template>
@@ -26,13 +26,13 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    matches() {
-      return this.$store.getters.matches;
+    members() {
+      return this.$store.getters.members;
     }
   },
   created() {
     if (this.loggedInUser) {
-      this.$store.dispatch({ type: "loadMatches" });
+      this.$store.dispatch({ type: "loadMembers", filterBy: null, routeName: 'match' });
     }
   },
   // watched: {

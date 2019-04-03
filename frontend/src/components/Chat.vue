@@ -29,10 +29,7 @@ export default {
   props: ["member"],
   data() {
     return {
-      currMsg: chatService.getEmptyMsg(
-        this.$store.state.loggedInUser._id,
-        this.member._id
-      ),
+      currMsg: chatService.getEmptyMsg(this.member._id),
       iAmTyping: false
     };
   },
@@ -42,6 +39,11 @@ export default {
     },
     isMemberTyping() {
       return this.$store.getters.isMemberTyping;
+    },
+    loggedInUser(){
+      console.log('loggedInUser', this.$store.getters.loggedInUser);
+      
+      return this.$store.getters.loggedInUser;
     }
   },
   watch: {
@@ -58,14 +60,11 @@ export default {
   methods: {
     sendMsg() {
       this.$store.dispatch({ type: "sendChatMsg", msg: this.currMsg });
-      this.currMsg = chatService.getEmptyMsg(
-        this.$store.state.loggedInUser._id,
-        this.member._id
-      );
+      this.currMsg = chatService.getEmptyMsg(this.member._id);
       this.iAmTyping = false;
     },
     getClass(msg) {
-      let isOut = (msg.from === this.$store.state.loggedInUser._id);
+      let isOut = (msg.from === this.loggedInUser._id);
       return {
         in: !isOut,
         out: isOut

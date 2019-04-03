@@ -49,10 +49,7 @@ export default {
   },
   computed: {
     loggedInUser() {
-      console.log(
-        "this.$store.getters.loggedInUser: ",
-        this.$store.getters.loggedInUser
-      );
+      console.log("loggedInUser", this.$store.getters.loggedInUser);
       return this.$store.getters.loggedInUser;
     },
     newMembersWhoWatchedMeCount() {
@@ -112,11 +109,8 @@ export default {
 
       this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({
-          type: "loginUser",
-          userCredentials
-        });
-        utilService.saveToStorage("loggedInUser", loggedInUser);
+            await this.$store.dispatch({type: "loginUser", userCredentials});
+            this.$router.push('/');
       } catch {
         this.loginFailed = true;
       }
@@ -125,18 +119,13 @@ export default {
       console.log('Signing up (HOME):', userCredentials);
         this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({
-          type: "signupUser",
-          userCredentials
-        });
-        utilService.saveToStorage("loggedInUser", loggedInUser);
-        this.$router.push(`/user/${loggedInUser._id}`)
+        let user = await this.$store.dispatch({type: "signupUser", userCredentials});
+        this.$router.push(`/user/${user._id}`)
       } catch {
         this.loginFailed = true;
       }
     },
     logout() {
-      localStorage.removeItem("loggedInUser");
       this.$store.dispatch({ type: "logoutUser" });
     }
   },
