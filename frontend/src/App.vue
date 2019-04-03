@@ -28,7 +28,7 @@ import login from "@/components/Login.vue";
 import Notif from "@/components/Notif.vue";
 import appHeader from "@/components/Header.vue";
 import utilService from "@/services/util.service.js";
-
+import Swal from "sweetalert2";
 import {
   EVENT_BUS,
   EV_START_CHAT,
