@@ -1,5 +1,5 @@
 import { SOCKET } from '@/socket.js';
-import store from '@/store.js';
+import store from '@/store/store';
 import axios from './axios.wrapper.js';
 import config from '@/config.js';
 
