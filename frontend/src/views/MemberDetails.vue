@@ -146,7 +146,7 @@ export default {
     let memberId = this.$route.params.userId;
     this.member = await this.$store.dispatch({ type: "loadMemberById", memberId });
     this.mainImg = this.member.mainImage;
-    this.imgs = this.member.images;
+    this.imgs = this.member.images.slice();
     this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
