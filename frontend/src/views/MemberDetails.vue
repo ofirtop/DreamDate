@@ -71,7 +71,7 @@
     <div class="img-gallery">
         <div class="member-img clickable" 
             :style="{backgroundImage: `url(${img})`}" 
-            v-for="(img, idx) in member.images" :key="idx" 
+            v-for="(img, idx) in imgs" :key="idx" 
             @click="changeMainImg(img, idx)">
         </div>
     </div>
@@ -92,9 +92,8 @@ export default {
   },
   methods: {
     changeMainImg(imgSrc, idx) {
-      // let img = this.member.mainImage;
-      // this.member.mainImage = imgSrc;
-      // this.member.images.splice(idx, 1, img);
+
+
       let img = this.mainImg;
       this.mainImg = imgSrc;
       this.imgs.splice(idx, 1, img);
@@ -147,6 +146,7 @@ export default {
     let memberId = this.$route.params.userId;
     this.member = await this.$store.dispatch({ type: "loadMemberById", memberId });
     this.mainImg = this.member.mainImage;
+    this.imgs = this.member.images;
     this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
