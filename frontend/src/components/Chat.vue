@@ -1,20 +1,20 @@
 <template>
-  <section class="chat-cmp flex flex-column">
+  <section class="chat-cmp flex flex-column" v-if="chat">
     <div class="header flex space-between">
       <div>
-        Chat with {{member.name}}
+        Chat with {{chat.memberName}}
       </div>
-      <span class="typing" v-if="isMemberTyping">typing...</span>
+      <span class="typing" v-if="chat.isMemberTyping">typing...</span>
       <div @click="closeChat">
         <font-awesome-icon icon="times" title="close" />
       </div>
     </div>
     <ul class="flex flex-column">
-      <li v-for="(msg, idx) in msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
+      <li v-for="(msg, idx) in chat.msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
     </ul>
 
     <div class="input-wrapper flex ">
-      <input autofocus @keyup.enter="sendMsg" v-model="currMsg.txt" @keydown="typeMsg" placeholder="type your message...">
+      <input autofocus @keyup.enter="sendMsg" v-model="txt" @keydown="typeMsg" placeholder="type your message...">
       <div @click="sendMsg" class="send">
         <font-awesome-icon icon="share" title="send"  />
       </div>
@@ -26,41 +26,37 @@
 import chatService from "@/services/chat.service.js";
 
 export default {
-  props: ["member"],
   data() {
     return {
-      currMsg: chatService.getEmptyMsg(this.member._id),
+      txt: '',
       iAmTyping: false
     };
   },
   computed: {
-    msgs() {
-      return this.$store.getters.chatMsgs;
-    },
-    isMemberTyping() {
-      return this.$store.getters.isMemberTyping;
+    chat(){
+      return this.$store.getters.chat;
     },
     loggedInUser(){
-      console.log('loggedInUser', this.$store.getters.loggedInUser);
-      
       return this.$store.getters.loggedInUser;
+    },
+    currMsg(){
+      return {to: this.chat.memberId, from: this.loggedInUser._id, txt: this.txt};
     }
   },
   watch: {
-    currMsg: {
-      handler: function(msg) {
-        if (msg.txt === "" && this.iAmTyping) {
+    txt(){
+        if (this.txt === "" && this.iAmTyping) {
           this.$store.dispatch({ type: "finishTyping", msg: this.currMsg });
           this.iAmTyping = false;
         }
-      },
-      deep: true
     }
   },
   methods: {
     sendMsg() {
+      console.log('currMsg', this.currMsg);
+      
       this.$store.dispatch({ type: "sendChatMsg", msg: this.currMsg });
-      this.currMsg = chatService.getEmptyMsg(this.member._id);
+      this.txt = '';
       this.iAmTyping = false;
     },
     getClass(msg) {
@@ -77,13 +73,10 @@ export default {
       }
     },
     closeChat() {
-      this.$store.commit({ type: "endChat" });
-      this.$emit("close");
+      this.$store.dispatch({ type: "endChat" });
     }
   },
   async created(){
-    console.log('chat cmp created');
-    await this.$store.dispatch({type: 'getMsgHistory', memberId: this.member._id});
   }
 };
 </script>

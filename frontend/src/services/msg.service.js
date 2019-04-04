@@ -3,19 +3,10 @@ import config from '@/config.js';
 
 export default {
     //getEmptyMsg,
-    getMsgHistory,
     getTopMsgs,
     markMsgAsRead,
     getMsgById
 };
-
-function getMsgHistory(memberId) {
-    return axios.get(`${config.BASE_URL}/user-msg/${memberId}`)
-        .then(res => {
-            console.log('msg history', res.data);
-            return res.data;
-        });
-}
 
 function getTopMsgs() {
     return axios.get(`${config.BASE_URL}/user-msg`)

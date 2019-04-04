@@ -1,21 +1,19 @@
 import chatService from '@/services/chat.service.js';
-import msgService from '@/services/msg.service.js';
 
 export default {
     state: {
-        chat: {
-            isOpen: false,
-            msgs: [],
-            member: null,
-            isMemberTyping: false
-        }
+        // chat:{
+        //     memberId: -1,
+        //     memberName,
+        //     msgs: [],
+        //     isMemberTyping: false,
+        //     isClosing: false
+        // }
+        chat: null
     },
     getters: {
-        chatMsgs(state) {
-            return state.chat.msgs;
-        },
-        isMemberTyping(state) {
-            return state.chat.isMemberTyping;
+        chat(state) {
+            return state.chat;
         }
     },
     mutations: {
@@ -23,23 +21,45 @@ export default {
             state.chat.msgs.push(msg);
             state.chat.isMemberTyping = false;
         },
-        addChatHistoryMsgs(state, { msgs }) {
+        loadHistoryMsgs(state, { msgs }) {
             state.chat.msgs = msgs;
         },
-        startChat(state, { member }) {
-            state.chat.member = member;
-            state.chat.isOpen = true;
+        startChat(state, { memberId, memberName }) {
+            state.chat = {
+                memberId,
+                memberName,
+                msgs: [],
+                isMemberTyping: false,
+                isClosing: false
+            };
         },
-        setIsMemberTyping(state, { isTyping }) {
-            state.chat.isMemberTyping = isTyping;
-        },
+        // hideChat(state) {
+        //     state.chat.isClosing = true;
+        // },
         endChat(state) {
-            state.chat.member = null;
-            state.chat.msgs = [];
-            state.chat.isOpen = false;
+            state.chat = null;
+        },
+        toggleIsMemberTyping(state, { isMemberTyping }) {
+            //console.log('toggleIsMemberTyping', isMemberTyping);
+            state.chat.isMemberTyping = isMemberTyping;
         },
     },
     actions: {
+        startChat({ commit, dispatch }, { memberId, memberName }) {
+            //console.log('memberId', memberId, 'memberName', memberName);
+
+            commit({ type: 'startChat', memberId, memberName });
+            dispatch({ type: 'loadHistoryMsgs', memberId });
+        },
+        endChat({ commit }) {
+            //commit({ type: 'hideChat' });
+            //setTimeout(() => { commit({ type: 'endChat' }) });
+            commit({ type: 'endChat' });
+        },
+        async loadHistoryMsgs({ commit }, { memberId }) {
+            let msgs = await chatService.getHistoryMsgs(memberId);
+            commit({ type: 'loadHistoryMsgs', msgs });
+        },
         sendChatMsg({ commit }, { msg }) {
             chatService.sendMsg(msg);
             commit({ type: 'addChatMsg', msg });
@@ -50,11 +70,28 @@ export default {
         finishTyping({ }, { msg }) {
             chatService.finishTyping(msg);
         },
-        async receiveChatMsg({ commit, dispatch }, { msg }) {
-            commit({ type: 'addChatMsg', msg });
-            EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
+        receiveMemberStartTyping({ commit, state }, { msg }) {
+            //console.log('store', 'receiveMemberStartTyping', msg.from);
 
-            dispatch({ type: 'insertMsgFromChat', msg });
+            if (state.chat && state.chat.memberId === msg.from) {
+                commit({ type: 'toggleIsMemberTyping', isMemberTyping: true });
+            }
+        },
+        receiveMemberStopTyping({ commit, state }, { msg }) {
+            //console.log('store', 'receiveMemberStopTyping', msg.from);
+            if (state.chat && state.chat.memberId === msg.from) {
+                commit({ type: 'toggleIsMemberTyping', isMemberTyping: false });
+            }
+        },
+        async receiveChatMsg({ commit, state, dispatch }, { msg }) {
+            console.log('receiveChatMsg', msg);
+
+            if (state.chat && state.chat.memberId === msg.from) {//member is in active chat
+                commit({ type: 'addChatMsg', msg });
+            }
+            //EVENT_BUS.$emit(EV_CHAT_RECEIVED_MSG, msg);
+
+            dispatch({ type: 'receiveMsg', msg });
 
             // let msgWithUser = await msgService.getMsgById(msg._id);
             // commit({ type: 'removeMsgByMemberId', memberId: msgWithUser.fromUser._id });

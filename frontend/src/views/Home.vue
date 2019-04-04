@@ -55,7 +55,7 @@ export default {
       this.$store.dispatch({ type: "notLikeMember", memberId });
     },
     startChat(member) {
-      EVENT_BUS.$emit(EV_START_CHAT, member);
+      this.$store.dispatch({type: 'startChat', memberId: member._id, memberName: member.name});
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
