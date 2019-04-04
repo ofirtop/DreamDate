@@ -19,7 +19,7 @@ function addUserEvents(socket){
 
         socketService.remove(socket.userId);
         
-        console.log('ws out (broadcast):', 'member logout', userId);
+        console.log('ws out (broadcast):', 'member logout', socket.userId);
         socket.broadcast.emit('member logout', socket.userId);
     });
 }

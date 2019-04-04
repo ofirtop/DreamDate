@@ -76,6 +76,7 @@ export default {
             commit({ type: 'removeMemberIDontLike', updatedMemberId });
         },
         updateMemberOnlineStatus({ commit }, { memberId, isOnline }) {
+            console.log('updateMemberOnlineStatus', memberId, isOnline);
             commit({ type: 'updateMemberOnlineStatus', memberId, isOnline });
         },
         async getLikeFromMember({ commit, getters, dispatch }, { memberId }) {
