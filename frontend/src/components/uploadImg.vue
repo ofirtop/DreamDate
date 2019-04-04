@@ -82,14 +82,14 @@ export default {
   background-color: white;
   position: absolute;
   top: 10%;
-  left: 40%;
+  left: 30%;
   flex-direction: column;
   z-index: 4;
   /* width: 40vw; */
 }
 .preview-img {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  min-height: 300px;
   background-size: contain;
   background-position: top center;
   background-repeat: no-repeat;
