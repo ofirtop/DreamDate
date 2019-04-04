@@ -1,11 +1,15 @@
 <template>
   <section class="edit-profile flex">
+    
     <div class="top-line flex items-center space-between full-width">
     <h1>Edit details</h1>
-    <i class="el-icon-close" @click="$emit('close')"></i>
+    <i class="el-icon-close" @click="saveProfile"></i>
+    
+    <!-- <i class="el-icon-success" @click="saveProfile"></i> -->
     </div>
     <div class="edit-container">
       <!-- <h2>{{user.name}}</h2> -->
+      <div class="user-details">
       <div>
         <label>I'm (gender)</label>
         <el-select size="mini" class="editInput" v-model="user.gender" placeholder="Select gender">
@@ -67,8 +71,10 @@
           placeholder="Pick a date"
         ></el-date-picker>
       </div>
-      <hr>
-      <h2>Dream your partner!</h2>
+      </div>
+      <!-- <hr> -->
+      <div class="partner-details">
+      <h3>Dream your partner</h3>
       <h4></h4>
       <div>
         <label>Gender</label>
@@ -85,7 +91,9 @@
         <label>Age</label>
         <el-slider class="editInput" v-model="age" range :min="18" :max="120"></el-slider>
       </div>
-        <el-button size="mini" type="info" @click="saveProfile">Save Profile</el-button>
+      <el-button size="mini" type="info" @click="saveProfile">Update details</el-button>
+      </div>
+        
     </div>
   </section>
 </template>
@@ -111,7 +119,7 @@ export default {
     };
   },
   created() {
-    this.user = this.profile;
+    this.user = JSON.parse(JSON.stringify(this.profile));
     let namesCities = memberService.getCities();
     this.cities = namesCities.map(city => {
       return { value: city, label: city };
@@ -166,17 +174,17 @@ export default {
 
 .edit-profile {
   position: fixed;
-  top: 13%;
+  // width: 100%;
+  // max-width: 1200px;
+  top: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 11;
   background-color: rgba(248, 248, 248, 1);
-
 }
 .edit-container {
   display: flex;
-  flex-direction: column;
   background-color: rgba(248, 248, 248, 1);
   border-radius: 2px;
   margin: 10px;
@@ -184,13 +192,20 @@ export default {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .edit-container>* {
+    flex-direction: column;
     display: flex;
-    justify-content: space-between;
-    margin: 5px;
+    margin: 10px;
     align-content: center
 }
 .top-line {
   padding: 5px 10px;
+  justify-content: space-between;
+}
+.user-details>*,
+.partner-details>* {
+  display: flex;
+  flex-direction: column;
+  margin: 7px
 }
 label {
     color: black;
@@ -199,7 +214,8 @@ h1 {
   font-size: 1.5em;
   font-weight: bold;
 }
-.el-icon-close {
+.el-icon-close,
+.el-icon-success {
     align-self: flex-end;
     cursor: pointer;
     font-size: 2em;
@@ -212,19 +228,31 @@ h1 {
 .el-slider__bar {
     background-color: $clr1;
 }
-
 button {
   margin: 10px;
-  width: 100px;
   align-self: center;
   background-color: $clr1;
 }
 @media (max-width: 760px) {
+  .top-line {
+    width: 95%;
+  }
   .edit-profile {
   position: absolute;
-  top: 17%;
-  width: 100vw;
-  height: 100%;
-}
+  top: 13%;
+  width: 100%;
+  margin: 0 auto;
+  }
+  .edit-container {
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    margin:0;
+    padding: 0 10px;
+  }
+  .edit-container>* {
+    width: 100%;
+    margin: 5px;
+  }
 }
 </style>
