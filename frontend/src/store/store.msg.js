@@ -4,6 +4,14 @@ export default {
     state: {
         msgs: [],
     },
+    getters: {
+        msgs(state) {
+            return state.msgs;
+        },
+        unreadMsgCount(state) {
+            return state.msgs.filter(msg => !msg.isRead).length;
+        }
+    },    
     mutations: {
         addMsgs(state, { msgs }) {
             state.msgs = msgs;
@@ -18,14 +26,6 @@ export default {
         markMsgAsRead(state, { msgId }) {
             let msg = state.msgs.find(currMsg => currMsg._id === msgId);
             msg.isRead = true;
-        }
-    },
-    getters: {
-        msgs(state) {
-            return state.msgs;
-        },
-        unreadMsgCount(state) {
-            return state.msgs.filter(msg => !msg.isRead).length;
         }
     },
     actions: {
@@ -53,6 +53,9 @@ export default {
             if (rootState.chatStore.chat.isOpen && rootState.chatStore.chat.member._id === msgWithUser.fromUser._id) {
                 dispatch({ type: 'markMsgAsRead', msgId: msgWithUser._id });
             }
+        },
+        updateMsgOnlineStatus({commit}, {memberId}){
+            
         }
     }
 };

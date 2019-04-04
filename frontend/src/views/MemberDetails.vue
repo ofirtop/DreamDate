@@ -137,12 +137,10 @@ export default {
       return this.member.likes.likeMe && this.member.likes.iLike;
     }
   },
-  created() {
+  async created() {
     let memberId = this.$route.params.userId;
-    this.$store
-      .dispatch({ type: "loadMemberById", memberId })
-      .then(res => (this.member = res));
-      this.$store.dispatch({type: 'watchMember', memberId});  
+    this.member = await this.$store.dispatch({ type: "loadMemberById", memberId });
+    this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
 </script>

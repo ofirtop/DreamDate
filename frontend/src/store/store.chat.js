@@ -10,6 +10,14 @@ export default {
             isMemberTyping: false
         }
     },
+    getters: {
+        chatMsgs(state) {
+            return state.chat.msgs;
+        },
+        isMemberTyping(state) {
+            return state.chat.isMemberTyping;
+        }
+    },
     mutations: {
         addChatMsg(state, { msg }) {
             state.chat.msgs.push(msg);
@@ -30,14 +38,6 @@ export default {
             state.chat.msgs = [];
             state.chat.isOpen = false;
         },
-    },
-    getters: {
-        chatMsgs(state) {
-            return state.chat.msgs;
-        },
-        isMemberTyping(state) {
-            return state.chat.isMemberTyping;
-        }
     },
     actions: {
         sendChatMsg({ commit }, { msg }) {

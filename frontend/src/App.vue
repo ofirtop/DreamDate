@@ -10,14 +10,15 @@
         <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
       </transition>
     </main>
-    <notif
-      :member="memberForNotif"
-      :action="notifAction"
-      v-if="memberForNotif"
-      @chat="openChatFromNotif"
-      @viewDetails="viewMemberDetailsFromNotif"
-      @close="memberForNotif = null"
-    />
+    <ul>
+      <li v-for="notif in notifs" :key="notif._id">
+        <notif
+          :notif="notif"
+          @chat="openChatFromNotif"
+          @viewDetails="viewMemberDetailsFromNotif"
+        />
+      </li>
+    </ul>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
 </template>
@@ -33,7 +34,7 @@ import {
   EVENT_BUS,
   EV_START_CHAT,
   EV_CHAT_RECEIVED_MSG,
-  EV_RECEIVED_LIKE
+  // EV_RECEIVED_LIKE
 } from "@/event-bus.js";
 
 export default {
@@ -41,7 +42,6 @@ export default {
   data() {
     return {
       memberToChat: null,
-      memberForNotif: null,
       loginFailed: false,
       showLogin: false,
       notifAction: ''
@@ -54,13 +54,12 @@ export default {
     },
     newMembersWhoWatchedMeCount() {
       return this.$store.getters.newMembersWhoWatchedCount;
+    },
+    notifs(){
+      return this.$store.getters.notifs;
     }
   },
   methods: {
-    openNotif(action, member) {
-      this.memberForNotif = member;
-      this.notifAction = action;
-    },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
     },
@@ -69,7 +68,6 @@ export default {
       this.openChat(member);
     },
     viewMemberDetailsFromNotif(member) {
-      this.memberForNotif = null;
       this.$router.push("/member/" + member._id);
     },
     openChat(member) {
@@ -139,10 +137,10 @@ export default {
       console.log(EV_START_CHAT, member);
       this.openChat(member);
     });
-    EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
-      console.log(EV_RECEIVED_LIKE, member);
-      this.openNotif("like", member);
-    });
+    // EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
+    //   console.log(EV_RECEIVED_LIKE, member);
+    //   this.openNotif("like", member);
+    // });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
       console.log(EV_CHAT_RECEIVED_MSG, memberId);
