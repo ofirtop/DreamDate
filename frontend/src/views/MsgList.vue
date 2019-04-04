@@ -1,7 +1,7 @@
 <template>
     <section class="msg-list-cmp flex space-between align-start">
         <ul>
-            <msgPrev v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :isActive="activeMsg === msg._id" @openChat="openChat"/>
+            <msgPrev v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :isActive="activeMsgID === msg._id" @openChat="openChat"/>
         </ul>
         <div class="chat-wrapper flex content-center items-center">
             <h1>chat here</h1>
@@ -17,7 +17,7 @@ export default {
     name: 'msgList',
     data(){
         return {
-            activeMsg:-1
+            activeMsgID:-1
         };
     },
     computed:{
@@ -27,11 +27,13 @@ export default {
     },
     methods:{
         async openChat(msg){
-            this.activeMsg = msg._id;
+            console.log('msg', msg);
+            
+            this.$store.dispatch({type: 'startChat', memberId: msg.fromUser._id, memberName: msg.fromUser.name });
+
+            this.activeMsgID = msg._id;
             this.$store.dispatch({type: 'markMsgAsRead', msgId:msg._id});//DO NOT WAIT FOR PROMISE!
 
-            let member = await this.$store.dispatch({type: 'loadMemberById', memberId: msg.fromUser._id});
-            EVENT_BUS.$emit(EV_START_CHAT, member);
         }
     },
     components:{

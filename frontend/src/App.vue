@@ -7,7 +7,7 @@
         name="fade"
         mode="out-in"
       >
-        <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
+        <router-view @notLike="notLikeMember" @like="addLike"/>
       </transition>
     </main>
     <ul>
@@ -19,7 +19,7 @@
         />
       </li>
     </ul>
-    <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
+    <chat/>
   </div>
 </template>
 
@@ -41,7 +41,6 @@ export default {
   name: "App",
   data() {
     return {
-      memberToChat: null,
       loginFailed: false,
       showLogin: false,
       notifAction: ''
@@ -60,22 +59,15 @@ export default {
     }
   },
   methods: {
-    startChat(member) {
-      EVENT_BUS.$emit(EV_START_CHAT, member);
-    },
+    // startChat(member) {
+    //   EVENT_BUS.$emit(EV_START_CHAT, member);
+    // },
     openChatFromNotif(member) {
       this.memberForNotif = null;
       this.openChat(member);
     },
     viewMemberDetailsFromNotif(member) {
       this.$router.push("/member/" + member._id);
-    },
-    openChat(member) {
-      this.memberToChat = member;
-      this.$store.commit({ type: "startChat", member });
-    },
-    closeChat() {
-      this.memberToChat = null;
     },
     async addLike(member) {
       await this.$store.dispatch({ type: "addLikeToMember", member });
@@ -133,28 +125,28 @@ export default {
     if (user) await this.login({ name: user.name, pass: "123" });
     else this.showLogin = true;
 
-    EVENT_BUS.$on(EV_START_CHAT, member => {
-      console.log(EV_START_CHAT, member);
-      this.openChat(member);
-    });
+    // EVENT_BUS.$on(EV_START_CHAT, member => {
+    //   console.log(EV_START_CHAT, member);
+    //   this.openChat(member);
+    // });
     // EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
     //   console.log(EV_RECEIVED_LIKE, member);
     //   this.openNotif("like", member);
     // });
-    EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
-      let memberId = msg.from;
-      console.log(EV_CHAT_RECEIVED_MSG, memberId);
+    // EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
+    //   let memberId = msg.from;
+    //   console.log(EV_CHAT_RECEIVED_MSG, memberId);
 
-      if (!this.$store.state.chat.member) {
-        //console.log('chat is closed' );
+    //   if (!this.$store.state.chat.member) {
+    //     //console.log('chat is closed' );
 
-        this.$store
-          .dispatch({ type: "loadMemberById", memberId })
-          .then(member => {
-            this.openNotif("chat", member);
-          });
-      }
-    });
+    //     this.$store
+    //       .dispatch({ type: "loadMemberById", memberId })
+    //       .then(member => {
+    //         this.openNotif("chat", member);
+    //       });
+    //   }
+    // });
   },
   components: {
     chat,

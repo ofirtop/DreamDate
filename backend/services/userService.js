@@ -178,7 +178,7 @@ function _modifyUserBeforeSend(memberToModify, loggedUser) {
     } else { memberToModify.likes.iLike = false; }
 
     //online status
-    memberToModify.online =  socketService.getByUserId(memberToModify._id);
+    memberToModify.online =  !!socketService.getByUserId(memberToModify._id);
 
     return memberToModify;
 }

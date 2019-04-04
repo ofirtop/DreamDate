@@ -1,14 +1,10 @@
 <template>
   <section class="member-preview animated" @click="gotoMember" :class="{  fadeOutLeft: animate}">
     <div class="image-container" :style="{backgroundImage: `url(${member.mainImage})`}"/>
-    <div v-if="this.member.online" class="status-wrapper flex space-between items-center">
-      <span
-        class="online-status"
-        title="Online"
-        :class="{on: this.member.online, off: !this.member.online}"
-      />
-    </div>
-    <h2 class="member-name">{{member.name}}, {{memberAge}}</h2>
+    <h2 class="member-name">
+      <span v-if="member.online" class="online-status" title="Online" />
+      {{member.name}}, {{memberAge}}
+    </h2>
     <div class="member-prop">{{member.city}}, Israel</div>
     <div class="member-prop">{{familyDesc}}</div>
 
@@ -117,14 +113,7 @@ export default {
   }  
 }
 
-.status-wrapper {
-  width: 100%;
-  position: absolute;
-  top: 0px;
-  height: 20px;
-  padding: 16px 12px;
-  opacity: 0.7;
-}
+
 a {
   display: block;
   width: 100%;
@@ -135,15 +124,7 @@ a {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-
   border: 2px solid white;
-  &.on {
-    background-color: $clr3;
-    box-shadow: 0px 0px 2px 2px white;
-  }
-  &.off {
-    background-color: $clr11;
-    box-shadow: 0px 0px 2px 2px #6d6d6d;
-  }
+  background-color: $clr3;
 }
 </style>

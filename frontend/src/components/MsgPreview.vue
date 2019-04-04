@@ -6,7 +6,10 @@
         
         <div class="txt-wrapper flex flex-column space-around">
             <h3 class="flex space-between items-center">
-                <span>{{msg.fromUser.name}}</span>
+                <span>
+                    <span v-if="msg.fromUser.online" class="online-status" title="Online" />
+                    {{msg.fromUser.name}}
+                </span>
                 <span class="time">{{msg.timestamp | date}}</span>
             </h3>
             {{msg.txt}}
@@ -83,5 +86,13 @@ $img-size: 100px;
         padding: 5px 15px;
         flex-grow: 1;
     }
+}
+.online-status {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: $clr3;
 }
 </style>

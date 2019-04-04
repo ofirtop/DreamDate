@@ -11,7 +11,7 @@ export default {
         unreadMsgCount(state) {
             return state.msgs.filter(msg => !msg.isRead).length;
         }
-    },    
+    },
     mutations: {
         addMsgs(state, { msgs }) {
             state.msgs = msgs;
@@ -26,6 +26,10 @@ export default {
         markMsgAsRead(state, { msgId }) {
             let msg = state.msgs.find(currMsg => currMsg._id === msgId);
             msg.isRead = true;
+        },
+        updateMsgOnlineStatus(state, { memberId, isOnline }) {
+            let msg = state.msgs.find(msg => msg.fromUser._id === memberId);
+            if (msg) msg.fromUser.online = isOnline;
         }
     },
     actions: {
@@ -41,21 +45,23 @@ export default {
             await msgService.markMsgAsRead(msgId);
             commit({ type: 'markMsgAsRead', msgId });
         },
-        removeMsgByMemberId({commit}, {memberId}){
+        removeMsgByMemberId({ commit }, { memberId }) {
             commit({ type: 'removeMsgByMemberId', memberId });
         },
-        async insertMsgFromChat({commit, rootState}, {msg}){
-            
+        async receiveMsg({ commit, rootState, dispatch }, { msg }) {
+
             let msgWithUser = await msgService.getMsgById(msg._id);
+            console.log('msgWithUser', msgWithUser);
+
             commit({ type: 'removeMsgByMemberId', memberId: msgWithUser.fromUser._id });
             commit({ type: 'insertMsg', msg: msgWithUser });
 
-            if (rootState.chatStore.chat.isOpen && rootState.chatStore.chat.member._id === msgWithUser.fromUser._id) {
+            if (rootState.chatStore.chat && rootState.chatStore.chat.memberId === msgWithUser.fromUser._id) {
                 dispatch({ type: 'markMsgAsRead', msgId: msgWithUser._id });
             }
         },
-        updateMsgOnlineStatus({commit}, {memberId}){
-            
-        }
+        updateMsgOnlineStatus({ commit }, { memberId, isOnline }) {
+            commit({ type: 'updateMsgOnlineStatus', memberId, isOnline });
+        },
     }
 };

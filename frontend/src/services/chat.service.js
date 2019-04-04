@@ -1,12 +1,13 @@
 import { SOCKET } from '@/socket.js';
 import store from '@/store/store';
-
+import axios from './axios.wrapper.js';
+import config from '@/config.js';
 
 export default {
     sendMsg,
     startTyping,
-    getEmptyMsg,
-    finishTyping
+    finishTyping,
+    getHistoryMsgs,
 };
 
 _init();
@@ -19,12 +20,12 @@ function _init() {
 
     SOCKET.on('chat start typing', msg => {
         console.log('ws in:', 'chat start typing', msg);
-        store.commit({ type: 'setIsMemberTyping', isTyping: true });
+        store.dispatch({ type: 'receiveMemberStartTyping', msg });
     });
 
     SOCKET.on('chat finish typing', msg => {
         console.log('ws in:', 'chat finish typing', msg);
-        store.commit({ type: 'setIsMemberTyping', isTyping: false });
+        store.dispatch({ type: 'receiveMemberStopTyping', msg });
     });
 }
 
@@ -43,6 +44,8 @@ function finishTyping(msg) {
     SOCKET.emit('chat finish typing', msg);
 }
 
-function getEmptyMsg(to) {
-    return { from: store.getters.loggedInUser._id, to, txt: '' };
+async function getHistoryMsgs(memberId) {
+    let msgs = await axios.get(`${config.BASE_URL}/user-msg/${memberId}`).then(res => res.data);
+    console.log('msg history', msgs);
+    return msgs;
 }

@@ -85,7 +85,7 @@ export default {
   name: "member-details",
   data() {
     return {
-      member: null,
+      //member: null,
       mainImg:'',
       imgs:[]
     };
@@ -108,7 +108,16 @@ export default {
       this.$router.push('/')
     }
   },
+  watch:{
+    member(){
+      this.mainImg = this.member.mainImage;
+      this.imgs = this.member.images.slice();
+    }
+  },
   computed: {
+    member(){
+      return this.$store.getters.currMember;
+    },
     memberAge() {
       let year = +this.member.dateOfBirth.substring(0, 4);
       return new Date().getFullYear() - year;
@@ -144,9 +153,7 @@ export default {
   },
   async created() {
     let memberId = this.$route.params.userId;
-    this.member = await this.$store.dispatch({ type: "loadMemberById", memberId });
-    this.mainImg = this.member.mainImage;
-    this.imgs = this.member.images.slice();
+    await this.$store.dispatch({ type: "loadMemberById", memberId });
     this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
