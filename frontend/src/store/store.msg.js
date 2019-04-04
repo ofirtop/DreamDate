@@ -26,6 +26,10 @@ export default {
         markMsgAsRead(state, { msgId }) {
             let msg = state.msgs.find(currMsg => currMsg._id === msgId);
             msg.isRead = true;
+        },
+        updateMsgOnlineStatus(state, { memberId, isOnline }) {
+            let msg = state.msgs.find(msg => msg.fromUser._id === memberId);
+            if (msg) msg.fromUser.online = isOnline;
         }
     },
     actions: {
@@ -56,8 +60,8 @@ export default {
                 dispatch({ type: 'markMsgAsRead', msgId: msgWithUser._id });
             }
         },
-        updateMsgOnlineStatus({ commit }, { memberId }) {
-
-        }
+        updateMsgOnlineStatus({ commit }, { memberId, isOnline }) {
+            commit({ type: 'updateMsgOnlineStatus', memberId, isOnline });
+        },
     }
 };

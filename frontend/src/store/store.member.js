@@ -5,6 +5,7 @@ import likeService from '@/services/like.service.js';
 export default {
     state: {
         members: [],
+        currMember: null
     },
     getters: {
         members(state) {
@@ -15,12 +16,17 @@ export default {
                 return state.members.find(member => member._id === memberId);
             }
         },
+        currMember(state) {
+            return state.currMember;
+        }
     },
     mutations: {
         setMembers(state, { members }) {
             state.members = members
         },
         loadMemberById(state, { member }) {
+            state.currMember = member;
+
             let idx = state.members.findIndex(item => item._id === member._id);
             if (idx > -1) state.members.splice(idx, 1, member);
         },
@@ -44,6 +50,7 @@ export default {
         updateMemberOnlineStatus(state, { memberId, isOnline }) {
             let member = state.members.find(currMember => currMember._id === memberId);
             if (member) member.online = isOnline;
+            if (state.currMember && state.currMember._id === memberId) state.currMember.online = isOnline;
         },
         removeMemberIDontLike(state, { updatedMemberId }) {
             // console.log('about to remove member I dont like. memberId:', updatedMemberId)
@@ -75,9 +82,10 @@ export default {
             let updatedMemberId = memberService.updateNotLikeMember(memberId);
             commit({ type: 'removeMemberIDontLike', updatedMemberId });
         },
-        updateMemberOnlineStatus({ commit }, { memberId, isOnline }) {
+        updateMemberOnlineStatus({ commit, dispatch }, { memberId, isOnline }) {
             console.log('updateMemberOnlineStatus', memberId, isOnline);
             commit({ type: 'updateMemberOnlineStatus', memberId, isOnline });
+            dispatch({ type: 'updateMsgOnlineStatus', memberId, isOnline });
         },
         async getLikeFromMember({ commit, getters, dispatch }, { memberId }) {
             console.log('getLikeFromMember', memberId);
