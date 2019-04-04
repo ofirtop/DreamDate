@@ -143,7 +143,7 @@ export default {
   // border: 1px solid red;
   position: relative;
   font-size: 1.3rem;
-  padding: 0 10px;
+  padding: 0 10px 1px 10px;
 }
 .toggle-menu-btn {
   background: none;

@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="main-img">
-        <div class="mainImg" :style="{backgroundImage: `url(${member.mainImage})`}"></div>
+        <div class="mainImg" :style="{backgroundImage: `url(${mainImg})`}"></div>
         <div class="actions-wrapper flex space-around">
           <div v-if="!isMatch" @click.stop="$emit('like', member)">
             <font-awesome-icon icon="heart" class="heart" />
@@ -71,7 +71,7 @@
     <div class="img-gallery">
         <div class="member-img clickable" 
             :style="{backgroundImage: `url(${img})`}" 
-            v-for="(img, idx) in member.images" :key="idx" 
+            v-for="(img, idx) in imgs" :key="idx" 
             @click="changeMainImg(img, idx)">
         </div>
     </div>
@@ -85,14 +85,19 @@ export default {
   name: "member-details",
   data() {
     return {
-      member: null
+      member: null,
+      mainImg:'',
+      imgs:[]
     };
   },
   methods: {
     changeMainImg(imgSrc, idx) {
-      let img = this.member.mainImage;
-      this.member.mainImage = imgSrc;
-      this.member.images.splice(idx, 1, img);
+
+
+      let img = this.mainImg;
+      this.mainImg = imgSrc;
+      this.imgs.splice(idx, 1, img);
+      
     },
     // like() {
     //   this.$emit('like', this.member);
@@ -137,12 +142,12 @@ export default {
       return this.member.likes.likeMe && this.member.likes.iLike;
     }
   },
-  created() {
+  async created() {
     let memberId = this.$route.params.userId;
-    this.$store
-      .dispatch({ type: "loadMemberById", memberId })
-      .then(res => (this.member = res));
-      this.$store.dispatch({type: 'watchMember', memberId});  
+    this.member = await this.$store.dispatch({ type: "loadMemberById", memberId });
+    this.mainImg = this.member.mainImage;
+    this.imgs = this.member.images.slice();
+    this.$store.dispatch({type: 'watchMember', memberId});  
   }
 };
 </script>

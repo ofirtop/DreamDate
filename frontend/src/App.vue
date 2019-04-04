@@ -10,14 +10,15 @@
         <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
       </transition>
     </main>
-    <notif
-      :member="memberForNotif"
-      :action="notifAction"
-      v-if="memberForNotif"
-      @chat="openChatFromNotif"
-      @viewDetails="viewMemberDetailsFromNotif"
-      @close="memberForNotif = null"
-    />
+    <ul>
+      <li v-for="notif in notifs" :key="notif._id">
+        <notif
+          :notif="notif"
+          @chat="openChatFromNotif"
+          @viewDetails="viewMemberDetailsFromNotif"
+        />
+      </li>
+    </ul>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
   </div>
 </template>
@@ -33,7 +34,7 @@ import {
   EVENT_BUS,
   EV_START_CHAT,
   EV_CHAT_RECEIVED_MSG,
-  EV_RECEIVED_LIKE
+  // EV_RECEIVED_LIKE
 } from "@/event-bus.js";
 
 export default {
@@ -41,7 +42,6 @@ export default {
   data() {
     return {
       memberToChat: null,
-      memberForNotif: null,
       loginFailed: false,
       showLogin: false,
       notifAction: ''
@@ -49,21 +49,17 @@ export default {
   },
   computed: {
     loggedInUser() {
-      console.log(
-        "this.$store.getters.loggedInUser: ",
-        this.$store.getters.loggedInUser
-      );
+      console.log("loggedInUser", this.$store.getters.loggedInUser);
       return this.$store.getters.loggedInUser;
     },
     newMembersWhoWatchedMeCount() {
       return this.$store.getters.newMembersWhoWatchedCount;
+    },
+    notifs(){
+      return this.$store.getters.notifs;
     }
   },
   methods: {
-    openNotif(action, member) {
-      this.memberForNotif = member;
-      this.notifAction = action;
-    },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
     },
@@ -72,7 +68,6 @@ export default {
       this.openChat(member);
     },
     viewMemberDetailsFromNotif(member) {
-      this.memberForNotif = null;
       this.$router.push("/member/" + member._id);
     },
     openChat(member) {
@@ -112,11 +107,8 @@ export default {
 
       this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({
-          type: "loginUser",
-          userCredentials
-        });
-        utilService.saveToStorage("loggedInUser", loggedInUser);
+            await this.$store.dispatch({type: "loginUser", userCredentials});
+            this.$router.push('/');
       } catch {
         this.loginFailed = true;
       }
@@ -125,18 +117,13 @@ export default {
       console.log('Signing up (HOME):', userCredentials);
         this.loginFailed = false;
       try {
-        let loggedInUser = await this.$store.dispatch({
-          type: "signupUser",
-          userCredentials
-        });
-        utilService.saveToStorage("loggedInUser", loggedInUser);
-        this.$router.push(`/user/${loggedInUser._id}`)
+        let user = await this.$store.dispatch({type: "signupUser", userCredentials});
+        this.$router.push(`/user/${user._id}`)
       } catch {
         this.loginFailed = true;
       }
     },
     logout() {
-      localStorage.removeItem("loggedInUser");
       this.$store.dispatch({ type: "logoutUser" });
     }
   },
@@ -150,10 +137,10 @@ export default {
       console.log(EV_START_CHAT, member);
       this.openChat(member);
     });
-    EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
-      console.log(EV_RECEIVED_LIKE, member);
-      this.openNotif("like", member);
-    });
+    // EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
+    //   console.log(EV_RECEIVED_LIKE, member);
+    //   this.openNotif("like", member);
+    // });
     EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
       let memberId = msg.from;
       console.log(EV_CHAT_RECEIVED_MSG, memberId);
