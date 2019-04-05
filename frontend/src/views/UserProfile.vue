@@ -162,7 +162,7 @@ export default {
   width: 100%;
 }
 .container {
-  /* max-width: 60%; */
+  max-width: 60%;
   flex-direction: column;
   background-color: rgba(248, 248, 248, 1);
   border-radius: 2px;
