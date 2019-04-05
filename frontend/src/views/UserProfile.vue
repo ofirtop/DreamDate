@@ -11,15 +11,15 @@
         <hr>
         <div class="details-section">
           <div class="gender">{{userGender}}</div>
-          <h4>{{user.descr}}</h4>
+          <p>{{user.descr}}</p>
           <hr>
-          <h4>Height: {{user.height}}cm</h4>
-          <h4>I'm from {{user.city}}</h4>
-          <h4>{{user.maritalStatus}}</h4>
-          <h4>{{childrenInfo}}</h4>
+          <p>Height: {{user.height}}cm</p>
+          <p>I'm from {{user.city}}</p>
+          <p>{{user.maritalStatus}}</p>
+          <p>{{childrenInfo}}</p>
           <hr>
           <h3>I want to meet</h3>
-          <h4>{{partnerGenderNAge}}</h4>
+          <p>{{partnerGenderNAge}}</p>
           <div class="btns full-width items-center flex">
             <el-button class="editBtn" size="mini" @click="editProfile" type="primary">Edit Details</el-button>
             <i class="el-icon-edit-outline clickable hidden" @click="editProfile"></i>
@@ -125,7 +125,7 @@ export default {
     },
     userGender(){
       if (this.user.gender === 'female') return 'Woman'
-      else if (this.user.gender === 'male') return 'Woman'
+      else if (this.user.gender === 'male') return 'Man'
       else return 'Gender is not defined'
     },
     isMobile(){
@@ -147,6 +147,9 @@ export default {
 };
 </script>
 <style scoped>
+p {
+  margin: 5px 0;
+}
 .screen {
   position: fixed;
   top:0;
