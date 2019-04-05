@@ -72,6 +72,7 @@ export default {
   },
   created() {
     if (this.loggedInUser) {
+      this.$store.dispatch({type: 'removeAllMembers'});
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
       this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
       this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;

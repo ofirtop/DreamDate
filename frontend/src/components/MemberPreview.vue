@@ -108,7 +108,7 @@ export default {
     &:after{
       content:"";
       display:block;
-      padding-bottom: 100%;
+      padding-bottom: 90%;
     }
   }  
 }

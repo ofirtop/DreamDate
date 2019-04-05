@@ -33,6 +33,7 @@ export default {
   },
   created() {
     if (this.loggedInUser) {
+      this.$store.dispatch({type: 'removeAllMembers'});
       this.$store.dispatch({ type: "loadMembers", filterBy: null, routeName: 'match' });
     }
   },

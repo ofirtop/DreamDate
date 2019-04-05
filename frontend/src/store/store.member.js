@@ -57,6 +57,9 @@ export default {
             let idx = state.members.findIndex(member => member._id === updatedMemberId);
             state.members.splice(idx, 1);
         },
+        removeAllMembers(state) {
+            state.members = [];
+        }
     },
     actions: {
         async loadMembers(context, { filterBy, routeName = 'home' }) {
@@ -66,6 +69,9 @@ export default {
             else if (routeName === 'match') members = await memberService.queryMatch();
 
             context.commit({ type: 'setMembers', members });
+        },
+        async removeAllMembers({ commit }) {
+            commit({ type: 'removeAllMembers' });
         },
         async loadMemberById({ commit }, { memberId }) {
             //console.log('loadMemberById', memberId);
