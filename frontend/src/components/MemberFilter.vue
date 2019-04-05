@@ -113,9 +113,9 @@ export default {
       this.openFilterSection('');
     },
     loggedInUserSet() {
-      this.filterBy.gender = this.loggedInUser.interestedIn.gender;
-      this.filterBy.age[0] = this.loggedInUser.interestedIn.minAge;
-      this.filterBy.age[1] = this.loggedInUser.interestedIn.maxAge;
+      if (this.loggedInUser.interestedIn.gender) this.filterBy.gender = this.loggedInUser.interestedIn.gender;
+      if (this.loggedInUser.interestedIn.minAge) this.filterBy.age[0] = this.loggedInUser.interestedIn.minAge;
+      if (this.loggedInUser.interestedIn.maxAge) this.filterBy.age[1] = this.loggedInUser.interestedIn.maxAge;
     }
   },
   watch: {
