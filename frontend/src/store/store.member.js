@@ -32,10 +32,7 @@ export default {
             console.log('added like to member', member);
         },
         getLikeFromMember(state, { memberId }) {
-            //console.log('addLikeFromMember', member.memberId);
             let member = state.members.find(currMember => currMember._id === memberId);
-            //console.log('addLikeFromMember', memberFromStore);
-
             if (member) {
                 member.likes.likeMe = true;
                 member.likes.isRead = false;
@@ -67,12 +64,12 @@ export default {
             return member;
         },
         async addLikeToMember({ commit, rootState }, { member }) {
-            await likeService.add(rootState.userStore.loggedInUser._id, member._id);
+            await likeService.add(rootState.userStore.loggedInUser._id, member._id);            
             commit({ type: 'addLikeToMember', member });
         },
-        async notLikeMember({ commit }, { memberId }) {
+        async addNotLikeToMember({ commit }, { memberId }) {
             //console.log('store - action:notLikeMember() - memberId: ', memberId)
-            let updatedMemberId = memberService.updateNotLikeMember(memberId);
+            let updatedMemberId = await memberService.updateNotLikeMember(memberId);
             commit({ type: 'removeMemberIDontLike', updatedMemberId });
         },
         updateMemberOnlineStatus({ commit }, { memberId, isOnline }) {
@@ -87,7 +84,12 @@ export default {
                 member = await memberService.getMemberById(memberId);
             }
             commit({ type: 'getLikeFromMember', memberId });
-            dispatch({ type: 'addNotif', member, actionType: 'like' });
+            console.log('store.member:getLikeFromMember (action) - commited')
+            if (member.likes.iLike && member.likes.likeMe) dispatch({ type: 'addMatch', member });
+            else {
+                console.log('store.member:getLikeFromMember (action) - about to dispatch addNotif')
+                dispatch({ type: 'addNotif', member, actionType: 'like' });
+            }
             //EVENT_BUS.$emit(EV_RECEIVED_LIKE, member);
         },
     }

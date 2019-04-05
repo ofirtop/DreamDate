@@ -3,11 +3,8 @@
     <app-header :loggedInUser="loggedInUser" @logout="logout"/>
     <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
     <main class="App__main">
-      <transition
-        name="fade"
-        mode="out-in"
-      >
-        <router-view @chat="openChat" @notLike="notLikeMember" @like="addLike"/>
+      <transition name="fade" mode="out-in">
+        <router-view @chat="openChat" @notLike="notLikeMember" />
       </transition>
     </main>
     <ul>
@@ -20,11 +17,14 @@
       </li>
     </ul>
     <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
+    <match-ad @removeMatch="removeMatch"/>
+    <!-- v-if="memberToMatch" :member="memberToMatch" @close="closeMatch" -->
   </div>
 </template>
 
 <script>
 import chat from "@/components/Chat.vue";
+import matchAd from "@/components/MatchAd.vue";
 import login from "@/components/Login.vue";
 import Notif from "@/components/Notif.vue";
 import appHeader from "@/components/Header.vue";
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       memberToChat: null,
+      memberToMatch: null,
       loginFailed: false,
       showLogin: false,
       notifAction: ''
@@ -60,6 +61,10 @@ export default {
     }
   },
   methods: {
+    removeMatch(){
+      console.log('methods:removeMatch');
+      this.$store.dispatch({ type: "removeMatch"});
+    },
     startChat(member) {
       EVENT_BUS.$emit(EV_START_CHAT, member);
     },
@@ -77,22 +82,22 @@ export default {
     closeChat() {
       this.memberToChat = null;
     },
-    async addLike(member) {
-      await this.$store.dispatch({ type: "addLikeToMember", member });
-      if (member.likes.iLike && member.likes.likeMe) {
-        Swal.fire({
-          title: "You have a new match !!!",
-          type: "success",
-          showCancelButton: true,
-          confirmButtonText: "Send a message",
-          cancelButtonText: "Later"
-        }).then(result => {
-          if (result.value) {
-            EVENT_BUS.$emit(EV_START_CHAT, member);
-          }
-        });
-      }
-    },
+    // async addLike(member) {
+    //   await this.$store.dispatch({ type: "addLikeToMember", member });
+    //   if (member.likes.iLike && member.likes.likeMe) {
+    //     Swal.fire({
+    //       title: "You have a new match !!!",
+    //       type: "success",
+    //       showCancelButton: true,
+    //       confirmButtonText: "Send a message",
+    //       cancelButtonText: "Later"
+    //     }).then(result => {
+    //       if (result.value) {
+    //         EVENT_BUS.$emit(EV_START_CHAT, member);
+    //       }
+    //     });
+    //   }
+    // },
     notLikeMember(memberId) {
       this.$store.dispatch({ type: "notLikeMember", memberId });
     },
@@ -160,7 +165,8 @@ export default {
     chat,
     login,
     Notif,
-    appHeader
+    appHeader,
+    matchAd
   }
 };
 </script>
