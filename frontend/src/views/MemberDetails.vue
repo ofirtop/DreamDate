@@ -13,15 +13,15 @@
         <div class="details flex">
           <hr>
           <!-- <h2>{{member.name}}'s details</h2> -->
-          <h4>{{member.descr}}</h4>
+          <p>{{member.descr}}</p>
           <hr>
-          <h4>Height: {{member.height}}cm</h4>
-          <h4>I'm from {{member.city}}</h4>
-          <h4>I'm {{member.maritalStatus}}</h4>
-          <h4>I have {{childrenInfo}}</h4>
+          <p>Height: {{member.height}}cm</p>
+          <p>I'm from {{member.city}}</p>
+          <p>I'm {{member.maritalStatus}}</p>
+          <p>I have {{childrenInfo}}</p>
           <hr>
           <h2>I want to meet:</h2>
-          <h4>{{partnerGenderNAge}}</h4>
+          <p>{{partnerGenderNAge}}</p>
         </div>
       </div>
       <div class="main-img">
@@ -160,7 +160,9 @@ export default {
 </script>
 <style scoped lang="scss">
   @import '../sass/_variables.scss';
-
+p {
+  margin: 5px 0;
+}
 a {
   text-decoration: none;
   color: black;
