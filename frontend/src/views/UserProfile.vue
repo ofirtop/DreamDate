@@ -1,52 +1,44 @@
 <template>
   <section v-if="user" class="user-profile">
-    <div class="screen" v-if="isEdit||uploadImg"></div>
-    <!-- <div class="title">
-    </div> -->
-    <edit-profile @addChanges="addChanges" @close="isEdit = false" :profile="user" :loggedInUser="loggedInUser" v-if="isEdit"></edit-profile>
-    <upload-img v-if="uploadImg" @addChanges="addChanges" @close="uploadImg = false" :profile="user"></upload-img>
-    <div class="container">
-      <div class="main-section">
+    <div class="screen" v-if="isEdit"></div>
+    <edit-profile  @addChanges="saveProfile" @close="isEdit=false" :profile="this.user" v-if="isEdit"></edit-profile>
+    <div  class="container flex">
+      <div class="main-section flex">
         <div class="info">
         <div class="name-section flex items-center">
           <h2>{{user.name}}, {{userAge}}</h2>
         </div>
-        <div class="save-btns flex" v-if="saveBtn">
-        <el-button  @click="saveProfile" type="success">Save changes</el-button>
-        <el-button  @click="clearChanges" type="danger">Cancel changes</el-button>
-        </div>
         <hr>
         <div class="details-section">
           <div class="gender">{{userGender}}</div>
-          <h4>{{user.descr}}</h4>
+          <p>{{user.descr}}</p>
           <hr>
-          <h4>Height: {{user.height}}cm</h4>
-          <h4>I'm from {{user.city}}</h4>
-          <h4>{{user.maritalStatus}}</h4>
-          <h4>{{childrenInfo}}</h4>
+          <p>Height: {{user.height}}cm</p>
+          <p>I'm from {{user.city}}</p>
+          <p>{{user.maritalStatus}}</p>
+          <p>{{childrenInfo}}</p>
           <hr>
           <h3>I want to meet</h3>
-          <h4>{{partnerGenderNAge}}</h4>
-          <div class="btns flex">
-            <el-button size="mini" @click="editProfile" type="primary">Edit Details</el-button>
-            <el-button size="mini" @click="uploadImg = !uploadImg" type="primary">Upload pic</el-button>
+          <p>{{partnerGenderNAge}}</p>
+          <div class="btns full-width items-center flex">
+            <el-button class="editBtn" size="mini" @click="editProfile" type="primary">Edit Details</el-button>
+            <i class="el-icon-edit-outline clickable hidden" @click="editProfile"></i>
+            <upload-img v-if="isMobile" class="mobile-upload-img" @addChanges="saveProfile" :profile="user"></upload-img>
           </div>
         </div>
         </div>
         <div class="img-section">
-          <img class="mainImg" :src="user.mainImage">
+          <div class="mainImg" :style="{backgroundImage: `url(${user.mainImage})`}"></div>
+          <a class="remove-image" href="#" style="display: inline;" @click.stop="removeMainImg">&#215;</a>
         </div>
       </div>
       <div class="img-gallery mt-1 mb-1">
-        <div
-          class="user-img clickable"
-          :style="{backgroundImage: `url(${img})`}"
-          v-for="(img, idx) in user.images"
-          :key="idx"
-          @click="changeMainImg(img, idx)"
-        ></div>
+        <upload-img v-if="!isMobile" class="desk-upload-img" @addChanges="saveProfile" :profile="user"></upload-img>
+        <div class="user-img clickable" v-for="(img, idx) in user.images" :key="idx" @click="changeMainImg(img, idx)">
+          <a class="remove-image" href="#" @click.stop="removeImg(img, idx)" style="display: inline;">&#215;</a>
+          <div class="img" :style="{backgroundImage: `url(${img})`}"></div>
+        </div>
       </div>
-      
       </div>
   </section>
 </template>
@@ -59,9 +51,8 @@ export default {
   data() {
     return {
       user: null,
-      saveBtn: false,
       isEdit: false,
-      uploadImg: false
+      // isMobile: false
     };
   },
   created() {
@@ -71,49 +62,44 @@ export default {
     else {
       this.$store
         .dispatch({ type: 'loadMemberById', memberId: userId })
-        .then(res => (this.user = res))
+        .then(res => {
+          this.user = JSON.parse(JSON.stringify(res))          
+        })
     }
     console.log('LoggedInUser', this.loggedInUser);
-
   },
   methods: {
-    addChanges(user) {
-      this.user = user;
-      this.isEdit = false;
-      this.uploadImg = false;
-      this.saveBtn = true;
-    },
     changeMainImg(imgSrc, idx) {
       let img = this.user.mainImage;
       this.user.mainImage = imgSrc;
       this.user.images.splice(idx, 1, img);
-      this.saveBtn = true;
+      this.saveProfile(this.user);
     },
-    saveProfile() {
+    saveProfile(user) {
+      this.user = user;
       this.isEdit = false;
-      this.uploadImg = false;
-      console.log('Save updated PROFILE: ', this.user);
-      this.$store.dispatch({ type: 'updateUser', user: this.user });
-      this.saveBtn = false;
+      user = JSON.parse(JSON.stringify(user));  
+      this.$store.dispatch({ type: 'updateUser', user });
     },
     editProfile() {
       this.isEdit = true;
     },
-    clearChanges() {
-      this.user = this.loggedInUser;
-      this.age = [
-        this.user.interestedIn.minAge,
-        this.user.interestedIn.maxAge
-      ];
-      this.saveBtn = false;
+    removeImg(img, idx) {
+      this.user.images.splice(idx, 1);
+      this.saveProfile(this.user);
     },
-    toAll() {
-      this.$router.push('/');
-    }
+    removeMainImg() {
+      if(this.user.images[0]) {
+        this.user.mainImage = this.user.images[0];
+        this.user.images.splice(0, 1)
+      } else this.user.mainImage = '';
+      this.saveProfile(this.user);
+    },
   },
   computed: {
     loggedInUser() {
-      return this.$store.getters.loggedInUser;
+      let user = this.$store.getters.loggedInUser;
+      return JSON.parse(JSON.stringify(user))
     },
     userAge() {
       let year = +this.user.dateOfBirth.substring(0, 4);
@@ -139,17 +125,20 @@ export default {
     },
     userGender(){
       if (this.user.gender === 'female') return 'Woman'
-      else if (this.user.gender === 'male') return 'Woman'
+      else if (this.user.gender === 'male') return 'Man'
       else return 'Gender is not defined'
+    },
+    isMobile(){
+      let size = window.innerWidth;
+      return (size < 740)
     }
-
   },
   watch: {
     loggedInUser() {
       let userId = this.$route.params.userId;
       if (!this.loggedInUser || this.loggedInUser._id !== userId)
         this.$router.push('/');
-    }
+    },
   },
   components: {
     editProfile,
@@ -158,12 +147,15 @@ export default {
 };
 </script>
 <style scoped>
+p {
+  margin: 5px 0;
+}
 .screen {
   position: fixed;
   top:0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(206, 201, 201, 0.932);
   z-index: 3;
 }
@@ -174,9 +166,7 @@ export default {
 }
 .container {
   max-width: 60%;
-  display: flex;
   flex-direction: column;
-  /* align-items: center; */
   background-color: rgba(248, 248, 248, 1);
   border-radius: 2px;
   margin: 10px;
@@ -184,11 +174,7 @@ export default {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-/* .container:hover {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-} */
 .main-section {
-  display: flex;
   justify-content: space-around;
   margin: 10px;
 }
@@ -204,43 +190,40 @@ a {
   display: flex;
   flex-direction: column;
   margin: 75px auto 0 auto;
-  width: 1200px;
+  max-width: 1200px;
+  width: 100%
 }
 .img-section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
+  
 }
-
 .mainImg {
-  width: 200px;
-  /* max-height: 250px; */
-  background-position: center top;
+  width: 300px;
+  height: 300px;
+  background-position: right top;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.img-gallery {
-  display: flex;
-  justify-content: center;
-}
 .user-img {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: gray;
+  font-size: 2em;
+  position: relative;
+}
+.user-img .img {
   width: 150px;
   height: 150px;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
-  margin: 10px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.user-img img {
-  width: 100%;
-  height: 100%;
-}
-/* .user-img:hover,
-.mainImg:hover {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-} */
 h2 {
   font-size: 1.5em;
   font-weight: bold;
@@ -250,6 +233,11 @@ h2 {
   flex-wrap: wrap;
   width: 100%;
   cursor: pointer;
+  justify-content: center;
+  margin: 10px;
+}
+.img-gallery>* {
+  margin: 10px;
 }
 .details-section {
   display: flex;
@@ -266,25 +254,62 @@ button {
 input {
   width: 50%;
 }
-@media (max-width: 700px){
+.remove-image {
+display: none;
+position: absolute;
+top: -10px;
+right: -10px;
+border-radius: 10em;
+padding: 2px 6px 3px;
+text-decoration: none;
+font: 700 21px/20px sans-serif;
+background: #555;
+border: 3px solid #fff;
+color: #FFF;
+box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  transition: background 0.5s;
+}
+.remove-image:hover {
+ background: #E54E4E;
+  padding: 3px 7px 5px;
+  top: -11px;
+  right: -11px;
+}
+.remove-image:active {
+ background: #E54E4E;
+  top: -11px;
+  right: -11px;
+}
+.mobile-upload-img{
+  display:none;
+}
+@media (max-width: 740px){
   .user-profile {
-    width:100%;
-    margin: 100px 0 0 0;
+    width: 100%;
+    margin: 80px auto;
   }
   .main-section {
     flex-direction: column;
     width: 100%;
+    margin: 0;
   }
   .container {
     width: 100%;
     margin: 0;
     max-width: 100%;
   }
-  .user-img {
+  .user-img,
+  .user-img .img{
   width: 100%;
-  height: 80vh;
+  height: 100%;
   margin: 0;
+  background-size: contain;
 }
+ .user-img {
+   background-color: rgba(168, 166, 166, 0.233);
+   height: 400px;
+ }
 .details {
   width: 95%;
   padding: 0 10px;
@@ -293,15 +318,40 @@ input {
 } 
 .img-gallery {
     flex-direction: column;
-    width: 100%;
+    width: 95%;
+    align-items: center
   }
+.img-section {
+  margin: 10px;
+}
 .mainImg {
   width: 100%;
-  max-height: 400px;
-  object-fit: contain
+  background-size: contain;
+  height: 400px;
 }
 .save-btns {
   justify-content: center;
+}
+.mobile-upload-img {
+  display: inline-block;
+}
+.btns {
+  justify-content: center;
+  height: 64px;
+  font-size: 64px;
+  margin-top:10px;
+}
+.editBtn {
+  display: none;
+}
+.el-icon-edit-outline {
+  display: inline-block;
+  color: gray;
+  margin-right: 20px;
+  
+}
+.desk-upload-img {
+  display: none;
 }
 }
 </style>

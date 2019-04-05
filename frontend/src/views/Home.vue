@@ -42,7 +42,7 @@ export default {
       this.$store.dispatch({ type: "addNotLikeToMember", memberId });
     },
     startChat(member) {
-      EVENT_BUS.$emit(EV_START_CHAT, member);
+      this.$store.dispatch({type: 'startChat', memberId: member._id, memberName: member.name});
     },
     setFilter(filterBy) {
       this.filterBy = filterBy;
@@ -59,6 +59,7 @@ export default {
   },
   created() {
     if (this.loggedInUser) {
+      this.$store.dispatch({type: 'removeAllMembers'});
       this.filterBy.gender = this.loggedInUser.interestedIn.gender;
       this.filterBy.minAge = this.loggedInUser.interestedIn.minAge;
       this.filterBy.maxAge = this.loggedInUser.interestedIn.maxAge;

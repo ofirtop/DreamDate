@@ -1,6 +1,6 @@
 const mongoService = require('./mongo-service')
 const ObjectId = require('mongodb').ObjectId;
-const userService = require('./userService');
+const socketService = require('./socketService');
 
 
 module.exports = {
@@ -96,7 +96,7 @@ async function getById(msgId) {
             ]).toArray();
         });
 
-        return msgArray[0];
+    return msgArray[0];
 }
 
 async function getTopMsgs(userId) {
@@ -170,8 +170,12 @@ async function getTopMsgs(userId) {
                         }
                     },
 
-                ]).toArray()
+                ]).toArray();
         });
-    //console.log('msgs', msgs);
-    return Promise.resolve(msgs);
+    msgs = msgs.map(msg => {
+        msg.fromUser.online = !!socketService.getByUserId(msg.fromUser._id);
+        return msg;
+    });
+    console.log('msgs', msgs);
+    return msgs;
 }

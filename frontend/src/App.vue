@@ -16,9 +16,8 @@
         />
       </li>
     </ul>
-    <chat v-if="memberToChat" :member="memberToChat" @close="closeChat"/>
+    <chat/>
     <match-ad @removeMatch="removeMatch"/>
-    <!-- v-if="memberToMatch" :member="memberToMatch" @close="closeMatch" -->
   </div>
 </template>
 
@@ -29,7 +28,7 @@ import login from "@/components/Login.vue";
 import Notif from "@/components/Notif.vue";
 import appHeader from "@/components/Header.vue";
 import utilService from "@/services/util.service.js";
-
+import Swal from "sweetalert2";
 import {
   EVENT_BUS,
   EV_START_CHAT,
@@ -41,8 +40,6 @@ export default {
   name: "App",
   data() {
     return {
-      memberToChat: null,
-      memberToMatch: null,
       loginFailed: false,
       showLogin: false,
       notifAction: ''
@@ -65,9 +62,6 @@ export default {
       console.log('methods:removeMatch');
       this.$store.dispatch({ type: "removeMatch"});
     },
-    startChat(member) {
-      EVENT_BUS.$emit(EV_START_CHAT, member);
-    },
     openChatFromNotif(member) {
       this.memberForNotif = null;
       this.openChat(member);
@@ -75,29 +69,6 @@ export default {
     viewMemberDetailsFromNotif(member) {
       this.$router.push("/member/" + member._id);
     },
-    openChat(member) {
-      this.memberToChat = member;
-      this.$store.commit({ type: "startChat", member });
-    },
-    closeChat() {
-      this.memberToChat = null;
-    },
-    // async addLike(member) {
-    //   await this.$store.dispatch({ type: "addLikeToMember", member });
-    //   if (member.likes.iLike && member.likes.likeMe) {
-    //     Swal.fire({
-    //       title: "You have a new match !!!",
-    //       type: "success",
-    //       showCancelButton: true,
-    //       confirmButtonText: "Send a message",
-    //       cancelButtonText: "Later"
-    //     }).then(result => {
-    //       if (result.value) {
-    //         EVENT_BUS.$emit(EV_START_CHAT, member);
-    //       }
-    //     });
-    //   }
-    // },
     notLikeMember(memberId) {
       this.$store.dispatch({ type: "notLikeMember", memberId });
     },
@@ -138,28 +109,28 @@ export default {
     if (user) await this.login({ name: user.name, pass: "123" });
     else this.showLogin = true;
 
-    EVENT_BUS.$on(EV_START_CHAT, member => {
-      console.log(EV_START_CHAT, member);
-      this.openChat(member);
-    });
+    // EVENT_BUS.$on(EV_START_CHAT, member => {
+    //   console.log(EV_START_CHAT, member);
+    //   this.openChat(member);
+    // });
     // EVENT_BUS.$on(EV_RECEIVED_LIKE, member => {
     //   console.log(EV_RECEIVED_LIKE, member);
     //   this.openNotif("like", member);
     // });
-    EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
-      let memberId = msg.from;
-      console.log(EV_CHAT_RECEIVED_MSG, memberId);
+    // EVENT_BUS.$on(EV_CHAT_RECEIVED_MSG, msg => {
+    //   let memberId = msg.from;
+    //   console.log(EV_CHAT_RECEIVED_MSG, memberId);
 
-      if (!this.$store.state.chat.member) {
-        //console.log('chat is closed' );
+    //   if (!this.$store.state.chat.member) {
+    //     //console.log('chat is closed' );
 
-        this.$store
-          .dispatch({ type: "loadMemberById", memberId })
-          .then(member => {
-            this.openNotif("chat", member);
-          });
-      }
-    });
+    //     this.$store
+    //       .dispatch({ type: "loadMemberById", memberId })
+    //       .then(member => {
+    //         this.openNotif("chat", member);
+    //       });
+    //   }
+    // });
   },
   components: {
     chat,
@@ -177,7 +148,7 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   background: $bg-color;
 }
 .fade-enter-active,

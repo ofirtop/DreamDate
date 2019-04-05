@@ -18,8 +18,9 @@ export default {
   },
   methods: {
     startChat(member) {
-      this.memberForMatch = null;
-      EVENT_BUS.$emit(EV_START_CHAT, member);
+      //this.memberForMatch = null;
+      //EVENT_BUS.$emit(EV_START_CHAT, member);
+      this.$store.dispatch({type: 'startChat', memberId: member._id, memberName: member.name});
     }
   },
   computed: {
@@ -32,6 +33,7 @@ export default {
   },
   created() {
     if (this.loggedInUser) {
+      this.$store.dispatch({type: 'removeAllMembers'});
       this.$store.dispatch({ type: "loadMembers", filterBy: null, routeName: 'match' });
     }
   },

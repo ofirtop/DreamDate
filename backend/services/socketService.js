@@ -18,11 +18,6 @@ function remove(userId) {
 }
 
 function getByUserId(userId) {
-    //console.log('sockets', sockets.map(sock => sock.userId));
-
-    let socket = sockets.find(currSocket => {
-        //console.log('currSocket', currSocket.userId, 'userId:', userId);
-        return currSocket.userId === userId
-    });
+    let socket = sockets.find(currSocket => currSocket.userId === userId + '');
     return socket;
 }
