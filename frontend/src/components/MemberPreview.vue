@@ -64,6 +64,7 @@ export default {
   border: 1px solid $clr15;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
   .member-name {
     margin: 20px 0;
     font-weight: bold;

@@ -163,7 +163,7 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   background: $bg-color;
 }
 .fade-enter-active,
