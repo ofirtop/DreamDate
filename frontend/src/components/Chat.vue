@@ -1,6 +1,6 @@
 <template>
   <section class="chat-cmp flex flex-column" v-if="chat">
-    <div class="header flex space-between">
+    <h3 class="header flex space-between">
       <div>
         Chat with {{chat.memberName}}
       </div>
@@ -8,9 +8,13 @@
       <div @click="closeChat">
         <font-awesome-icon icon="times" title="close" />
       </div>
-    </div>
+    </h3>
     <ul class="flex flex-column">
-      <li v-for="(msg, idx) in chat.msgs" :key="idx" class="msg" :class="getClass(msg)">{{msg.txt}}</li>
+      <li v-for="(msg, idx) in chat.msgs" :key="idx" class="msg" :class="getClass(msg)">
+        <span class="msg-txt">
+          {{msg.txt}}
+        </span>
+        </li>
     </ul>
 
     <div class="input-wrapper flex ">
@@ -49,6 +53,10 @@ export default {
           this.$store.dispatch({ type: "finishTyping", msg: this.currMsg });
           this.iAmTyping = false;
         }
+    },
+    chat(){
+      this.txt = '';
+      this.iAmTyping = false;
     }
   },
   methods: {
@@ -89,32 +97,32 @@ export default {
   bottom: 0;
   right: 0;
   height: 50vh;
-  background: white;
+  background-color: #030303;
   width: 40vw;
   max-width: 300px;
-  border: 2px solid white;
-  box-shadow: inset 0 0 9px 1px black;
-  border-radius: 5px;
-  .header{
-        padding: 15px 15px 5px 15px;
-        color: $clr2;
-        .typing{
-          color:#25ba25;
-          font-size: 0.8em;
-          align-self: flex-end;
-        }
+  border-top-left-radius: 5px;
+  border-top-left-radius: 5px;
+  h3{
+    color: white;
+    padding: 5px;
+    margin: 3px;
+    .typing{
+      color:#25ba25;
+      font-size: 0.8em;
+      align-self: flex-end;
+    }
   }
 }
 ul {
-  background-color: rgb(247, 244, 244);
+  background-color: white;
   flex-grow: 1;
-  margin: 5px;
+  margin: 0 5px;
   padding: 5px;
-  overflow-y: auto;
+  overflow-y: scroll;
   text-align: left;
+  overflow-x: hidden;
 }
 .msg {
-  background-color: white;
   padding: 2px 5px;
   margin-top:2px;
   max-width: 85%;
@@ -124,15 +132,13 @@ ul {
   }
   &.out {
     color: $clr1;
-    background-color: white;
-    align-self: flex-end;
+    align-self: flex-end;     
   }
 }
 .input-wrapper{
-  padding: 5px 10px 10px 10px;
+  padding: 5px;
   input{
     flex-grow:1;
-    border-radius: 25px;
     border: 1px solid gray;
     padding:5px;
     outline: none;
@@ -140,6 +146,7 @@ ul {
 }
 .send{
   padding:5px;
+  color: white;
   cursor: pointer;
 }
 @media (max-width: 760px) {

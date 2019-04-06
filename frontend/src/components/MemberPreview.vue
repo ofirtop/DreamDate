@@ -64,6 +64,7 @@ export default {
   border: 1px solid $clr15;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
   .member-name {
     margin: 20px 0;
     font-weight: bold;
@@ -117,14 +118,5 @@ export default {
 a {
   display: block;
   width: 100%;
-}
-
-.online-status {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: $clr3;
 }
 </style>

@@ -16,7 +16,7 @@
         <div class="info full-width">
           <div class="name-section flex items-center space-between">
             <p><span>{{member.name}}, {{memberAge}}</span>
-            <span v-if="member.online" class="online-status ml-1" title="Online" />
+            <span v-if="member.online" class="online-status" title="Online" />
             </p>
             <div class="actions-wrapper flex space-between">
               <div v-if="!isMatch" @click.stop="addLike">
@@ -50,7 +50,7 @@
       <!-- <div class="main-img">
         <div class="mainImg" :style="{backgroundImage: `url(${mainImg})`}"></div>
         <div class="actions-wrapper flex space-around">
-          <div v-if="!isMatch" @click.stop="$emit('like', member)">
+          <div v-if="!isMatch" @click.stop="addLike">
             <font-awesome-icon icon="heart" class="heart" />
           </div>
           <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">

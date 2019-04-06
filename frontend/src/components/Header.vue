@@ -17,7 +17,13 @@
         <li class="nav-link" @click="getMatch" :class="{active: activeLink === 1}">Matches</li>
         <li class="nav-link" @click="toMsgs" :class="{active: activeLink === 2}">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
         <li class="nav-link" @click="logout" style="padding-right:5px">Logout</li>
+        <li>
+          <div class="img-wrapper">
+            <img src="loggedInUser.mainImage">
+          </div>
+        </li>
       </ul>
+
       <button class="toggle-menu-btn fa" @click="toggleMenu" alt="Open main menu"></button>
       <div :class="{open:isOpen}" class="toggle-menu-screen screen" @click="toggleMenu" alt="toggle main menu"></div>
     </nav>

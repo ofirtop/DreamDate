@@ -1,18 +1,20 @@
 <template>
-    <li class="msg-prev-cmp flex space-between" @click="$emit('openChat', msg)" :class="{unread: !msg.isRead, active: isActive}">
+    <li class="msg-prev-cmp flex animated" @click="$emit('openChat', msg)" 
+    :class="{unread: !msg.isRead, active: isActive, pulse: isActive}">
         <div class="img-wrapper">
             <img :src="msg.fromUser.mainImage" alt="user image">
         </div>
-        
-        <div class="txt-wrapper flex flex-column space-around">
-            <h3 class="flex space-between items-center">
+        <div class="content-wrapper">
+            <h3 class="flex space-between ">
                 <span>
-                    <span v-if="msg.fromUser.online" class="online-status" title="Online" />
                     {{msg.fromUser.name}}
+                    <span v-if="msg.fromUser.online" class="online-status" title="Online" />
                 </span>
-                <span class="time">{{msg.timestamp | date}}</span>
+                <span class="msg-date">{{msg.timestamp | date}}</span>
             </h3>
-            {{msg.txt}}
+            <div class="msg-txt">
+                {{msg.txt | max-length(85)}}
+            </div>
         </div>
     </li>
 </template>
@@ -30,21 +32,19 @@ export default {
 $img-size: 100px;
 
 .msg-prev-cmp{
-    border: 1px solid $clr14;
-    border-radius: 5px;
-    height: $img-size;
+    padding: 10px;
+    height: calc($img-size + 20px);
     width: calc(4 * #{$img-size});
-    transition: 0.4s ease-out;
+    transition: 0.3s ease-out;
     background-color: $clr14;
     cursor: pointer;
-    &:not(:last-child){
-        margin-bottom: 20px;
+    .online-status{
+        border-color: $clr14;
     }
     &.unread{
-        font-weight: bold;
         background-color: white;
-        .time{
-            font-weight: normal;
+        .online-status{
+            border-color: white;
         }
         &:after{
             background-color: white;
@@ -56,43 +56,32 @@ $img-size: 100px;
         background-color: $clr14;
         transition: 0.5s ease;
     }    
-    &.active{
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-        &:after{
-            background-color: $clr1;
-        }
-    }
+    // &.active{
+    //     // &:after{
+    //     //     background-color: $clr1;
+    //     // }
+    // }
     h3{
-        margin-bottom: 5px;
-        .time{
+        margin-top: 0;
+        .msg-date{
             font-size: 0.7em;
+            font-weight: normal;
         }
     }
     .img-wrapper{
-        width: $img-size;
+        flex-basis: $img-size;
         height: $img-size;
         object-fit: contain;
+        margin-right: 15px;
         img{
             object-fit: cover;
             height: 99%;
             width: 100%;
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
         }
     }
-    .txt-wrapper{
-        text-align: left;
-        padding: 5px 15px;
-        flex-grow: 1;
+    .content-wrapper{
+        flex-basis: $img-size * 3;
     }
 }
-.online-status {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: $clr3;
-}
+
 </style>
