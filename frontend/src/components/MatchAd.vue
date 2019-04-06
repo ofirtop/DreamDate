@@ -58,11 +58,9 @@ export default {
     top: 15%;
     left: 17.5%;
     -webkit-transform: translate(-50%, -50%);
-    padding: 25px;
+    padding: 50px;
     background: rgba(28, 28, 28, 0.8);
     width: 65vw;
-    height: 60vh;
-    
 }
 .match {
   width: 200px;
