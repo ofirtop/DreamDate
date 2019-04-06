@@ -194,7 +194,7 @@ export default {
 }
 .sub-menu{
   position: absolute;
-  top: 5rem;
+  top: 4.7rem;
   right: 0px;
   overflow: hidden;
   z-index: 10000;  
@@ -208,7 +208,7 @@ export default {
   font-weight: normal;
   display: none;
   li{
-    padding: 5px 10px 5px 5px;
+    padding: 5px 24px 5px 10px;
   }
   &.show{
     display: block;
