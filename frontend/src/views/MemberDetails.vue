@@ -310,8 +310,8 @@ h1 {
     color: lightgray;
   }
 }
-.btn-chat {
-  color: #8b368b;
+.btn-round.btn-chat{
+  line-height: 48px;
 }
 .notLike {
   color: lightgray;
