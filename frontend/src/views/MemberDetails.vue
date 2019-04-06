@@ -19,13 +19,13 @@
             <span v-if="member.online" class="online-status" title="Online" />
             </p>
             <div class="actions-wrapper flex space-between">
-              <div v-if="!isMatch" @click.stop="addLike">
+              <div v-if="!isMatch" @click.stop="addLike" class="btn-round">
                 <font-awesome-icon icon="heart" class="heart" />
               </div>
-              <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
+              <div v-if="isMatch" @click="$emit('chat', member)" class="btn-round btn-chat">
                 <font-awesome-icon icon="comment" title="Click to start chat"/>
               </div>
-              <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)">
+              <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)" class="btn-round">
                 <font-awesome-icon icon="times" class="not-like" />
               </div>
             </div>
@@ -277,21 +277,6 @@ h1 {
   .actions-wrapper{
     // margin-right: 70px;
     width: 120px;
-    & > div{
-      background: linear-gradient(to bottom right,  #2c8789, $clr1);
-      color: #fff;
-      width: 45px;
-      height: 45px;
-      font-size: 1.5rem;
-      line-height: 60px;
-      text-align: center;
-      border-radius: 30px;
-      box-shadow: 0 13px 26px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2); 
-      cursor: pointer;
-    }
-    & > .btn-chat {
-      line-height: 50px;
-    }
   }
   .heart{
     transform: translateY(-5px);
@@ -332,8 +317,8 @@ h1 {
     color: lightgray;
   }
 }
-.btn-chat {
-  color: #8b368b;
+.btn-round.btn-chat{
+  line-height: 48px;
 }
 .notLike {
   color: lightgray;

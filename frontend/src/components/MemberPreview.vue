@@ -9,13 +9,13 @@
     <div class="member-prop">{{familyDesc}}</div>
 
     <div class="actions-wrapper flex space-around">
-      <div v-if="!isMatch" @click.stop="$emit('like', member)">
+      <div v-if="!isMatch" @click.stop="$emit('like', member)" class="btn-round">
         <font-awesome-icon icon="heart" class="heart" />
       </div>
-      <div v-if="isMatch" @click.stop="$emit('chat', member)" >
+      <div v-if="isMatch" @click.stop="$emit('chat', member)" class="btn-round btn-chat">
           <font-awesome-icon icon="comment" title="Start chat" class="chat"/>
       </div>
-      <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)">
+      <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)" class="btn-round">
         <font-awesome-icon icon="times" class="not-like" />
       </div>
     </div>
@@ -75,21 +75,6 @@ export default {
   }  
   .actions-wrapper{
     margin: 20px 0;
-    & > div{
-      background: linear-gradient(to bottom right,  #2c8789, $clr1);
-      color: #fff;
-      width: 45px;
-      height: 45px;
-      font-size: 1.5rem;
-      line-height: 60px;
-      text-align: center;
-      border-radius: 30px;
-      box-shadow: 0 13px 26px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2); 
-      cursor: pointer;
-    }
-    & > .btn-chat {
-      line-height: 50px;
-    }
   }
   .heart{
     transform: translateY(-5px);

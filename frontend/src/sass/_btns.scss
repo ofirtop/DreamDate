@@ -1,10 +1,7 @@
-@import 'variables';
-
 .btn{
   border: 1px solid $clr15;
   border-radius: 4px;
   background-color: white;
-  // color: $clr12;
   font-size: 1rem;
   display: inline-block;
   padding: 6px 12px;
@@ -15,5 +12,21 @@
     &:active{
       background-color:$clr1;
       color: white;
+    }
+  }
+
+  .btn-round{
+    background: linear-gradient(to bottom right,  #2c8789, $clr1);
+    color: #fff;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 30px;
+    box-shadow: 0 13px 26px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2); 
+    cursor: pointer;
+    & .btn-chat {
+      line-height: 50px;
     }
   }
