@@ -4,12 +4,12 @@
       <div class="newMatch ">It's a Match!</div>
       <div class="newMatch subtitle mt-2">You and {{currentMatchMember.name}} have liked each other.</div>
       <div class="mt-5 flex content-center">
-        <img class="match " :src="loggedInUser.mainImage">
         <img class="match " :src="currentMatchMember.mainImage">
+        <img class="match " :src="loggedInUser.mainImage">
       </div>
-      <div class="flex space-around newMatch actionBar mt-5">
-        <div class="underline pointer" @click="goToProfilePage">See Profile</div>
-        <div class="underline pointer" @click="closeAnimation">Later</div>
+      <div class="flex content-center newMatch actionBar mt-5">
+        <div class="action underline pointer" @click="goToProfilePage">See Profile</div>
+        <div class="action underline pointer" @click="closeAnimation">Later</div>
       </div>
     </div>
   </section>
@@ -55,12 +55,14 @@ export default {
 
 .centered {
     position: fixed;
-    top: 15%;
-    left: 17.5%;
+    top: 0;
+    left: 0;
     -webkit-transform: translate(-50%, -50%);
     padding: 50px;
     background: rgba(28, 28, 28, 0.8);
-    width: 65vw;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
 }
 .match {
   width: 200px;
@@ -68,8 +70,6 @@ export default {
   border-radius: 50%;
   border: 3px solid white;
   margin: 0 25px;
-  // border: 5px solid white;
-  // box-shadow: 0px 0px 32px 32px #fff;
 }
 .newMatch {
   text-align: center;
@@ -97,14 +97,9 @@ export default {
 .underline {
   border-bottom: 1px solid white;
 }
-.match2.on {
-  width: 255px;
-  height: 255px;
-  visibility: visible;
-  position: fixed;
-  border-radius: 50%;
-  top: 50%;
-  left: 60%;
-  transform: translate(-50%, -50%);
+.action{
+  margin-left:55px;
+  margin-right:100px;
 }
+
 </style>
