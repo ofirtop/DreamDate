@@ -119,13 +119,4 @@ a {
   display: block;
   width: 100%;
 }
-
-.online-status {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: $clr3;
-}
 </style>
