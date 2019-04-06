@@ -6,7 +6,7 @@
           <img :src="notif.member.mainImage">
         </div>
       </div>
-      <div class="content flex items-center">
+      <div class="content flex align-center">
         <h3 v-if="notif.type === 'like' && isMatch">
           New match
           <br>
@@ -30,7 +30,7 @@
         </h3>        
       </div>
       <div class="chat" @click="doAction('chat')" v-if="isMatch">
-        <div class="icon-container flex items-center">
+        <div class="icon-container flex align-center">
           <font-awesome-icon icon="comment" size="4x"/>
         </div>
         <span>Chat</span>

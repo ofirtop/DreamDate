@@ -6,7 +6,7 @@
     <div class="container">
     <div class="main-section">
       <div class="info">
-        <div class="name-section flex items-center content-center">
+        <div class="name-section flex align-center content-center">
           <span v-if="member.online" class="online-status" title="Online" />
           <h1>{{member.name}}, {{memberAge}}</h1>
         </div>

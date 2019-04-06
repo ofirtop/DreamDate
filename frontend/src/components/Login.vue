@@ -1,10 +1,10 @@
 <template>
   <section>
-    <div class="wrapper flex items-center">
+    <div class="wrapper flex align-center">
       <!-- <div class="logo"></div> -->
       <div class="login-wrapper flex content-center">
         <div class="content">
-          <h1 class="flex space-between items-center mb-5">
+          <h1 class="flex space-between align-center mb-5">
             {{isNewUser ? 'Sign up' : 'Login'}}  
             <button @click="flip" class="btn">
               {{isNewUser ? 'Login' : 'Sign up'}} 

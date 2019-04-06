@@ -3,7 +3,7 @@
         <ul>
             <msgPrev v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :isActive="activeMsgID === msg._id" @openChat="openChat"/>
         </ul>
-        <div class="chat-wrapper flex content-center items-center">
+        <div class="chat-wrapper flex content-center align-center">
             <h1>chat here</h1>
         </div>
     </section>

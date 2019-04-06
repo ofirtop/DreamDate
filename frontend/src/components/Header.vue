@@ -5,22 +5,36 @@
         <router-link to="/" class="logo-wrapper">
           <img src="@/assets/img/logo_hh.png" alt="logo" >
         </router-link>
-        <div class="userName" v-if="loggedInUser">Welcome, {{loggedInUser.name}}</div>
       </div>
-      <ul id="nav-links" :class="{open:isOpen}" class="nav-links flex align-end">
+      <ul id="nav-links" :class="{open:isOpen}" class="nav-links flex ">
         <!-- <div class="user-img" v-if="loggedInUser">
           <img :src="loggedInUser.mainImage" alt="user image">
         </div>-->
 
-        <li class="nav-link" @click="toGallery" :class="{active: activeLink === 3}">Home</li>
-        <li class="nav-link" @click="toProfile" v-if="loggedInUser" :class="{active: activeLink === 0}">My Profile</li>
-        <li class="nav-link" @click="getMatch" :class="{active: activeLink === 1}">Matches</li>
-        <li class="nav-link" @click="toMsgs" :class="{active: activeLink === 2}">Messages <span v-if="newMsgCount">({{newMsgCount}})</span></li>        
-        <li class="nav-link" @click="logout" style="padding-right:5px">Logout</li>
-        <li>
+        <li @click="toGallery" :class="{active: activeLink === 3}">
+          <div>Home</div>
+        </li>
+        <li @click="getMatch" :class="{active: activeLink === 1}">
+          <div>Matches</div>
+        </li>
+        <li @click="toMsgs" :class="{active: activeLink === 2}">
+          <div>Messages <span v-if="newMsgCount">({{newMsgCount}})</span></div>
+        </li>        
+        <li @click="toggleSubMenu" class="flex relative user-menu">
+          <div>{{loggedInUser.name}}</div>
           <div class="img-wrapper">
-            <img src="loggedInUser.mainImage">
+            <img :src="loggedInUser.mainImage">
           </div>
+          <section class="sub-menu" :class="{show: activeLink === 0}">
+            <ul class="flex flex-column space-around">
+              <li @click.stop="toProfile">
+                <div>My Profile</div>
+              </li>              
+              <li @click.stop="logout">
+                <div>Logout</div>
+              </li>
+            </ul>
+          </section>
         </li>
       </ul>
 
@@ -56,73 +70,43 @@ export default {
   methods: {
     getMatch() {
       this.activeLink = 1;
-      this.$router.push("/match");
       this.isOpen = false;
+      this.$router.push("/match");
     },
     toProfile() {
-      this.activeLink = 0;
-      this.$router.push(`/user/${this.loggedInUser._id}`);
+      this.activeLink = 4;
       this.isOpen = false;
+      this.$router.push(`/user/${this.loggedInUser._id}`);
     },
     toGallery() {
       this.activeLink = 3;
-      this.$router.push(`/`);
       this.isOpen = false;
+      this.$router.push(`/`);
     },
     toMsgs(){
       this.activeLink = 2;
-      this.$router.push('/msg');
       this.isOpen = false;
+      this.$router.push('/msg');
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;
     },
     logout(){
-      this.activeLink = 3;
-      this.$emit('logout');
       this.isOpen = false;
+      this.activeLink = 5;
+      this.$emit('logout');
+    },
+    toggleSubMenu(){
+      this.activeLink = (this.activeLink !== 0) ? 0 : -1;
+      // this.activeLink = 0;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/_fonts.scss";
 @import '@/sass/_variables.scss';
 
-.nav-link {
-  cursor: pointer;
-}
-.nav-links > * {
-  padding: 1rem 1rem 0.3rem 1rem;
-  transition: 0.3s;
-  border-bottom: 3px solid white;
- &.active{
-    border-top-left-radius: 7px;   
-    border-top-right-radius: 7px;   
-    border-bottom: 3px solid $clr1;
- } 
-}
-.nav-links {
-  height: 100%;
-}
-
-.logo-name {
-  margin-bottom: 8px;
-  flex-grow: 1;
-  // border: 5px solid purple;
-}
-.logo-wrapper{
-  display: inline-block;
-    width: 80px;
-    img{
-      width: 100%;
-      transform: translateY(6px);
-    }
-}
-.userName {
-  margin-left: 1rem;
-}
 .app-header {
   position: fixed;
   background-color: white;
@@ -131,7 +115,46 @@ export default {
   z-index: 99;
   width: 100%;
   height: 75px;
-  // border: 5px solid black;
+}
+.nav-content-container {
+  max-width: 1200px;
+  width: 100%;
+  position: relative;
+  padding: 0 10px 1px 10px;
+  font-weight: bold;
+}
+.nav-links {
+  height: 100%;
+}
+.nav-links > * {
+  padding: 1rem 1rem 0.3rem 1rem;
+  transition: 0.3s;
+  border-bottom: 3px solid white;
+  cursor: pointer;
+  &:last-child{
+    padding-right:0;
+  }
+  & > div{
+    display: flex;
+    align-items:center;
+    height: 100%;
+  }
+ &.active{
+    border-bottom: 3px solid $clr1;
+ } 
+}
+.logo-name {
+  margin-bottom: 8px;
+  flex-grow: 1;
+  // border: 5px solid purple;
+}
+.logo-wrapper{
+  display: inline-block;
+  width: 80px;
+   img{
+    width: 100%;
+    transform: translateY(6px);
+  }
 }
 .user-img {
   width: 36px;
@@ -142,15 +165,7 @@ export default {
     width: 100%;
   }
 }
-.nav-content-container {
-  max-width: 1200px;
-  width: 100%;
-  // margin: 0 auto;
-  // border: 1px solid red;
-  position: relative;
-  font-size: 1.3rem;
-  padding: 0 10px 1px 10px;
-}
+
 .toggle-menu-btn {
   background: none;
   border: none;
@@ -160,8 +175,44 @@ export default {
   width: 30px;
   font-size: 1.75rem;
   display: none;
-  font-family: fontawesome;
+  font-family: $fonts-awesome;
   font-size: inherit;
+}
+.img-wrapper{
+  width: 50px;
+  height: 50px;
+  margin-left: 1rem;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
+}
+.user-menu{
+}
+.sub-menu{
+  position: absolute;
+  top: 5rem;
+  right: 0px;
+  overflow: hidden;
+  z-index: 10000;  
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+  padding: 10px 0px;
+  transform-origin: right top;
+  transform: scale(1);
+  opacity: 1;
+  font-weight: normal;
+  display: none;
+  li{
+    padding: 5px 10px 5px 5px;
+  }
+  &.show{
+    display: block;
+  }
 }
 
 @media (max-width: 740px) {
@@ -223,4 +274,6 @@ export default {
   visibility: visible;
   opacity: 1;
 }
+
+
 </style>

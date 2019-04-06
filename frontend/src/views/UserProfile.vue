@@ -5,7 +5,7 @@
     <div  class="container flex">
       <div class="main-section flex">
         <div class="info">
-        <div class="name-section flex items-center">
+        <div class="name-section flex align-center">
           <h2>{{user.name}}, {{userAge}}</h2>
         </div>
         <hr>
@@ -20,7 +20,7 @@
           <hr>
           <h3>I want to meet</h3>
           <p>{{partnerGenderNAge}}</p>
-          <div class="btns full-width items-center flex">
+          <div class="btns full-width align-center flex">
             <el-button class="editBtn" size="mini" @click="editProfile" type="primary">Edit Details</el-button>
             <i class="el-icon-edit-outline clickable hidden" @click="editProfile"></i>
             <upload-img v-if="isMobile" class="mobile-upload-img" @addChanges="saveProfile" :profile="user"></upload-img>

@@ -1,13 +1,13 @@
 
 <template>
-    <section class="upload-img clickable items-center flex">
+    <section class="upload-img clickable align-center flex">
       <div class="screen" v-if="isImgReady"></div>
-      <label for="takePic" class="input-img flex items-center content-center" title="take a picture"> 
+      <label for="takePic" class="input-img flex align-center content-center" title="take a picture"> 
           <i class="el-icon-plus clickable"></i>
           <i class="el-icon-upload btn-mobile clickable hidden"></i>
           <input id="takePic" type="file" name="img" @change="previewFiles" accept="image/*;capture" style="display:none"/>
       </label>
-        <div v-if="isImgReady" class="preview flex items-center content-center">
+        <div v-if="isImgReady" class="preview flex align-center content-center">
           <i class="el-icon-close close" @click.stop="close"></i>
           <div class="flex">
             <div class="preview-img" :style="{backgroundImage: `url(${newImg})`}"></div>

@@ -1,7 +1,7 @@
 <template>
   <section class="edit-profile flex">
     
-    <div class="top-line flex items-center space-between full-width">
+    <div class="top-line flex align-center space-between full-width">
     <h1>Edit details</h1>
     <i class="el-icon-close" @click="saveProfile"></i>
     
