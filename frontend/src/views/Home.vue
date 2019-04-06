@@ -4,11 +4,11 @@
       <div class="member-filter-container">
         <member-filter @setFilter="setFilter"/>
       </div>
-      <!-- <main class="flex align-start"> -->
       <main>
-        <member-list :members="members" @notLike="notLikeMember" @like="addLike" @chat="startChat"/>
+        <member-list :members="members" @notLike="addNotLike" @like="addLike" @chat="startChat"/>
       </main>
     </div>
+    
   </section>
 </template>
 
@@ -21,6 +21,7 @@ import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 export default {
   data() {
     return {
+      currentMatchMember:'',
       filterBy: {
         gender: "",
         minAge: null,
@@ -31,28 +32,14 @@ export default {
     };
   },
   methods: {
-    async addLike(member) {
-      console.log("like");
-
-      await this.$store.dispatch({ type: "addLikeToMember", member });
-
-      if (member.likes.iLike && member.likes.likeMe) {
-        //match
-        Swal.fire({
-          title: "You have a new match !!!",
-          type: "success",
-          showCancelButton: true,
-          confirmButtonText: "Send a message",
-          cancelButtonText: "Later"
-        }).then(result => {
-          if (result.value) {
-            EVENT_BUS.$emit(EV_START_CHAT, member);
-          }
-        });
+    addLike(member) {
+      if(member.likes.likeMe) {
+        this.$store.dispatch({ type:"addMatch",member })  
       }
+      this.$store.dispatch({ type: "addLikeToMember", member });
     },
-    notLikeMember(memberId) {
-      this.$store.dispatch({ type: "notLikeMember", memberId });
+    addNotLike(memberId) {
+      this.$store.dispatch({ type: "addNotLikeToMember", memberId });
     },
     startChat(member) {
       this.$store.dispatch({type: 'startChat', memberId: member._id, memberName: member.name});
@@ -110,4 +97,6 @@ main {
   max-width: 1200px;
   width: 100%;
 }
+
+
 </style>

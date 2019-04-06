@@ -5,6 +5,7 @@ import chatStore from './store.chat';
 import userStore from './store.user';
 import msgStore from './store.msg';
 import notifStore from './store.notif';
+import matchStore from './store.match';
 import memberStore from './store.member';
 
 // import likeService from '@/services/like.service.js';
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     userStore,
     msgStore,
     notifStore,
-    memberStore
+    memberStore,
+    matchStore
   }
 });

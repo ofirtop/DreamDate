@@ -27,7 +27,7 @@
       <div class="main-img">
         <div class="mainImg" :style="{backgroundImage: `url(${mainImg})`}"></div>
         <div class="actions-wrapper flex space-around">
-          <div v-if="!isMatch" @click.stop="$emit('like', member)">
+          <div v-if="!isMatch" @click.stop="addLike">
             <font-awesome-icon icon="heart" class="heart" />
           </div>
           <div v-if="isMatch" @click="$emit('chat', member)" class="btn-chat">
@@ -99,10 +99,12 @@ export default {
       this.imgs.splice(idx, 1, img);
       
     },
-    // like() {
-    //   this.$emit('like', this.member);
-    //   this.$router.push('/')
-    // },
+    addLike() {
+      if(this.member.likes.likeMe) {
+        this.$store.dispatch({ type:"addMatch",member:this.member })  
+      }
+      this.$store.dispatch({ type: "addLikeToMember", member:this.member });
+    },
     notLike() {
       this.$emit('notLike', this.member._id);
       this.$router.push('/')
