@@ -234,6 +234,13 @@ a {
     line-height: 1.375em;
     color: #484848;
 }
+.partner-info >* {
+  margin-top: 12px;
+  margin-bottom: 12px
+}
+.partner-info p{
+  padding-top: 4px;
+}
 .container {
   // max-width: 60%;
   width: 1180px;

@@ -69,7 +69,7 @@ export default {
   height: 200px;
   border-radius: 50%;
   border: 3px solid white;
-  margin: 0 25px;
+  margin: 0 -15px;
 }
 .newMatch {
   text-align: center;
@@ -83,6 +83,10 @@ export default {
   font-size: 26px;
   font-family: inherit;  
   font-weight: 400;
+  & :first-child {
+    margin-right: 80px;
+    margin-left: -35px;
+  }
 }
 .newMatch.subtitle {
   font-family: inherit;
@@ -97,9 +101,9 @@ export default {
 .underline {
   border-bottom: 1px solid white;
 }
-.action{
-  margin-left:55px;
-  margin-right:100px;
-}
+// .action{
+//   margin-left:55px;
+//   margin-right:100px;
+// }
 
 </style>
