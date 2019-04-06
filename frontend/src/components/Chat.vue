@@ -159,7 +159,8 @@ ul {
   .chat-cmp{
     height: 77vh;
     width: 97vw;
-    max-width: 100vw;
+    left: 0;
+    top: 10vh;
   }
 }
 </style>
