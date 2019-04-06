@@ -2,8 +2,8 @@
   <section class="edit-profile flex">
     
     <div class="top-line flex align-center space-between full-width">
-    <h1>Edit details</h1>
-    <i class="el-icon-close" @click="saveProfile"></i>
+      <h1>Edit details</h1>
+      <i class="el-icon-close" @click="saveProfile"></i>
     
     <!-- <i class="el-icon-success" @click="saveProfile"></i> -->
     </div>
@@ -176,7 +176,7 @@ export default {
   position: fixed;
   // width: 100%;
   // max-width: 1200px;
-  top: 15%;
+  top: 12%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -214,9 +214,7 @@ h1 {
   font-size: 1.5em;
   font-weight: bold;
 }
-.el-icon-close,
-.el-icon-success {
-    align-self: flex-end;
+.el-icon-close {
     cursor: pointer;
     font-size: 2em;
     font-weight: bold;

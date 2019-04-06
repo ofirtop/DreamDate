@@ -73,7 +73,7 @@ export default {
     return {
       filterBy: {
         gender: '',
-        age: [18, 100],
+        age: [18, 120],
         minHeight: null,
         city: ''
       },
@@ -105,7 +105,7 @@ export default {
     clearFilter() {
       this.filterBy = {
         gender: '',
-        age: [18, 100],
+        age: [18, 120],
         minHeight: null,
         city: ''
       };
