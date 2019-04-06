@@ -18,7 +18,12 @@
           <div>Matches</div>
         </li>
         <li @click="toMsgs" :class="{active: activeLink === 2}">
-          <div>Messages <span v-if="newMsgCount">({{newMsgCount}})</span></div>
+          <div class="relative">
+            Messages 
+            <span v-if="newMsgCount" class="msg-count">
+              <span>{{newMsgCount}}</span>
+            </span>
+            </div>
         </li>        
         <li @click="toggleSubMenu" class="flex relative user-menu">
           <div>{{loggedInUser.name}}</div>
@@ -190,8 +195,6 @@ export default {
     border-radius: 50%;
   }
 }
-.user-menu{
-}
 .sub-menu{
   position: absolute;
   top: 4.7rem;
@@ -213,6 +216,22 @@ export default {
   &.show{
     display: block;
   }
+}
+.msg-count{
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    position: relative;
+    top: -9px;
+    right: 0px;
+    padding: 1.5px;
+    display: inline-block;
+    line-height: 1.2; 
+    color: white;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 740px) {
