@@ -58,10 +58,10 @@ export default {
     top: 15%;
     left: 17.5%;
     -webkit-transform: translate(-50%, -50%);
-    padding: 50px;
+    padding: 25px;
     background: rgba(28, 28, 28, 0.8);
     width: 65vw;
-    height: 50vh;
+    height: 60vh;
     
 }
 .match {
@@ -76,19 +76,19 @@ export default {
 .newMatch {
   text-align: center;
   font-family: "Dancing Script", cursive;
-  font-size: 160px;
+  font-size: 107px;
   font-weight: 900;
   color: white;
   text-shadow: 4px 1px 17px #a44d11;
 }
 .newMatch.actionBar{
-  font-size: 37px;
+  font-size: 26px;
   font-family: inherit;  
   font-weight: 400;
 }
 .newMatch.subtitle {
   font-family: inherit;
-  font-size: 37px;
+  font-size: 26px;
   text-align: center;
   font-weight: 400;
   color: white;
