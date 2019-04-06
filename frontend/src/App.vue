@@ -4,14 +4,13 @@
     <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
     <main class="App__main">
       <transition name="fade" mode="out-in">
-        <router-view @chat="openChat" @notLike="notLikeMember" />
+        <router-view @notLike="notLikeMember" />
       </transition>
     </main>
     <ul>
       <li v-for="notif in notifs" :key="notif._id">
         <notif
           :notif="notif"
-          @chat="openChatFromNotif"
           @viewDetails="viewMemberDetailsFromNotif"
         />
       </li>
@@ -62,10 +61,10 @@ export default {
       console.log('methods:removeMatch');
       this.$store.dispatch({ type: "removeMatch"});
     },
-    openChatFromNotif(member) {
-      this.memberForNotif = null;
-      this.openChat(member);
-    },
+    // openChatFromNotif(member) {
+    //   this.memberForNotif = null;
+    //   this.openChat(member);
+    // },
     viewMemberDetailsFromNotif(member) {
       this.$router.push("/member/" + member._id);
     },
