@@ -10,7 +10,7 @@
                     {{msg.fromUser.name}}
                     <span v-if="msg.fromUser.online" class="online-status" title="Online" />
                 </span>
-                <span class="msg-date">{{msg.timestamp | date}}</span>
+                <span class="msg-date">{{msg.timestamp | dateFromNow}}</span>
             </h3>
             <div class="msg-txt">
                 {{msg.txt | max-length(85)}}

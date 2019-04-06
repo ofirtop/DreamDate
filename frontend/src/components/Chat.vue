@@ -1,33 +1,33 @@
 <template>
   <section class="chat-cmp flex flex-column" v-if="chat">
-    <h3 class="header flex space-between">
-      <div>
-        Chat with {{chat.memberName}}
-      </div>
-      <span class="typing" v-if="chat.isMemberTyping">typing...</span>
-      <div @click="closeChat">
-        <font-awesome-icon icon="times" title="close" />
-      </div>
-    </h3>
+    <header class="top-bar">
+      <h3 class="header flex space-between">
+        <font-awesome-icon icon="comment"/>        
+        <div>
+          Chat with {{chat.memberName}}
+          <span class="typing" v-if="chat.isMemberTyping">typing...</span>
+        </div>
+        <div @click="closeChat" class="clickable">
+          <font-awesome-icon icon="times" title="close" />
+        </div>
+      </h3>
+    </header>
     <ul class="flex flex-column">
-      <li v-for="(msg, idx) in chat.msgs" :key="idx" class="msg" :class="getClass(msg)">
-        <span class="msg-txt">
-          {{msg.txt}}
-        </span>
-        </li>
+      <chatMsg v-for="(msg, idx) in chat.msgs" :key="idx" :msg="msg" :userId="loggedInUser._id" />
     </ul>
 
-    <div class="input-wrapper flex ">
+    <div class="input-wrapper">
       <input autofocus @keyup.enter="sendMsg" v-model="txt" @keydown="typeMsg" placeholder="type your message...">
-      <div @click="sendMsg" class="send">
+      <!-- <div @click="sendMsg" class="send">
         <font-awesome-icon icon="share" title="send"  />
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
 
 <script>
 import chatService from "@/services/chat.service.js";
+import chatMsg from '@/components/ChatMsg.vue';
 
 export default {
   data() {
@@ -67,13 +67,6 @@ export default {
       this.txt = '';
       this.iAmTyping = false;
     },
-    getClass(msg) {
-      let isOut = (msg.from === this.loggedInUser._id);
-      return {
-        in: !isOut,
-        out: isOut
-      };
-    },
     typeMsg() {
       if (!this.iAmTyping) {
         this.$store.dispatch({ type: "startTyping", msg: this.currMsg });
@@ -84,7 +77,8 @@ export default {
       this.$store.dispatch({ type: "endChat" });
     }
   },
-  async created(){
+  components:{
+    chatMsg    
   }
 };
 </script>
@@ -95,53 +89,64 @@ export default {
 .chat-cmp {
   position: fixed;
   bottom: 0;
+  left: 50%;
+  height: 70vh;
+  /* background-color: #030303; */
+  width: 30vw;
+  /* max-width: 300px; */
+}
+.top-bar {
+  background: #666;
+  position: relative;
+  overflow: hidden; 
+  // height: 160px;
+}
+.top-bar::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
   right: 0;
-  height: 50vh;
-  background-color: #030303;
-  width: 40vw;
-  max-width: 300px;
-  border-top-left-radius: 5px;
-  border-top-left-radius: 5px;
-  h3{
-    color: white;
-    padding: 5px;
-    margin: 3px;
-    .typing{
-      color:#25ba25;
-      font-size: 0.8em;
-      align-self: flex-end;
-    }
+  bottom: -100%;
+  opacity: 0.25;
+  background: radial-gradient(white, black);
+}
+.top-bar > * {
+  position: relative;
+}
+.top-bar::before {
+  animation: pulse 1s ease alternate ;
+}
+@keyframes pulse {
+  from { opacity: 0; }
+  to { opacity: 0.5; }
+}
+h3{
+  color: white;
+  padding: 5px;
+  margin: 3px;
+  .typing{
+    color:#25ba25;
+    font-size: 0.8em;
+    align-self: flex-end;
   }
 }
 ul {
-  background-color: white;
+  background-color: #e5e5e5;
   flex-grow: 1;
-  margin: 0 5px;
   padding: 5px;
   overflow-y: scroll;
-  text-align: left;
   overflow-x: hidden;
 }
-.msg {
-  padding: 2px 5px;
-  margin-top:2px;
-  max-width: 85%;
-  &.in {
-    color: $clr2;
-    align-self: flex-start;
-  }
-  &.out {
-    color: $clr1;
-    align-self: flex-end;     
-  }
-}
 .input-wrapper{
-  padding: 5px;
   input{
-    flex-grow:1;
-    border: 1px solid gray;
-    padding:5px;
+    //flex-grow: 1;
+    border: 1px solid #e5e5e5;
+    padding: 5px;
     outline: none;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
   }
 }
 .send{
@@ -149,6 +154,7 @@ ul {
   color: white;
   cursor: pointer;
 }
+
 @media (max-width: 760px) {
   .chat-cmp{
     height: 77vh;
