@@ -172,10 +172,11 @@ export default {
 }
 
 .toggle-menu-btn {
+  
   background: none;
   border: none;
   color: black;
-  margin: auto 20px;
+  margin: auto 10px;
   font-size: 1em;
   width: 30px;
   font-size: 1.75rem;
@@ -237,6 +238,7 @@ export default {
 @media (max-width: 740px) {
   .toggle-menu-btn {
     display: block;
+    font-size: 1.5em;
   }
   .toggle-menu-screen {
     display: block;
@@ -260,13 +262,17 @@ export default {
   .nav-links li {
     height: auto;
     line-height: .7;
-    padding: 20px 0;
+    padding: 20px 10px;
     width: 40vw;
     border: none;
     border-bottom: 1px solid #1e1e1e;
   }
   .nav-links li.active {
     border-width: 1px;
+  }
+  .sub-menu {
+    background-color: unset;
+    box-shadow: none
   }
 }
 
