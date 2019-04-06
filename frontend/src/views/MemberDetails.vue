@@ -289,6 +289,7 @@ h1 {
   width: 16px;
   height: 16px;
   border-radius: 50%;
+  margin-left: 7px;
   &.on {
     background-color: darken($clr1, 10%);
     border-color:darken($clr1, 10%);
@@ -323,7 +324,7 @@ h1 {
 .notLike {
   color: lightgray;
 }
- @media (max-width: 800px) {
+ @media (max-width: 740px) {
     .container {
       flex-direction: column-reverse;
       width: 100%;
@@ -348,7 +349,7 @@ h1 {
     .block-1,
     .block-2 >*,
     .block-3>* {
-      height: 500px;
+      height: 1000px;
     }
     .member-img {
     width: 100%;
