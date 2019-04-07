@@ -22,10 +22,10 @@
               <div v-if="!isMatch" @click.stop="addLike" class="btn-round">
                 <font-awesome-icon icon="heart" class="heart" />
               </div>
-              <div v-if="isMatch" @click="$emit('chat', member)" class="btn-round btn-chat">
+              <div v-if="isMatch" @click.stop="startChat" class="btn-round btn-chat">
                 <font-awesome-icon icon="comment" title="Click to start chat"/>
               </div>
-              <div v-if="!isMatch" @click.stop="$emit('notLike', member._id)" class="btn-round">
+              <div v-if="!isMatch" @click.stop="notLike" class="btn-round">
                 <font-awesome-icon icon="times" class="not-like" />
               </div>
             </div>
@@ -73,7 +73,6 @@
   </section>
 </template>
 <script>
-import { EVENT_BUS, EV_START_CHAT } from "@/event-bus.js";
 export default {
   name: "member-details",
   data() {
@@ -96,9 +95,12 @@ export default {
       this.$store.dispatch({ type: "addLikeToMember", member:this.member });
     },
     notLike() {
-      this.$emit('notLike', this.member._id);
+      this.$store.dispatch({ type: "addNotLikeToMember", memberId: this.member._id });
       this.$router.push('/')
-    }
+    },
+    startChat() {
+      this.$store.dispatch({type: 'startChat', memberId: this.member._id, memberName: this.member.name});
+    },
   },
   watch:{
     member(){
@@ -150,6 +152,7 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
   @import '../sass/_variables.scss';
 .top-block {

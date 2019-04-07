@@ -10,7 +10,7 @@
                     {{msg.fromUser.name}}
                     <span v-if="msg.fromUser.online" class="online-status" title="Online" />
                 </span>
-                <span class="msg-date">{{msg.timestamp | date}}</span>
+                <span class="msg-date">{{msg.timestamp | dateFromNow}}</span>
             </h3>
             <div class="msg-txt">
                 {{msg.txt | max-length(85)}}
@@ -33,7 +33,7 @@ $img-size: 100px;
 
 .msg-prev-cmp{
     padding: 10px;
-    height: calc($img-size + 20px);
+    height: calc(#{$img-size} + 20px);
     width: calc(4 * #{$img-size});
     transition: 0.3s ease-out;
     background-color: $clr14;

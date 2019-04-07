@@ -4,7 +4,7 @@
     <login v-if="!loggedInUser" :hasError="loginFailed" @login="login" @signup="signup" />
     <main class="App__main">
       <transition name="fade" mode="out-in">
-        <router-view @notLike="notLikeMember" />
+        <router-view />
       </transition>
     </main>
     <ul>
@@ -67,9 +67,6 @@ export default {
     // },
     viewMemberDetailsFromNotif(member) {
       this.$router.push("/member/" + member._id);
-    },
-    notLikeMember(memberId) {
-      this.$store.dispatch({ type: "addNotLikeToMember", memberId });
     },
     gotoMembersWhoWatchedMe() {
       //update watchedMe list

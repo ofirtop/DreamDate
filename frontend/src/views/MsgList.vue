@@ -3,15 +3,15 @@
         <ul>
             <msgPrev v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :isActive="activeMsgID === msg._id" @openChat="openChat"/>
         </ul>
-        <div class="chat-wrapper flex content-center align-center">
-            <h1>chat here</h1>
-        </div>
+        <!-- <div class="chat-wrapper flex content-center align-center">
+            <chat chatLocation="msgList"/>
+        </div> -->
     </section>
 </template>
 
 <script>
 import msgPrev from '@/components/MsgPreview.vue';
-import {EV_START_CHAT, EVENT_BUS} from '@/event-bus.js';
+import chat from '@/components/Chat.vue';
 
 export default {
     name: 'msgList',
@@ -37,7 +37,8 @@ export default {
         }
     },
     components:{
-        msgPrev
+        msgPrev,
+        chat
     }
 }
 </script>

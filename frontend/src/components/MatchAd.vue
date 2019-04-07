@@ -1,6 +1,6 @@
 <template>
   <section class="match-cmp">
-    <div v-if="currentMatchMember" class="centered animated delay-2s fadeInUp">
+    <div v-if="currentMatchMember" class="centered animated delay-0.4s fadeInUp">
       <div class="newMatch ">It's a Match!</div>
       <div class="newMatch subtitle mt-2">You and {{currentMatchMember.name}} have liked each other.</div>
       <div class="mt-5 flex content-center">
