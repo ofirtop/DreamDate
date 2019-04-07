@@ -69,7 +69,7 @@ export default {
       this.$router.push("/member/" + member._id);
     },
     notLikeMember(memberId) {
-      this.$store.dispatch({ type: "notLikeMember", memberId });
+      this.$store.dispatch({ type: "addNotLikeToMember", memberId });
     },
     gotoMembersWhoWatchedMe() {
       //update watchedMe list
