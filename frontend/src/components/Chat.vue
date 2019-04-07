@@ -94,29 +94,31 @@ export default {
   /* background-color: #030303; */
   width: 30vw;
   /* max-width: 300px; */
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .top-bar {
   background: #666;
   position: relative;
-  overflow: hidden; 
+  // overflow: hidden; 
   // height: 160px;
 }
-.top-bar::before {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: 0;
-  right: 0;
-  bottom: -100%;
-  opacity: 0.25;
-  background: radial-gradient(white, black);
-}
+// .top-bar::before {
+//   content: "";
+//   position: absolute;
+//   top: -100%;
+//   left: 0;
+//   right: 0;
+//   bottom: -100%;
+//   opacity: 0.25;
+//   background: radial-gradient(white, black);
+// }
 .top-bar > * {
   position: relative;
 }
-.top-bar::before {
-  animation: pulse 1s ease alternate ;
-}
+// .top-bar::before {
+//   animation: pulse 1s ease alternate ;
+// }
 @keyframes pulse {
   from { opacity: 0; }
   to { opacity: 0.5; }
