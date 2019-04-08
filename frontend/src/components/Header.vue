@@ -189,8 +189,8 @@ export default {
   height: 50px;
   margin-left: 1rem;
   img{
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
     object-position: center;
     border-radius: 50%;
