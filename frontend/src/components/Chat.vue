@@ -160,7 +160,7 @@ ul {
 @media (max-width: 760px) {
   .chat-cmp{
     height: 85vh;
-    width: 99vw;
+    width: 98vw;
     left: 0;
     top: 13vh;
   }
